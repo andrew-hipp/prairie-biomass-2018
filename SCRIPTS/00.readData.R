@@ -40,6 +40,8 @@ dat$biomass.raw <- dat$biomass.raw[!dat$biomass.raw$sp == 'CONTROL', ]
 
 dat$plugTrans <- dat$biomass.raw[dat$biomass.raw$type == 'Plug', ]
 
+## this here is a fix!
+
 dat$spp <- dat$plugTrans[, grep('b0|b1', names(dat$plugTrans), value = T)] %>%
  unlist %>%
  as.character %>%
