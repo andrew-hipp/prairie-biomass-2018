@@ -1,0 +1,143 @@
+treeName	Scientific Name	CODE
+Agalinis_tenuifolia	Agalinis tenuifolia	AGATEN
+Agastache_nepetoides	Agastache nepetoides	AGANEP
+Agastache_scrophulariifolia	Agastache scrophulariifolia	AGASCR
+Allium_canadense	Allium canadense	ALLCAN
+Allium_cernuum	Allium cernuum	ALLCER
+Amorpha_canescens	Amorpha canescens	AMOCAN
+Andropogon_gerardii	Andropogon gerardii	ANDGER
+Anemone_canadensis	Anemone canadensis	ANECAN
+Anemone_cylindrica	Anemone cylindrica	ANECYL
+Anemone_virginiana	Anemone virginiana	ANEVIR
+Antennaria_neglecta	Antennaria neglecta	ANTNEG
+Arnoglossum_plantagineum	Arnoglossum plantagineum	ARNPLA
+______(Cacalia_plantaginea)	      (Cacalia plantaginea)	
+Asclepias_hirtella	Asclepias hirtella	ASCHIR
+Asclepias_sullivantii	Asclepias sullivantii	ASCSUL
+Asclepias_syriaca	Asclepias syriaca	ASCSYR
+Asclepias_tuberosa	Asclepias tuberosa	ASCTUB
+Asclepias_verticillata	Asclepias verticillata	ASCVER
+Astragalus_canadensis	Astragalus canadensis	ASTCAN
+Baptisia_alba	Baptisia alba	BAPALB
+Baptisia_bracteata	Baptisia bracteata	BAPBRA
+Blephilia_ciliata	Blephilia ciliata	BLECIL
+Bouteloua_curtipendula	Bouteloua curtipendula	BOUCUR
+Brickellia_eupatorioides	Brickellia eupatorioides	BRIEUP
+_______(Kuhnia_eupatorioides)	       (Kuhnia eupatorioides)	
+Bromus_kalmii	Bromus kalmii	BROKAL
+Campanula_rotundifolia	Campanula rotundifolia	CAMROT
+Camassia_scilloides	Camassia scilloides	CAMSCI
+Castilleja_coccinea	Castilleja coccinea	CASCOC
+Ceanothus_americanus	Ceanothus americanus	CEAAME
+Chamaecrista_fasciculata	Chamaecrista fasciculata	CHAFAS
+_______(Cassia_fasciculata)	       (Cassia fasciculata)	
+Coreopsis_palmata	Coreopsis palmata	CORPAL
+Carex_annectens	Carex annectens	CXANNE
+Carex_bicknellii	Carex bicknellii	CXBICK
+Carex_blanda	Carex blanda	CXBLAN
+Carex_brevior	Carex brevior	CXBREV
+Carex_gravida	Carex gravida	CXGRAV
+Carex_molesta	Carex molesta	CXMOLE
+Carex_normalis	Carex normalis	CXNORM
+Dalea_candida	Dalea candida	DALCAN
+_______(Petalostemum_candidum)	       (Petalostemum candidum)	
+Dalea_purpurea	Dalea purpurea	DALPUR
+_______(Petalostemum_purpureum)	       (Petalostemum purpureum)	
+Desmodium_canadense	Desmodium canadense	DESCAN
+Desmodium_illinoense	Desmodium illinoense	DESILL
+Dodecatheon_meadia	Dodecatheon meadia	DODMEA
+Desmanthus_illinoensis	Desmanthus illinoensis	DSMILL
+Echinacea_pallida	Echinacea pallida	ECHPAL
+Echinacea_purpurea	Echinacea purpurea	ECHPUR
+Elymus_canadensis	Elymus canadensis	ELYCAN
+Eragrostis_spectabilis	Eragrostis spectabilis	ERASPE
+Eryngium_yuccifolium	Eryngium yuccifolium	ERYYUC
+Eupatorium_altissimum	Eupatorium altissimum	EUPALT
+Euphorbia_corollata	Euphorbia corollata	EUPCOR
+Euthamia_graminifolia	Euthamia graminifolia	EUTGRA
+_______(Solidago_graminifolia)	       (Solidago graminifolia)	
+Gentiana_andrewsii	Gentiana andrewsii	GENAND
+Helenium_autumnale	Helenium autumnale	HELAUT
+Heliopsis_helianthoides	Heliopsis helianthoides	HELHEL
+Helianthus_mollis	Helianthus mollis	HELMOL
+Helianthus_occidentalis	Helianthus occidentalis	HELOCC
+Helianthus_pauciflorus	Helianthus pauciflorus	HELPAU
+Helianthus_strumosus	Helianthus strumosus	HELSTR
+Heuchera_richardsonii	Heuchera richardsonii	HEURIC
+Hierochloe_odorata	Hierochloe odorata	HIEODO
+Hypericum_punctatum	Hypericum punctatum	HYPPUN
+Hypericum_pyramidatum	Hypericum pyramidatum	HYPPYR
+Juncus_dudleyi	Juncus dudleyi	JUNDUD
+Juncus_interior	Juncus interior	JUNINT
+Juncus_tenuis	Juncus tenuis	JUNTEN
+Koeleria_pyramidata	Koeleria macrantha	KOEMAC
+Lespedeza_capitata	Lespedeza capitata	LESCAP
+Liatris_aspera	Liatris aspera	LIAASP
+Liatris_pycnostachya	Liatris pycnostachya	LIAPYC
+Liatris_scariosa	Liatris scariosa	LIASCN
+Liatris_spicata	Liatris spicata	LIASPI
+Lilium_michiganense	Lilium michiganense	LILMIC
+Maianthemum_racemosum	Maianthemum racemosum	MAIRAC
+_______(Smilacina_racemosa)	       (Smilacina racemosa)	
+Monarda_bradburiana	Monarda bradburiana	MONBRA
+Monarda_fistulosa	Monarda fistulosa	MONFIS
+Oenothera_pilosella	Oenothera pilosella	OENPIL
+Solidago_rigida	Oligoneuron rigidum	OLIRIG
+_______(Solidago_rigida)	       (Solidago rigida)	
+Panicum_virgatum	Panicum virgatum	PANVIR
+Parthenium_integrifolium	Parthenium integrifolium	PARINT
+Penstemon_digitalis	Penstemon digitalis	PENDIG
+Penstemon_hirsutus	Penstemon hirsutus	PENHIR
+Phlox_pilosa	Phlox pilosa	PHLPIL
+Physostegia_virginiana	Physostegia virginiana	PHYVIR
+Polygonatum_biflorum	Polygonatum biflorum	POLBIC
+Polemonium_reptans	Polemonium reptans	POLREP
+Potentilla_arguta	Potentilla arguta	POTARU
+Pycnanthemum_pilosum	Pycnanthemum pilosum	PYCPIL
+Pycnanthemum_tenuifolium	Pycnanthemum tenuifolium	PYCTEN
+Pycnanthemum_virginianum	Pycnanthemum virginianum	PYCVIR
+Ratibida_pinnata	Ratibida pinnata	RATPIN
+Rosa_blanda	Rosa blanda	ROSBLA
+Rosa_carolina	Rosa carolina	ROSCAR
+Rosa_setigera	Rosa setigera	ROSSET
+Rudbeckia_fulgida	Rudbeckia fulgida	RUDFUL
+Rudbeckia_hirta	Rudbeckia hirta	RUDHIR
+Rudbeckia_subtomentosa	Rudbeckia subtomentosa	RUDSUB
+Rudbeckia_triloba	Rudbeckia triloba	RUDTRI
+Ruellia_humilis	Ruellia humilis	RUEHUM
+Schizachyrium_scoparium	Schizachyrium scoparium	SCHSCO
+Senna_hebecarpa	Senna hebecarpa	SENHEB
+_______(Cassia_hebecarpa)	       (Cassia hebecarpa)	
+Senna_marilandica	Senna marilandica	SENMAR
+_______(Cassia_marilandica)	       (Cassia marilandica)	
+Silphium_integrifolium	Silphium integrifolium	SILINT
+Silphium_laciniatum	Silphium laciniatum	SILLAC
+Silphium_terebinthinaceum	Silphium terebinthinaceum	SILTER
+Sisyrinchium_angustifolium	Sisyrinchium angustifolium	SISANG
+Solidago_juncea	Solidago juncea	SOLJUN
+Solidago_nemoralis	Solidago nemoralis	SOLNEM
+Solidago_speciosa	Solidago speciosa	SOLSPE
+Sorghastrum_nutans	Sorghastrum nutans	SORNUT
+Spiraea_alba	Spiraea alba	SPIALB
+Sporobolus_heterolepis	Sporobolus heterolepis	SPOHET
+Symphyotrichum_ericoides	Symphyotrichum ericoides	SYMERI
+_______(Aster_ericoides)	       (Aster ericoides)	
+Symphyotrichum_laeve	Symphyotrichum laeve	SYMLAE
+_______(Aster_laevis)	       (Aster laevis)	
+Symphyotrichum_novae-angliae	Symphyotrichum novae-angliae	SYMNOV
+_______(Aster_novae-angliae)	       (Aster novae-angliae)	
+Symphyotrichum_oolentangiense	Symphyotrichum oolentangiense	SYMOOL
+_______(Aster_azureus)	       (Aster azureus)	
+Symphyotrichum_sericeum	Symphyotrichum sericeum	SYMSER
+_______(Aster_sericeus)	       (Aster sericeus)	
+Teucrium_canadense	Teucrium canadense	TEUCAN
+Thalictrum_dasycarpum	Thalictrum dasycarpum	THADAS
+Tradescantia_ohiensis	Tradescantia ohiensis	TRAOHI
+Vernonia_fasciculata	Vernonia fasciculata	VERFAS
+Vernonia_altissima	Vernonia gigantea	VERGIG
+Vernonia_missurica	Vernonia missurica	VERMIS
+Verbena_stricta	Verbena stricta	VERSTR
+Veronicastrum_virginicum	Veronicastrum virginicum	VERVIR
+Viola_pedatifida	Viola pedatifida	VIOPDF
+Zizia_aptera	Zizia aptera	ZIZAPT
+Zizia_aurea	Zizia aurea	ZIZAUR

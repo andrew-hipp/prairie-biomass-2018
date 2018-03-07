@@ -24,6 +24,9 @@ dat <- list(
     biomass.raw = read.delim('../DATA/Biomass_Datasheet-2018-12-14v2-AHedit.tsv', as.is = T)
     )
 
+spp.trans <- read.delim('../DATA/sp.trans.tsv.txt', as.is = T)
+ndvi <- read.table('../DATA/plotNDVI', header = T)
+
 ## a little cleanup on two names
 names(dat$composition) <- gsub('[.-]', '', names(dat$composition))
 tr.prairie$tip.label <- gsub('[.-]', '', tr.prairie$tip.label)
@@ -68,3 +71,30 @@ dat$mono <- dat$biomass.raw[which(dat$biomass.raw$type == 'Mono'), ] %>%
 names(dat$mono) <- dat.headers.mono
 dat$mono[, c('plot', 'type', 'sp')] <- dat$biomass.raw[dat$biomass.raw$type == 'Mono', c('plot', 'type', 'sp')]
 dat$mono$noGL <- dat$mono$biomass.total - ifelse(is.na(dat$mono$gl), 0, dat$mono$gl)
+
+mono.scalar <- 15/4 # accounts for the fact that 4 of 15 plants were collected from each monoculture
+mono.rows <- match(ndvi$plot, dat$mono$plot)
+tmt.rows <- match(ndvi$plot, dat$plugs$plot)
+ndvi.mat <- data.frame(plot = ndvi$plot,
+              biomass.monocultures = dat$mono[mono.rows, 'biomass.total'] * mono.scalar,
+              biomass.monocultures.noGL = dat$mono[mono.rows, 'noGL'] * mono.scalar,
+              biomass.tmts = dat$plugs[tmt.rows, 'biomass.total'],
+              biomass.tmts.noGL = dat$plugs[tmt.rows, 'biomass.total'] -
+                                  dat$plugs[tmt.rows, 'groundLeaves'],
+              phy.div = dat$plugs[tmt.rows, 'phy'],
+              trait.div = dat$plugs[tmt.rows, 'trt'],
+              ndvi = ndvi$ndvi,
+              as.is = T)
+
+ndvi.mat$biomass.all <- apply(ndvi.mat[, c('biomass.monocultures', 'biomass.tmts')],
+                              1, sum, na.rm = T)
+ndvi.mat$biomass.all[which(apply(head(ndvi.mat[, c('biomass.monocultures', 'biomass.tmts')], 15),1,function(x) sum(is.na(x))) == 2)] <- NA
+
+
+ndvi.mat$'Plot.category' = NA
+ndvi.mat$'Plot.category'[which(!is.na(tmt.rows))] = "Treatment"
+ndvi.mat$'Plot.category'[which(!is.na(mono.rows))] = "Monoculture"
+ndvi.mat$Plot.category <- factor(ndvi.mat$Plot.category, levels = c('Treatment',
+                                                                    'Monoculture'))
+
+ndvi.mat <- ndvi.mat[-ndvi.mat$plot[is.na(ndvi.mat$Plot.category)], ]
