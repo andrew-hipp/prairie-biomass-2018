@@ -1,3 +1,6 @@
+library(magrittr)
+library(ggplot2)
+
 source("../SCRIPTS/00.readData.R")
 source("../DATA/plot.design.R")
 
@@ -47,6 +50,8 @@ block.A.biomass.test
 layout(matrix(1:2, 2))
 hist(soil.cover$AHOR_cm[which(soil.cover$block_BS.mod %in% LETTERS[1:3])], 20, main = 'W superblock', xlab = 'A horizon depth', xlim = range(20,45), ylim = range(0,25))
 hist(soil.cover$AHOR_cm[which(soil.cover$block_BS.mod %in% LETTERS[1])], 20, main = 'Block A', xlab = 'A horizon depth', xlim = range(20,45), ylim = range(0,25))
+
+
 
 ##Block B and replicates NDVI
 
