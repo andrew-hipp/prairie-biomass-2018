@@ -1,0 +1,386 @@
+??rasterVis
+raster:::.plotraster(cropped)
+points(sampleOGR)
+?raster:::.imageplot
+??.imageplot
+raster:::.imageplot(cropped)
+raster:::.imageplot(cropped, pch=".")
+?raster
+library(sp)#
+library(maptools)#
+library(rgdal)#
+library(raster)#
+library(rasterVis)#
+#
+prairie=raster(/Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/Sample Data/prairieNDVI.tif)#
+sp::plot(prairie)#
+crop=drawExtent()#
+cropped=crop(prairie,crop)#
+#
+sampleOGR=readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data','markerstest')#
+#
+raster:::.plotraster(cropped)#
+points(sampleOGR)
+raster:::.plotraster(cropped)
+sp::plot(cropped)
+df(file.choose())
+markers=readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data','markers-all')
+plot(cropped)
+plot(prairie)
+prairie(raster('file.choose()'))
+prairie=raster('file.choose()'))
+prairie=raster('file.choose()')
+prairie=raster(file.choose())
+plot(prairie)
+prairie=drawExtent()
+plot(prairie)
+prairie=raster(file.choose())
+plot(prairie)
+crop=drawExtent()
+sp::plot(crop)
+plot(prairie)
+croped=drawExtent()
+pcrop=crop(prairie,cropped)
+plot(pcrop)
+markers=readShapePoly('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/markers-all')
+library(maptools)
+library(rgeos)
+library(maptools)\
+library(maptools)
+markers=readShapePoly('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/markers-all')
+readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/','markers'all)
+readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/','markers-all)
+readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/','markers-all')
+library(sp)
+readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/','markers-all')
+library(rgdal)
+readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/','markers-all')
+file.exsits('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/markers-all.shp')
+file.exists('/Users/Tuffin96/Google Drive/Morton/Biomass-VI/Sample Data/markers-all.shp')
+file.exists('/Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/Sample Data/markers-all.shp')
+readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/Sample Data/','markers-all')
+markers=readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/Sample Data/','markers-all')
+plot(markers,add=t)
+plot(markers,add=T)
+raster:::.plotraster(pcrop)
+plot(markers,add=T)
+png()
+raster:::.plotraster(pcrop)
+plot(markers,add=T)
+dev.off()
+png(filename='pcrop-allmarkers')
+raster:::.plotraster(pcrop)
+plot(markers,add=T)
+dev.off()
+png(filename='pcrop-allmarkers.png')
+raster:::.plotraster(pcrop)
+plot(markers,add=T)
+dev.off()
+PNG(filename='pcrop-allmarkers.png')
+raster:::.plotraster(pcrop)
+points(markers)
+coord=read.table('file.choose()')
+coord=read.table(file.choose())
+header(coord)
+summary(coord)
+head(coord)
+df=coord(,3,4)
+df=coord[,3,4)]
+df=coord[,3,4]
+head(df)
+df
+df=coord[,5,6]
+df
+df=coord[,3:4]
+head(df)
+raster:::.plotraster(pcrop)
+plot(df,add=T)
+raster:::.plotraster(pcrop)
+points(df)
+raster:::.plotraster(pcrop)
+readShapePoly(/Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/DATA/test-shape)
+readShapePoly(Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/DATA/test-shape)
+shape=readShapePoly('Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/DATA/test-shape')
+shape=readOGR('Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/DATA/test-shape')
+shape=readOGR('Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/DATA','test-shape')
+shape=readOGR('/Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/DATA','test-shape')
+plot(shape,add=T)
+points(df)
+plot(pcrop)
+points(df)
+raster:::.plotraster(pcrop)
+points(df)
+markers@proj4string
+pcrop@proj4string
+pcrop@CRS
+pcrop@crs
+>pheight=raster('file.choose()')
+pheight=raster('file.choose()')
+> prairie=raster(file.choose())
+pheight=raster(file.choose())
+mheight=readOGR(file.choose())
+raster:::.plotraster(pheight)
+plot(mheight, add=T)
+plotswithoutNA <- df#
+#
+plotswithNA <- #
+for (i in 1:length(plotswithoutNA)) {#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+1,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+2,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+3,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, c(NA, NA))#
+  i <- i + 4#
+}
+plotswithNA <- for (i in 1:length(plotswithoutNA)) {#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+1,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+2,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+3,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, c(NA, NA))#
+  i <- i + 4#
+}
+plotswithoutNA <- df#
+#
+plotswithNA <- df#
+for (i in 1:length(plotswithoutNA)) {#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+1,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+2,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+3,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, c(NA, NA))#
+  i <- i + 4#
+}
+head(plotswithNA)
+summary(plotswithNA)
+plotswithoutNA <- df#
+#
+plotswithNA <- df#
+for (i in 1:length(plotswithoutNA)) {#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+1,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+2,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+3,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, r(NA, NA))#
+  i <- i + 4#
+}
+plotswithoutNA <- df#
+#
+plotswithNA <- df#
+for (i in 1:length(plotswithoutNA)) {#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+1,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+2,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+3,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, c(NA, NA))#
+  i <- i + 4#
+}
+plotswithoutNA
+plotswithNA
+plotswithoutNA <- df#
+#
+plotswithNA <- df#
+for (i in 1:1748) {#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+1,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+2,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i+3,])#
+  plotswithNA <- rbind(plotswithNA, plotswithoutNA[i,])#
+  plotswithNA <- rbind(plotswithNA, c(NA, NA))#
+  i <- i + 4#
+}
+plotswithNA
+pNDVI=raster("DATA/alt-prairie-ndvi.tif")
+library(raster)
+pNDVI=raster("DATA/alt-prairie-ndvi.tif")
+ls()
+getwd
+getwd()
+setwd("Users/Tuffin96/Google Drive/Morton/Biomass-NDVI")
+setwd(Users/Tuffin96/Google Drive/Morton/Biomass-NDVI)
+setwd("Users/Tuffin96/Google Drive/Morton/Biomass-NDVI")
+setwd("Users/Tuffin96/Google Drive/Morton/Biomass NDVI")
+clearwd
+load(".RData")
+load("/Users/Tuffin96/Google Drive/Morton/GIS & Mapping In R/week 1-3/practiceChicagoMap.rdata")
+library(geiger)
+install.packages(geiger)
+install.packages ('geiger')
+library(geiger)
+tr = sim.bdtree(n=20)
+dat=sim.char(tr, 1, 1)
+tr2 = ex.ratesimulator(tr, min=5)
+dat2=sim.char(tr2,1,1)
+layout(matrix(1:3,1))
+plot(tr, main='original tree')
+plot(tr2,main='rescaled tree')
+plot(dat[,,1],dat[,,1],xlab='data, raw tree', ylab='data, rescaled tree', main = '')
+models <- list(#
+    origOnOrig = fitContinuous(tr, dat[,,1]),#
+    origOnRescaled = fitContinuous(tr2, dat[,,1]),#
+    rescaledOnRescaled = fitContinuous(tr2, dat2[,,1]),#
+    rescaledOnOrig = fitContinuous(tr,dat2[,,1])#
+)
+models.mat <- cbind(orig = models$origOnOrig$opt,#
+                    origOnRescaled = models$origOnRescaled$opt,#
+                    rescaled = models$rescaledOnRescaled$opt,#
+                    rescaledOnOrig = models$rescaledOnOrig$opt)
+print(models.mat)
+sims <- list(#
+    s12 = sim.char(tr2, par = as.numeric(models.mat['sigsq', 'origOnRescaled']), root = as.numeric(models.mat['z0', 'origOnRescaled']), nsim = 20),#
+    s11 = sim.char(tr, par = as.numeric(models.mat['sigsq', 'orig']), root = as.numeric(models.mat['z0', 'orig']), nsim = 20),#
+    s22 = sim.char(tr2, par = as.numeric(models.mat['sigsq', 'rescaled']), root = as.numeric(models.mat['z0', 'rescaled']), nsim = 20),#
+    s21 = sim.char(tr, par = as.numeric(models.mat['sigsq', 'rescaledOnOrig']), root = as.numeric(models.mat['z0', 'rescaledOnOrig']), nsim = 20)#
+)#
+sims.out <- sapply(names(sims), function(x) {#
+    if(substr(x,3,3) == 2) simTree <- tr2#
+        else simTree <- tr#
+    out <- apply(sims[[x]], 3, function(y) fitContinuous(simTree, y)$opt$lnL)#
+    out#
+        })#
+sims.out
+plot(tr, main='original tree')#
+> plot(tr2,main='rescaled tree')#
+> plot(dat[,,1],dat2[,,1],xlab='data, raw tree', ylab='data, rescaled tree', main = '')
+plot(tr, main='original tree')#
+plot(tr2,main='rescaled tree')#
+plot(dat[,,1],dat2[,,1],xlab='data, raw tree', ylab='data, rescaled tree', main = '')
+plot(tr, main='original tree')
+plot(tr2,main='rescaled tree')
+plot(dat[,,1],dat2[,,1],xlab='data, raw tree', ylab='data, rescaled tree', main = '')
+load("/Users/Tuffin96/Rtrial/.RData")
+load("/Users/Tuffin96/Google Drive/GitHub/prairie-biomass-2018/WORKSPACE/.RData")
+lm()
+lm
+?lm
+?list
+ls()
+head(dat)
+load("/Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/DATA/plot.design.final.2016.08.10c.Rdata")
+pdesign = plot.design.final.2016.08.10c.Rdata
+pdesign = load("/Users/Tuffin96/Google Drive/Morton/Biomass-NDVI/DATA/plot.design.final.2016.08.10c.Rdata")
+names(pdesign)
+ls()
+pdesign = plot.design.final.2016.08.10c
+names(pdesign)
+head(plotVector)
+head(pdesign[2])
+header(pdesign[2])
+?head
+summary(pdesign[2])
+pcon=grep("_",pdesign$plotVector,value=T,fixed=T)
+plot.id = strsplit(pcon, "_", fixed = T) %>% #Splits plot names so...#
+  lapply(., head, 2) %>% #rep number, ie. "rep2", can be removed#
+  sapply(., paste, collapse = "_") #Undoes the split#
+table(plot.id)
+?%>%
+library(magrittr)
+plot.id = strsplit(pcon, "_", fixed = T) %>% #Splits plot names so...#
+  lapply(., head, 2) %>% #rep number, ie. "rep2", can be removed#
+  sapply(., paste, collapse = "_") #Undoes the split#
+table(plot.id)
+head(plot.id)
+head(pcon)
+load(file.choose())
+names(plot.design.final.2016.08.10c)
+design.final = dput(plot.design.final.2016.08.10c)
+dput(plot.design.final.2016.08.10c, file = 'plot.design.R')
+dir()
+head(readLines('plot.design.R'))
+load(../DATA/plot.design.R)
+load("../DATA/plot.design.R")
+praire.design = source("../DATA/plot.design.R")
+praire.design = source(''../DATA/plot.design.R')
+praire.design = source('../DATA/plot.design.R')
+library(ape)
+prairiePath = ('https://raw.githubusercontent.com/andrew-hipp/PCM-2018/master/R-tutorials/DATA/prairie/')
+pr <- function(x, path = prairiePath) paste(path, x, sep = '')
+tr.prairie <- read.tree(pr('tree.pruned.tre'))
+plot(tr.prairie, show.tip.label = F)
+dat <- list(#
+    blocks = read.csv(pr('dat.blocksSoilCover.csv'), row.names = 1, as.is = T),#
+    composition = read.csv(pr('dat.composition.2017.csv'), row.names = 1, as.is = T),#
+    plotMeta = read.csv(pr('dat.cover.meta.2017.csv'), row.names = 1, as.is = T)#
+    )#
+## a little cleanup on two names#
+names(dat$composition) <- gsub('[.-]', '', names(dat$composition))#
+tr.prairie$tip.label <- gsub('[.-]', '', tr.prairie$tip.label)#
+dat$bin <- dat$composition#
+dat$bin[!is.na(dat$bin)] <- 1#
+dat$bin[is.na(dat$bin)] <- 0#
+tr.prairie <- drop.tip(tr.prairie, which(!tr.prairie$tip.label %in% names(dat$bin)))#
+t(sapply(dat, dim))
+phyD <- function(phy, roundDigits = 2) {#
+    out <- c(#
+        pd = sum(phy$edge.length),#
+        mpd = mean(as.dist(cophenetic(phy))),#
+        mntd = mean(apply(cophenetic(phy), 1, function(x) min(x[x > 0])))#
+        )#
+    out <- round(out, roundDigits)#
+    out#
+}#
+phyD(tr.prairie)
+library(picante)
+install.packages(picante)
+?mpd
+??pd
+names(dat$bin)
+head(dat$bin)
+summary(dat$bin)
+names(dat)
+??pd
+pd(dat$bin, tr.prairie)
+library(picante)
+library(vegan)
+library(picante)
+pd(dat$bin, tr.prairie)
+library(picante)
+library(vegan)
+library(vegan)
+library(picante)
+pd(dat$bin, tr.prairie)
+names(dat$bin)
+names(dat)
+names(dat$blocks)
+names(dat$composition)
+names(dat$plotMeta)
+names(dat$plotMeta$phyD)
+names(dat$phyD)
+plot.number = c(1:437)
+head(plot.number)
+plot = c(1:437)#
+#
+all.prairie = as.data.frame(plot)
+head(all.prairie)
+ls()
+source(file.choose())
+names(dat)
+dat$blocks
+plot = c(1:437)#
+#
+all.prairie = as.data.frame(plot)#
+#
+block = dat$blocks#
+#
+all.prairie$gsm = block$GSM
+head(all.praire)
+head(all.prairie)
+??merge
+ls()
+rm(ls)
+ls()
+rm(ls())
+rm()
+ls()
+rm(list=ls())
+ls()
+getwd()
+setwd(/Users/Tuffin96/Google Drive/GitHub/prairie-biomass-2018))
+setwd(Users/Tuffin96/Google Drive/GitHub/prairie-biomass-2018))
+setwd("/Users/Tuffin96/Google Drive/GitHub/prairie-biomass-2018")
+getwd()
