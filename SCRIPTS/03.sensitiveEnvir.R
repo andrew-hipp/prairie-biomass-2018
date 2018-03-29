@@ -51,7 +51,37 @@ layout(matrix(1:2, 2))
 hist(soil.cover$AHOR_cm[which(soil.cover$block_BS.mod %in% LETTERS[1:3])], 20, main = 'W superblock', xlab = 'A horizon depth', xlim = range(20,45), ylim = range(0,25))
 hist(soil.cover$AHOR_cm[which(soil.cover$block_BS.mod %in% LETTERS[1])], 20, main = 'Block A', xlab = 'A horizon depth', xlim = range(20,45), ylim = range(0,25))
 
+##Block A vs replicates environmental factors
 
+block.A.envir = data.frame(block.A, all.prairie$AHOR_cm[which(as.character(all.prairie$plot) %in% names(block.A))])
+block.A.envir = data.frame(block.A.envir, all.prairie$pH[which(as.character(all.prairie$plot) %in% names(block.A))])
+block.A.envir = data.frame(block.A.envir, all.prairie$fWAS[which(as.character(all.prairie$plot) %in% names(block.A))])
+block.A.envir = data.frame(block.A.envir, all.prairie$EC[which(as.character(all.prairie$plot) %in% names(block.A))])
+block.A.envir = data.frame(block.A.envir, all.prairie$GSM[which(as.character(all.prairie$plot) %in% names(block.A))])
+block.A.envir = data.frame(block.A.envir, all.prairie$LOI[which(as.character(all.prairie$plot) %in% names(block.A))])
+
+block.A.envir = block.A.envir[-c(1)]
+olnames(block.A.envir) <- c("AHOR_cm", "pH", "fWAS", "EC", "GSM", "LOI")
+block.A.envir$block = "A"
+
+block.repA.envir = data.frame(block.A.rep, all.prairie$AHOR_cm[which(as.character(all.prairie$plot) %in% names(block.A.rep))])
+block.repA.envir = data.frame(block.repA.envir, all.prairie$pH[which(as.character(all.prairie$plot) %in% names(block.A.rep))])
+block.repA.envir = data.frame(block.repA.envir, all.prairie$fWAS[which(as.character(all.prairie$plot) %in% names(block.A.rep))])
+block.repA.envir = data.frame(block.repA.envir, all.prairie$EC[which(as.character(all.prairie$plot) %in% names(block.A.rep))])
+block.repA.envir = data.frame(block.repA.envir, all.prairie$GSM[which(as.character(all.prairie$plot) %in% names(block.A.rep))])
+block.repA.envir = data.frame(block.repA.envir, all.prairie$LOI[which(as.character(all.prairie$plot) %in% names(block.A.rep))])
+block.repA.envir = block.repA.envir[-c(1)]
+colnames(block.repA.envir) <- c("AHOR_cm", "pH", "fWAS", "EC", "GSM", "LOI")
+block.repA.envir$block = "A repicate"
+
+A.envir = merge(block.A.envir, block.repA.envir, all.y = T, all.x = T)
+
+log.envir.A = log(A.envir[1:6])
+View(log.envir.A)
+pca.envir.A = prcomp(log.envir.A, center = TRUE, scale. = TRUE)
+gg.pca.envir.A <- ggbiplot(pca.envir.A, obs.scale = 1, var.scale = 1, groups = A.envir[,7], ellipse = TRUE, circle = TRUE)
+gg.pca.envir.A = gg.pca.envir.A + scale_color_discrete(name = 'Block')
+print(gg.pca.envir.A)
 
 ##Block B and replicates NDVI
 
@@ -214,3 +244,21 @@ block.F.biomass = block.F.biomass[-10] #biomass is missing from F.rep, so counte
 
 block.F.biomass.test = t.test(block.F.biomass, block.F.rep.biomass, paired = T)
 block.F.biomass.test
+
+##PCA of environmental factors
+
+log.envir = log(all.prairie [c(7,11,12,13,14,15)])
+log.envir = log.envir[-c(409), ] ##AHOR_cm missing from plot 409
+blocks = all.prairie[3]
+blocks = data.frame(blocks[-409, ]) ##AHOR_cm missing from plot 409
+
+pca.envir = prcomp(log.envir, center = TRUE, scale. = TRUE)
+
+library(devtools)
+install_github("ggbiplot", "vqv")
+library(plyr)
+library(dplyr)
+
+gg.pca.envir <- ggbiplot(pca.envir, obs.scale = 1, var.scale = 1, groups = blocks[,1], ellipse = TRUE, circle = TRUE)
+gg.pca.envir = gg.pca.envir + scale_color_discrete(name = 'Block')
+print(gg.pca.envir)
