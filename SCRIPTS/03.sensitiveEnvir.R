@@ -1,5 +1,9 @@
 library(magrittr)
 library(ggplot2)
+library(devtools)
+install_github("ggbiplot", "vqv")
+library(plyr)
+library(dplyr)
 
 source("../SCRIPTS/00.readData.R")
 source("../DATA/plot.design.R")
@@ -51,17 +55,17 @@ layout(matrix(1:2, 2))
 hist(soil.cover$AHOR_cm[which(soil.cover$block_BS.mod %in% LETTERS[1:3])], 20, main = 'W superblock', xlab = 'A horizon depth', xlim = range(20,45), ylim = range(0,25))
 hist(soil.cover$AHOR_cm[which(soil.cover$block_BS.mod %in% LETTERS[1])], 20, main = 'Block A', xlab = 'A horizon depth', xlim = range(20,45), ylim = range(0,25))
 
-##Block A vs replicates environmental factors
+##Block A vs replicate environmental factors
 
-block.A.envir = data.frame(block.A, all.prairie$AHOR_cm[which(as.character(all.prairie$plot) %in% names(block.A))])
-block.A.envir = data.frame(block.A.envir, all.prairie$pH[which(as.character(all.prairie$plot) %in% names(block.A))])
-block.A.envir = data.frame(block.A.envir, all.prairie$fWAS[which(as.character(all.prairie$plot) %in% names(block.A))])
-block.A.envir = data.frame(block.A.envir, all.prairie$EC[which(as.character(all.prairie$plot) %in% names(block.A))])
-block.A.envir = data.frame(block.A.envir, all.prairie$GSM[which(as.character(all.prairie$plot) %in% names(block.A))])
-block.A.envir = data.frame(block.A.envir, all.prairie$LOI[which(as.character(all.prairie$plot) %in% names(block.A))])
+block.A.envir = data.frame(plots.app, all.prairie$AHOR_cm[which(as.character(all.prairie$plot) %in% plots.A)])
+block.A.envir = data.frame(block.A.envir, all.prairie$pH[which(as.character(all.prairie$plot) %in% plots.A)])
+block.A.envir = data.frame(block.A.envir, all.prairie$fWAS[which(as.character(all.prairie$plot) %in% plots.A)])
+block.A.envir = data.frame(block.A.envir, all.prairie$EC[which(as.character(all.prairie$plot) %in% plots.A)])
+block.A.envir = data.frame(block.A.envir, all.prairie$GSM[which(as.character(all.prairie$plot) %in% plots.A)])
+block.A.envir = data.frame(block.A.envir, all.prairie$LOI[which(as.character(all.prairie$plot) %in% plots.A)])
 
 block.A.envir = block.A.envir[-c(1)]
-olnames(block.A.envir) <- c("AHOR_cm", "pH", "fWAS", "EC", "GSM", "LOI")
+colnames(block.A.envir) <- c("AHOR_cm", "pH", "fWAS", "EC", "GSM", "LOI")
 block.A.envir$block = "A"
 
 block.repA.envir = data.frame(block.A.rep, all.prairie$AHOR_cm[which(as.character(all.prairie$plot) %in% names(block.A.rep))])
@@ -72,7 +76,7 @@ block.repA.envir = data.frame(block.repA.envir, all.prairie$GSM[which(as.charact
 block.repA.envir = data.frame(block.repA.envir, all.prairie$LOI[which(as.character(all.prairie$plot) %in% names(block.A.rep))])
 block.repA.envir = block.repA.envir[-c(1)]
 colnames(block.repA.envir) <- c("AHOR_cm", "pH", "fWAS", "EC", "GSM", "LOI")
-block.repA.envir$block = "A repicate"
+block.repA.envir$block = "A replicate"
 
 A.envir = merge(block.A.envir, block.repA.envir, all.y = T, all.x = T)
 
