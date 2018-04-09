@@ -13,26 +13,54 @@ soil.cover = read.csv("../DATA/dat.blocksSoilCover.csv")
 
 treatment.plots=grep("_",plot.design$plotVector,value=T,fixed=T)
 plot.id = strsplit(treatment.plots, "_", fixed = T) %>%
-+     lapply(., head, 2) %>%
-+     sapply(., paste, collapse = "_")
+lapply(., head, 2) %>%
+sapply(., paste, collapse = "_")
 
 ##Block A and replicates NDVI
 
-plots.A <- soil.cover$plot[which(soil.cover$block_BS.mod == 'A')]
+plots.A <- all.prairie$plot[which(all.prairie$block == 'A')]
 block.A <- plot.id[names(plot.id) %in% as.character(plots.A)]
 
-block.A.ndvi <- soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.A))]
-names(block.A.ndvi) <- soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.A))]
+block.A.ndvi <- all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.A))]
+names(block.A.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.A))]
 
 block.A.rep <- plot.id[setdiff(names(plot.id[which(plot.id %in% block.A)]), names(block.A))]
-block.A.rep.ndvi = soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.A.rep))]
-names(block.A.rep.ndvi) <-soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.A.rep))]
+block.A.rep.ndvi = all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.A.rep))]
+names(block.A.rep.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.A.rep))]
 
 names(block.A.ndvi) <- plot.id[names(block.A.ndvi)]
 names(block.A.rep.ndvi) <- plot.id[names(block.A.rep.ndvi)]
 
 block.A.ndvi.test=t.test(block.A.ndvi, block.A.rep.ndvi, paired=T)
 block.A.ndvi.test ##t.test of treatment plots in Block A against its replicates
+
+##bA: GNDVI t.test
+
+block.A.gndvi <- all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.A))]
+names(block.A.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.A))]
+
+block.A.rep.gndvi = all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.A.rep))]
+names(block.A.rep.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.A.rep))]
+
+names(block.A.gndvi) <- plot.id[names(block.A.gndvi)]
+names(block.A.rep.gndvi) <- plot.id[names(block.A.rep.gndvi)]
+
+block.A.gndvi.test=t.test(block.A.gndvi, block.A.rep.gndvi, paired=T)
+block.A.gndvi.test
+
+##bA GDVI2 t.test
+
+block.A.gdvi2 <- all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.A))]
+names(block.A.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.A))]
+
+block.A.rep.gdvi2 = all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.A.rep))]
+names(block.A.rep.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.A.rep))]
+
+names(block.A.gdvi2) <- plot.id[names(block.A.gdvi2)]
+names(block.A.rep.gdvi2) <- plot.id[names(block.A.rep.gdvi2)]
+
+block.A.gdvi2.test=t.test(block.A.gdvi2, block.A.rep.gdvi2, paired=T)
+block.A.gdvi2.test
 
 ##Block A and replicates biomass
 
@@ -89,21 +117,49 @@ print(gg.pca.envir.A)
 
 ##Block B and replicates NDVI
 
-plots.B <- soil.cover$plot[which(soil.cover$block_BS.mod == 'B')]
+plots.B <- all.prairie$plot[which(all.prairie$block == 'B')]
 block.B <- plot.id[names(plot.id) %in% as.character(plots.B)]
 
-block.B.ndvi <- soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.B))]
-names(block.B.ndvi) <- soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.B))]
+block.B.ndvi <- all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.B))]
+names(block.B.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.B))]
 
 block.B.rep <- plot.id[setdiff(names(plot.id[which(plot.id %in% block.B)]), names(block.B))]
-block.B.rep.ndvi = soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.B.rep))]
-names(block.B.rep.ndvi) <-soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.B.rep))]
+block.B.rep.ndvi = all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.B.rep))]
+names(block.B.rep.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.B.rep))]
 
 names(block.B.ndvi) <- plot.id[names(block.B.ndvi)]
 names(block.B.rep.ndvi) <- plot.id[names(block.B.rep.ndvi)]
 
 block.B.ndvi.test=t.test(block.B.ndvi, block.B.rep.ndvi, paired=T)
 block.B.ndvi.test ##t.test of treatment plots in Block B against its replicates
+
+##bB: GNDVI t.test
+
+block.B.gndvi <- all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.B))]
+names(block.B.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.B))]
+
+block.B.rep.gndvi = all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.B.rep))]
+names(block.B.rep.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.B.rep))]
+
+names(block.B.gndvi) <- plot.id[names(block.B.gndvi)]
+names(block.B.rep.gndvi) <- plot.id[names(block.B.rep.gndvi)]
+
+block.B.gndvi.test=t.test(block.B.gndvi, block.B.rep.gndvi, paired=T)
+block.B.gndvi.test
+
+##bB GDVI2 t.test
+
+block.B.gdvi2 <- all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.B))]
+names(block.B.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.B))]
+
+block.B.rep.gdvi2 = all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.B.rep))]
+names(block.B.rep.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.B.rep))]
+
+names(block.B.gdvi2) <- plot.id[names(block.B.gdvi2)]
+names(block.B.rep.gdvi2) <- plot.id[names(block.B.rep.gdvi2)]
+
+block.B.gdvi2.test=t.test(block.B.gdvi2, block.B.rep.gdvi2, paired=T)
+block.B.gdvi2.test
 
 ##Block B and replicates biomass
 
@@ -121,21 +177,49 @@ block.B.biomass.test
 
 ##Block C and replicates NDVI
 
-plots.C <- soil.cover$plot[which(soil.cover$block_BS.mod == 'C')]
+plots.C <- all.prairie$plot[which(all.prairie$block == 'C')]
 block.C <- plot.id[names(plot.id) %in% as.character(plots.C)]
 
-block.C.ndvi <- soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.C))]
-names(block.C.ndvi) <- soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.C))]
+block.C.ndvi <- all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.C))]
+names(block.C.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.C))]
 
 block.C.rep <- plot.id[setdiff(names(plot.id[which(plot.id %in% block.C)]), names(block.C))]
-block.C.rep.ndvi = soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.C.rep))]
-names(block.C.rep.ndvi) <-soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.C.rep))]
+block.C.rep.ndvi = all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.C.rep))]
+names(block.C.rep.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.C.rep))]
 
 names(block.C.ndvi) <- plot.id[names(block.C.ndvi)]
 names(block.C.rep.ndvi) <- plot.id[names(block.C.rep.ndvi)]
 
 block.C.ndvi.test=t.test(block.C.ndvi, block.C.rep.ndvi, paired=T)
 block.C.ndvi.test ##t.test of treatment plots in Block C against its replicates
+
+##bB GNDVI: t.test
+
+block.C.gndvi <- all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.C))]
+names(block.C.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.C))]
+
+block.C.rep.gndvi = all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.C.rep))]
+names(block.C.rep.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.C.rep))]
+
+names(block.C.gndvi) <- plot.id[names(block.C.gndvi)]
+names(block.C.rep.gndvi) <- plot.id[names(block.C.rep.gndvi)]
+
+block.C.gndvi.test=t.test(block.C.gndvi, block.C.rep.gndvi, paired=T)
+block.C.gndvi.test
+
+##bC GDVI2 t.test
+
+block.C.gdvi2 <- all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.C))]
+names(block.C.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.C))]
+
+block.C.rep.gdvi2 = all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.C.rep))]
+names(block.C.rep.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.C.rep))]
+
+names(block.C.gdvi2) <- plot.id[names(block.C.gdvi2)]
+names(block.C.rep.gdvi2) <- plot.id[names(block.C.rep.gdvi2)]
+
+block.C.gdvi2.test=t.test(block.C.gdvi2, block.C.rep.gdvi2, paired=T)
+block.C.gdvi2.test
 
 ##Block C and replicates biomass
 
@@ -153,21 +237,49 @@ block.C.biomass.test
 
 ##Block D and replicates NDVI
 
-plots.D <- soil.cover$plot[which(soil.cover$block_BS.mod == 'D')]
+plots.D <- all.prairie$plot[which(all.prairie$block == 'D')]
 block.D <- plot.id[names(plot.id) %in% as.character(plots.D)]
 
-block.D.ndvi <- soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.D))]
-names(block.D.ndvi) <- soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.D))]
+block.D.ndvi <- all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.D))]
+names(block.D.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.D))]
 
 block.D.rep <- plot.id[setdiff(names(plot.id[which(plot.id %in% block.D)]), names(block.D))]
-block.D.rep.ndvi = soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.D.rep))]
-names(block.D.rep.ndvi) <-soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.D.rep))]
+block.D.rep.ndvi = all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.D.rep))]
+names(block.D.rep.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.D.rep))]
 
 names(block.D.ndvi) <- plot.id[names(block.D.ndvi)]
 names(block.D.rep.ndvi) <- plot.id[names(block.D.rep.ndvi)]
 
 block.D.ndvi.test=t.test(block.D.ndvi, block.D.rep.ndvi, paired=T)
 block.D.ndvi.test ##t.test of treatment plots in Block D against its replicates
+
+##bD GNDVI t.test
+
+block.D.gndvi <- all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.D))]
+names(block.D.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.D))]
+
+block.D.rep.gndvi = all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.D.rep))]
+names(block.D.rep.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.D.rep))]
+
+names(block.D.gndvi) <- plot.id[names(block.D.gndvi)]
+names(block.D.rep.gndvi) <- plot.id[names(block.D.rep.gndvi)]
+
+block.D.gndvi.test=t.test(block.D.gndvi, block.D.rep.gndvi, paired=T)
+block.D.gndvi.test
+
+##bD GDVI2 t.test
+
+block.D.gdvi2 <- all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.D))]
+names(block.D.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.D))]
+
+block.D.rep.gdvi2 = all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.D.rep))]
+names(block.D.rep.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.D.rep))]
+
+names(block.D.gdvi2) <- plot.id[names(block.D.gdvi2)]
+names(block.D.rep.gdvi2) <- plot.id[names(block.D.rep.gdvi2)]
+
+block.D.gdvi2.test=t.test(block.D.gdvi2, block.D.rep.gdvi2, paired=T)
+block.D.gdvi2.test
 
 ##Block D and replicates biomass
 
@@ -186,21 +298,49 @@ block.D.biomass.test
 
 ##Block E and replicates NDVI
 
-plots.E <- soil.cover$plot[which(soil.cover$block_BS.mod == 'E')]
+plots.E <- all.prairie$plot[which(all.prairie$block == 'E')]
 block.E <- plot.id[names(plot.id) %in% as.character(plots.E)]
 
-block.E.ndvi <- soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.E))]
-names(block.E.ndvi) <- soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.E))]
+block.E.ndvi <- all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.E))]
+names(block.E.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.E))]
 
 block.E.rep <- plot.id[setdiff(names(plot.id[which(plot.id %in% block.E)]), names(block.E))]
-block.E.rep.ndvi = soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.E.rep))]
-names(block.E.rep.ndvi) <-soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.E.rep))]
+block.E.rep.ndvi = all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.E.rep))]
+names(block.E.rep.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.E.rep))]
 
 names(block.E.ndvi) <- plot.id[names(block.E.ndvi)]
 names(block.E.rep.ndvi) <- plot.id[names(block.E.rep.ndvi)]
 
 block.E.ndvi.test=t.test(block.E.ndvi, block.E.rep.ndvi, paired=T)
 block.E.ndvi.test ##t.test of treatment plots in Block E against its replicates
+
+##bE GNDVI t.test
+
+block.E.gndvi <- all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.E))]
+names(block.E.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.E))]
+
+block.E.rep.gndvi = all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.E.rep))]
+names(block.E.rep.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.E.rep))]
+
+names(block.E.gndvi) <- plot.id[names(block.E.gndvi)]
+names(block.E.rep.gndvi) <- plot.id[names(block.E.rep.gndvi)]
+
+block.E.gndvi.test=t.test(block.E.gndvi, block.E.rep.gndvi, paired=T)
+block.E.gndvi.test
+
+##bE GDVI2 t.test
+
+block.E.gdvi2 <- all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.E))]
+names(block.E.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.E))]
+
+block.E.rep.gdvi2 = all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.E.rep))]
+names(block.E.rep.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.E.rep))]
+
+names(block.E.gdvi2) <- plot.id[names(block.E.gdvi2)]
+names(block.E.rep.gdvi2) <- plot.id[names(block.E.rep.gdvi2)]
+
+block.E.gdvi2.test=t.test(block.E.gdvi2, block.E.rep.gdvi2, paired=T)
+block.E.gdvi2.test
 
 ##Block E and replicates biomass
 
@@ -218,21 +358,49 @@ block.E.biomass.test
 
 ##Block F and replicates NDVI
 
-plots.F <- soil.cover$plot[which(soil.cover$block_BS.mod == 'F')]
+plots.F <- all.prairie$plot[which(all.prairie$block == 'F')]
 block.F <- plot.id[names(plot.id) %in% as.character(plots.F)]
 
-block.F.ndvi <- soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.F))]
-names(block.F.ndvi) <- soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.F))]
+block.F.ndvi <- all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.F))]
+names(block.F.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.F))]
 
 block.F.rep <- plot.id[setdiff(names(plot.id[which(plot.id %in% block.F)]), names(block.F))]
-block.F.rep.ndvi = soil.cover$ndvi_v1[which(as.character(soil.cover$plot) %in% names(block.F.rep))]
-names(block.F.rep.ndvi) <-soil.cover$plot[which(as.character(soil.cover$plot) %in% names(block.F.rep))]
+block.F.rep.ndvi = all.prairie$pNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.F.rep))]
+names(block.F.rep.ndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.F.rep))]
 
 names(block.F.ndvi) <- plot.id[names(block.F.ndvi)]
 names(block.F.rep.ndvi) <- plot.id[names(block.F.rep.ndvi)]
 
 block.F.ndvi.test=t.test(block.F.ndvi, block.F.rep.ndvi, paired=T)
 block.F.ndvi.test ##t.test of treatment plots in Block F against its replicates
+
+##bF GNDVI t.test
+
+block.F.gndvi <- all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.F))]
+names(block.F.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.F))]
+
+block.F.rep.gndvi = all.prairie$pGNDVIvalues[which(as.character(all.prairie$plot) %in% names(block.F.rep))]
+names(block.F.rep.gndvi) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.F.rep))]
+
+names(block.F.gndvi) <- plot.id[names(block.F.gndvi)]
+names(block.F.rep.gndvi) <- plot.id[names(block.F.rep.gndvi)]
+
+block.F.gndvi.test=t.test(block.F.gndvi, block.F.rep.gndvi, paired=T)
+block.F.gndvi.test
+
+##bF GDVI2 t.test
+
+block.F.gdvi2 <- all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.F))]
+names(block.F.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.F))]
+
+block.F.rep.gdvi2 = all.prairie$pGDVI2values[which(as.character(all.prairie$plot) %in% names(block.F.rep))]
+names(block.F.rep.gdvi2) <- all.prairie$plot[which(as.character(all.prairie$plot) %in% names(block.F.rep))]
+
+names(block.F.gdvi2) <- plot.id[names(block.F.gdvi2)]
+names(block.F.rep.gdvi2) <- plot.id[names(block.F.rep.gdvi2)]
+
+block.F.gdvi2.test=t.test(block.F.gdvi2, block.F.rep.gdvi2, paired=T)
+block.F.gdvi2.test
 
 ##Block F and replicates biomass
 
@@ -266,3 +434,100 @@ library(dplyr)
 gg.pca.envir <- ggbiplot(pca.envir, obs.scale = 1, var.scale = 1, groups = blocks[,1], ellipse = TRUE, circle = TRUE)
 gg.pca.envir = gg.pca.envir + scale_color_discrete(name = 'Block')
 print(gg.pca.envir)
+
+##Boxplot of blocks NDVI vs block/replicates
+
+all.block.ndvi = data.frame(block.A.ndvi, block.A.rep.ndvi,block.B.ndvi, block.B.rep.ndvi,block.C.ndvi, block.C.rep.ndvi,block.D.ndvi, block.D.rep.ndvi,block.E.ndvi, block.E.rep.ndvi,block.F.ndvi, block.F.rep.ndvi)
+
+allstack.block.ndvi = stack(all.block.ndvi)
+
+allstack.block.ndvi$block = 0
+allstack.block.ndvi$rep = 0
+
+allstack.block.ndvi$rep[1:24] = "block"
+allstack.block.ndvi$rep[49:72] = "block"
+allstack.block.ndvi$rep[97:120] = "block"
+allstack.block.ndvi$rep[145:168] = "block"
+allstack.block.ndvi$rep[193:216] = "block"
+allstack.block.ndvi$rep[241:264] = "block"
+
+allstack.block.ndvi$rep[which(allstack.block.ndvi$rep == "0")] = "replicate"
+
+allstack.block.ndvi$block[1:48] = "A"
+allstack.block.ndvi$block[49:96] = "B"
+allstack.block.ndvi$block[97:144] = "C"
+allstack.block.ndvi$block[145:192] = "D"
+allstack.block.ndvi$block[193:240] = "E"
+allstack.block.ndvi$block[241:288] = "F"
+
+names(allstack.block.ndvi)[names(allstack.block.ndvi) == 'values'] <- 'NDVI'
+
+box.blockrep.ndvi = ggplot(allstack.block.ndvi, aes(x=block, y=NDVI, fill=rep)) + geom_boxplot(position=position_dodge(.9))
+
+##Boxplot of NDVI vs blocks
+
+just.block.ndvi = data.frame(block.A.ndvi,block.B.ndvi, block.C.ndvi, block.D.ndvi, block.E.ndvi, block.F.ndvi)
+
+just.stack.block.ndvi = stack(just.block.ndvi)
+names(just.stack.block.ndvi)[names(just.stack.block.ndvi) == 'values'] <- 'NDVI'
+names(just.stack.block.ndvi)[names(just.stack.block.ndvi) == 'ind'] <- 'Block'
+
+box.block.ndvi = ggplot(just.stack.block.ndvi, aes(x=Block, y=NDVI, fill=Block)) + geom_boxplot()
+
+##Boxplot of GNDVI vs blocks/replicates
+
+all.block.gndvi = data.frame(block.A.gndvi, block.A.rep.gndvi,block.B.gndvi, block.B.rep.gndvi,block.C.gndvi, block.C.rep.gndvi,block.D.gndvi, block.D.rep.gndvi,block.E.gndvi, block.E.rep.gndvi,block.F.gndvi, block.F.rep.gndvi)
+
+allstack.block.gndvi = stack(all.block.gndvi)
+
+allstack.block.gndvi$block = 0
+allstack.block.gndvi$rep = 0
+
+allstack.block.gndvi$rep[1:24] = "block"
+allstack.block.gndvi$rep[49:72] = "block"
+allstack.block.gndvi$rep[97:120] = "block"
+allstack.block.gndvi$rep[145:168] = "block"
+allstack.block.gndvi$rep[193:216] = "block"
+allstack.block.gndvi$rep[241:264] = "block"
+
+allstack.block.gndvi$rep[which(allstack.block.gndvi$rep == "0")] = "replicate"
+
+allstack.block.gndvi$block[1:48] = "A"
+allstack.block.gndvi$block[49:96] = "B"
+allstack.block.gndvi$block[97:144] = "C"
+allstack.block.gndvi$block[145:192] = "D"
+allstack.block.gndvi$block[193:240] = "E"
+allstack.block.gndvi$block[241:288] = "F"
+
+names(allstack.block.gndvi)[names(allstack.block.gndvi) == 'values'] <- 'GNDVI'
+
+box.blockrep.gndvi = ggplot(allstack.block.gndvi, aes(x=block, y=GNDVI, fill=rep)) + geom_boxplot(position=position_dodge(.9))
+
+##Boxplot of GDVI2 vs blocks/replicates
+
+all.block.gdvi2 = data.frame(block.A.gdvi2, block.A.rep.gdvi2,block.B.gdvi2, block.B.rep.gdvi2,block.C.gdvi2, block.C.rep.gdvi2,block.D.gdvi2, block.D.rep.gdvi2,block.E.gdvi2, block.E.rep.gdvi2,block.F.gdvi2, block.F.rep.gdvi2)
+
+allstack.block.gdvi2 = stack(all.block.gdvi2)
+
+allstack.block.gdvi2$block = 0
+allstack.block.gdvi2$rep = 0
+
+allstack.block.gdvi2$rep[1:24] = "block"
+allstack.block.gdvi2$rep[49:72] = "block"
+allstack.block.gdvi2$rep[97:120] = "block"
+allstack.block.gdvi2$rep[145:168] = "block"
+allstack.block.gdvi2$rep[193:216] = "block"
+allstack.block.gdvi2$rep[241:264] = "block"
+
+allstack.block.gdvi2$rep[which(allstack.block.gdvi2$rep == "0")] = "replicate"
+
+allstack.block.gdvi2$block[1:48] = "A"
+allstack.block.gdvi2$block[49:96] = "B"
+allstack.block.gdvi2$block[97:144] = "C"
+allstack.block.gdvi2$block[145:192] = "D"
+allstack.block.gdvi2$block[193:240] = "E"
+allstack.block.gdvi2$block[241:288] = "F"
+
+names(allstack.block.gdvi2)[names(allstack.block.gdvi2) == 'values'] <- 'GDVI2'
+
+box.blockrep.gdvi2 = ggplot(allstack.block.gdvi2, aes(x=block, y=GDVI2, fill=rep)) + geom_boxplot(position=position_dodge(.9))
