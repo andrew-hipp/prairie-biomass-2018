@@ -5,6 +5,7 @@ library(geiger)
 library(ggplot2)
 library(ggrepel)
 
+dat.fams <- read.delim('../DATA/prairie.spp.list.v11.2016-01-05.tsv', as.is = T)
 dat.traits <- read.csv('../DATA/ImputedMiceTraits.2016-01-06.csv',
                        as.is = T, row.names = 1)
 
@@ -14,7 +15,7 @@ dat.mds <- as.data.frame(dat.traits.mds$points)
 dat.mds$Biomass <- ndvi.mat.mean[row.names(dat.mds), 'biomass.all']
 
 p.mds <- ggplot(dat.mds, aes(x = MDS1, y = MDS2))
-p.mds <- p.mds + geom_point(aes(size = log(Biomass)))
+p.mds <- p.mds + geom_point(aes(size = Biomass))
 # p.mds <- p.mds + geom_label_repel(label = row.names(dat.mds),point.padding = 1)
 p.mds <- p.mds + theme(legend.position = c(0.9,0.1))
 print(p.mds)
