@@ -1,24 +1,56 @@
 ## ordination of biomass and NDVI on traits
 
 library(vegan)
+library(FD)
 library(geiger)
 library(ggplot2)
 library(ggrepel)
 
-dat.fams <- read.delim('../DATA/prairie.spp.list.v11.2016-01-05.tsv', as.is = T)
+dat.fams <- read.csv('../DATA/families.csv', row.names = 1, as.is = T)
 dat.traits <- read.csv('../DATA/ImputedMiceTraits.2016-01-06.csv',
-                       as.is = T, row.names = 1)
+                       as.is = F, row.names = 1)
 
-dat.traits.mds <- metaMDS(dat.traits[row.names(ndvi.mat.small), 1:13])
-
+dat.traits.use <- c("seedMass", "LDMC", "SLA", "LNC", "LCC", "LPC", "SDMC", "circularity",
+                       "vegetativeHeight", "leafLength", "leafThickness", "leafWidth",
+                       "petioleLength", "Lifeform", "photosyntheticPathway", "rhizomes",
+                       "habitClean", "nFixer",
+                       "wis_IL", "genome_Use")
+dat.traits.continuous <- c("seedMass", "LDMC", "SLA", "LNC", "LCC", "LPC", "SDMC", "circularity",
+                                              "vegetativeHeight", "leafLength", "leafThickness", "leafWidth",
+                                              "petioleLength","genome_Use")
+dat.traits.scaled <- dat.traits[row.names(ndvi.mat.small), dat.traits.use]
+for(i in dat.traits.continuous) dat.traits.scaled[[i]] <- as.numeric(scale(dat.traits.scaled[[i]]))
+dat.fams$Family.8 <- dat.fams$family
+dat.fams$Family.8[!dat.fams$family %in% names(tail(sort(table(dat.fams$family)), 7))] <- "Other"
+dat.traits.mds <- monoMDS(gowdis(dat.traits.scaled))
 dat.mds <- as.data.frame(dat.traits.mds$points)
+dat.mds$Family <- dat.fams[row.names(dat.mds), 'family']
+dat.mds$Family.8 <- dat.fams[row.names(dat.mds), 'Family.8']
 dat.mds$Biomass <- ndvi.mat.mean[row.names(dat.mds), 'biomass.all']
 
+dat.traits.mapping <- data.frame(dat.traits.scaled[c('SDMC', 'circularity', 'vegetativeHeight',
+                                'LDMC', 'SLA', 'LCC', 'leafLength', 'leafThickness')],
+                                Biomass = ndvi.mat.mean[row.names(dat.mds), 'biomass.all'],
+                                NDVI = ndvi.mat.mean[row.names(dat.mds), 'ndvi']
+                                )
+dat.traits.env <- envfit(dat.traits.mds, dat.traits.mapping)
+dat.traits.arrows <- as.data.frame(dat.traits.env$vector$arrows*sqrt(dat.traits.env$vectors$r) * 3)
+dat.traits.arrows$Trait <- row.names(dat.traits.arrows)
 p.mds <- ggplot(dat.mds, aes(x = MDS1, y = MDS2))
-p.mds <- p.mds + geom_point(aes(size = Biomass))
+p.mds <- p.mds + geom_point(aes(size = Biomass, color = Family.8))
+p.mds <- p.mds + scale_color_brewer(type = 'qual', palette = 1)
+#p.mds <- p.mds <- scale_color_brewer("Top 7 families")
 # p.mds <- p.mds + geom_label_repel(label = row.names(dat.mds),point.padding = 1)
-p.mds <- p.mds + theme(legend.position = c(0.9,0.1))
+#p.mds <- p.mds + theme(legend.position = c(0.9,0.1))
+p.mds <- p.mds + geom_segment(data= dat.traits.arrows,
+                              aes(x = 0, xend = MDS1, y = 0, yend = MDS2),
+                              arrow = arrow(length = unit(0.5, 'cm')), color = 'gray',
+                              inherit_aes = FALSE)
+p.mds <- p.mds + geom_text(data = dat.traits.arrows, aes(x = MDS1, y = MDS2, label = Trait))
+#p.mds <- p.mds + coord_fixed()
 print(p.mds)
+
+plot(dat.traits.env)
 
 dat.traits.lambda <- fitContinuous(tr.prairie.phylosig,
   dat.traits[row.names(ndvi.mat.small), 1:13],
