@@ -5,7 +5,7 @@
 library(ape)
 library(ggtree)
 library(magrittr)
-library(caper)
+library(picante)
 
 ndvi.mat$sp <- dat$blocks$monoTreeName[match(ndvi.mat$plot, dat$blocks$plot)]
 ndvi.mat.spl <- split(ndvi.mat, ndvi.mat$sp)
@@ -48,15 +48,16 @@ p <- gheatmap(p, data = ndvi.mat.small,
               width = 0.1,
               hjust = 0,
               )
-p <- p + theme(legend.position = c(0.05,0.9))
+#p <- p + theme(legend.position = c(0.05,0.9))
+p <- p + theme(legend.position = 'none')
 print(p)
 dev.off()
 
 tr.prairie.phylosig <- tr.prairie.biomassPlot
 tr.prairie.phylosig$node.label <- NULL
 tr.prairie.biomass.K <- list(
-  biomass = phylosignal(ndvi.mat.small[tr.prairie.phylosig$tip.label, 'Biomass'], tr.prairie.phylosig),
-  NDVI = phylosignal(ndvi.mat.small[tr.prairie.phylosig$tip.label, 'NDVI'], tr.prairie.phylosig)
+  biomass = phylosignal(ndvi.mat.small[tr.prairie.phylosig$tip.label, 'Biomass'], tr.prairie.phylosig)[1,],
+  NDVI = phylosignal(ndvi.mat.small[tr.prairie.phylosig$tip.label, 'NDVI'], tr.prairie.phylosig)[1,]
 #  ln.biomass = phylosignal(log(ndvi.mat.small[tr.prairie.phylosig$tip.label, 'Biomass']), tr.prairie.phylosig),
 #  ln.NDVI = phylosignal(log(ndvi.mat.small[tr.prairie.phylosig$tip.label, 'NDVI']), tr.prairie.phylosig)
   )
