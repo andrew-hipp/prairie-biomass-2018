@@ -6,6 +6,7 @@ library(plyr)
 library(dplyr)
 
 source("../SCRIPTS/00.readData.R")
+source("../SCRIPTS/01.compileData.R")
 source("../DATA/plot.design.R")
 
 cover.diversity = read.csv("../DATA/dat.cover.diversity.2017.csv")
