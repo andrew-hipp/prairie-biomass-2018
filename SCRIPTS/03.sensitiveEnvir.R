@@ -465,6 +465,76 @@ names(allstack.block.ndvi)[names(allstack.block.ndvi) == 'values'] <- 'NDVI'
 
 box.blockrep.ndvi = ggplot(allstack.block.ndvi, aes(x=block, y=NDVI, fill=rep)) + geom_boxplot(position=position_dodge(.9))
 
+##Boxplot of biomass vs blocks
+
+all.block.biomass = data.frame(block.A.biomass)
+allstack.block.biomass = stack(all.block.biomass)
+
+stack.B = stack(data.frame(block.B.biomass))
+allstack.block.biomass = merge(allstack.block.biomass, stack.B, all.x = T, all.y =T, sort = F)
+
+stack.C = stack(data.frame(block.C.biomass))
+allstack.block.biomass = merge(allstack.block.biomass, stack.C, all.x = T, all.y =T, sort = F)
+
+stack.D = stack(data.frame(block.D.biomass))
+allstack.block.biomass = merge(allstack.block.biomass, stack.D, all.x = T, all.y =T, sort = F)
+
+stack.E = stack(data.frame(block.E.biomass))
+allstack.block.biomass = merge(allstack.block.biomass, stack.E, all.x = T, all.y =T, sort = F)
+
+stack.F = stack(data.frame(block.F.biomass))
+allstack.block.biomass = merge(allstack.block.biomass, stack.F, all.x = T, all.y =T, sort = F)
+
+names(allstack.block.biomass)[names(allstack.block.biomass) == 'values'] <- 'Biomass'
+names(allstack.block.biomass)[names(allstack.block.biomass) == 'ind'] <- 'Block'
+
+box.block.biomass = ggplot(allstack.block.biomass, aes(x=Block, y=Biomass, fill=Block)) + geom_boxplot()
+
+names(allstack.block.biomass)[names(allstack.block.biomass) == 'Biomass'] <- ‘values’
+names(allstack.block.biomass)[names(allstack.block.biomass) == 'Block'] <- ‘ind’
+
+stack.A.rep = stack(data.frame(block.A.rep.biomass))
+allstack.blockrep.biomass = merge(allstack.block.biomass, stack.A.rep, all.x = T, all.y =T, sort = F)
+
+stack.B.rep = stack(data.frame(block.B.rep.biomass))
+allstack.blockrep.biomass = merge(allstack.blockrep.biomass, stack.B.rep, all.x = T, all.y =T, sort = F)
+
+stack.C.rep = stack(data.frame(block.C.rep.biomass))
+allstack.blockrep.biomass = merge(allstack.blockrep.biomass, stack.C.rep, all.x = T, all.y =T, sort = F)
+
+stack.D.rep = stack(data.frame(block.D.rep.biomass))
+allstack.blockrep.biomass = merge(allstack.blockrep.biomass, stack.D.rep, all.x = T, all.y =T, sort = F)
+
+stack.E.rep = stack(data.frame(block.E.rep.biomass))
+allstack.blockrep.biomass = merge(allstack.blockrep.biomass, stack.E.rep, all.x = T, all.y =T, sort = F)
+
+stack.F.rep = stack(data.frame(block.F.rep.biomass))
+allstack.blockrep.biomass = merge(allstack.blockrep.biomass, stack.F.rep, all.x = T, all.y =T, sort = F)
+
+allstack.blockrep.biomass$Block = 0
+allstack.blockrep.biomass$Replicate = 0
+
+allstack.blockrep.biomass$Replicate[1:70] = "Block"
+allstack.blockrep.biomass$Replicate[which(allstack.blockrep.biomass$Replicate == "0")] = "Replicate"
+
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.A.biomass")] = "A"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.B.biomass")] = "B"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.C.biomass")] = "C"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.D.biomass")] = "D"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.E.biomass")] = "E"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.F.biomass")] = "F"
+
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.A.rep.biomass")] = "A"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.B.rep.biomass")] = "B"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.C.rep.biomass")] = "C"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.D.rep.biomass")] = "D"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.E.rep.biomass")] = "E"
+allstack.blockrep.biomass$Block[which(allstack.blockrep.biomass$ind == "block.F.rep.biomass")] = "F"
+
+names(allstack.blockrep.biomass)[names(allstack.blockrep.biomass) == 'values'] <- 'Biomass'
+
+box.blockrep.biomass = ggplot(allstack.blockrep.biomass, aes(x=Block, y=Biomass, fill=Replicate)) + geom_boxplot(position=position_dodge(.9))
+
 ##Boxplot of NDVI vs blocks
 
 just.block.ndvi = data.frame(block.A.ndvi,block.B.ndvi, block.C.ndvi, block.D.ndvi, block.E.ndvi, block.F.ndvi)
