@@ -21,8 +21,26 @@ findthreshold <- function(area, samples) {
   return(bare)
 }
 
-
 # make a function that calculates avg VI excluding pixels below a threshold
+# area: raster
+# samples: list of polygons
+# threshold: the value of cutoff to make ratio
+avgoverthreshold <- function(area, samples, threshold) {
+  avgthreshold <- c(1:length(samples))
+  for (i in 1:length(samples)) {
+    low <- c()
+    high <- c()
+    smallarea <- crop(area, samples[[i]]) #gets raster surrounding plot
+    df <- as.data.frame(smallarea, xy = TRUE) #converts raster to df
+    inside <- pip(df, samples[[i]]) #creates df with raster points that are within plot
+    avgover <- mean(inside[,3][which(inside[,3] > threshold[i])])
+    avgthreshold[i] <- avgover
+  }
+  return(avgthreshold)
+}
+
+
+# make a function that calculates avg VI excluding pixels below a threshold, variable
 # area: raster
 # samples: list of polygons
 # threshold: the value of cutoff to make ratio
