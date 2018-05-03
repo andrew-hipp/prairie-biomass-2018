@@ -32,7 +32,7 @@ tr.prairie.biomassPlot$node.label <-
   c(rep(NA, length(tr.prairie.biomassPlot$tip.label)), tr.prairie.biomassPlot$node.label)
 tr.prairie.biomassPlot$tip.label[tr.prairie.biomassPlot$tip.label == 'Symphyotrichum_novaeangliae'] <- "Symphyotrichum_novae-angliae"
 
-pdf('../OUT/prairie.biomass.ALTedit.pdf')
+pdf('../OUT/prairie.biomass.ALT_edit_NDVI.pdf')
 p <- ggtree(tr.prairie.biomassPlot
 #            layout = 'fan',
 #            open.anphylosignal(all.prairie.small[, tr.prairie.biomassPlot)gle = 15
@@ -50,6 +50,13 @@ p <- gheatmap(p, data = all.prairie.small,
 p <- p + theme(legend.position = 'none')
 print(p)
 dev.off()
+
+tr.prairie.phylosig <- tr.prairie.biomassPlot
+tr.prairie.phylosig$node.label <- NULL
+tr.prairie.biomass.K <- list(
+  biomass = phylosignal(all.prairie.small[tr.prairie.phylosig$tip.label, 'Biomass'], tr.prairie.phylosig)[1,],
+  NDVI = phylosignal(all.prairie.small[tr.prairie.phylosig$tip.label, 'NDVI'], tr.prairie.phylosig)[1,]
+)
 
 ##GNDVI
 
@@ -97,6 +104,13 @@ p <- p + theme(legend.position = 'none')
 print(p)
 dev.off()
 
+tr.prairie.phylosig <- tr.prairie.biomassPlot
+tr.prairie.phylosig$node.label <- NULL
+tr.prairie.biomass.K <- list(
+  biomass = phylosignal(GNDVI.small[tr.prairie.phylosig$tip.label, 'Biomass'], tr.prairie.phylosig)[1,],
+  GNDVI = phylosignal(GNDVI.small[tr.prairie.phylosig$tip.label, 'GNDVI'], tr.prairie.phylosig)[1,]
+)
+
 ##GDVI2
 
 GDVI2.small <- all.prairie.mean[c('biomass.monocultures', 'pGDVI2values')]
@@ -136,10 +150,9 @@ p <- p + theme(legend.position = 'none')
 print(p)
 dev.off()
 
-###Something else?
-
 tr.prairie.phylosig <- tr.prairie.biomassPlot
 tr.prairie.phylosig$node.label <- NULL
 tr.prairie.biomass.K <- list(
-biomass = phylosignal(all.prairie.small[tr.prairie.phylosig$tip.label, 'Biomass'], tr.prairie.phylosig)[1,],
-NDVI = phylosignal(all.prairie.small[tr.prairie.phylosig$tip.label, 'NDVI'], tr.prairie.phylosig)[1,]
+  biomass = phylosignal(GDVI2.small[tr.prairie.phylosig$tip.label, 'Biomass'], tr.prairie.phylosig)[1,],
+  GDVI2 = phylosignal(GDVI2.small[tr.prairie.phylosig$tip.label, 'GDVI2'], tr.prairie.phylosig)[1,]
+)
