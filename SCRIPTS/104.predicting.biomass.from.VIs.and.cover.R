@@ -52,11 +52,9 @@ ggplot(data = all.rsqrs,
   geom_point(aes(col = all.rsqrs$variable)) +
   theme(axis.text.x = element_text(angle = 45)) +
   scale_x_discrete(name = "predictor", 
-                   limits=c("pNDVIvalues", "pGDVI2values", "pGNDVIvalues",
-                            "ndvicover", "gdvi2cover", "gndvicover",
-                            "ndvi.threshold", "ndvi.threshold.var",
-                            "gndvi.threshold", "gndvi.threshold.var",
-                            "ndvi.threshold.noflowers", "gndvi.threshold.noflowers"))
+                   limits=c("pNDVIvalues", 
+                            "ndvi.threshold", "pGNDVIvalues",
+                            "gndvi.threshold"))
 
 ggplot(data = all.coefs, 
        aes(x = all.coefs$predictors, y = all.coefs$value)) +
@@ -135,8 +133,7 @@ ggplot(data = all.rsqrs,
   theme(axis.text.x = element_text(angle = 45)) +
   scale_x_discrete(name = "predictor", 
                    limits=c("ndvi.scaled","ndvi.threshold.scaled", 
-                            "ndvi.threshold.noflowers.scaled", "gndvi.scaled", 
-                            "gndvi.threshold.scaled", "gndvi.threshold.noflowers.scaled"))
+                            "gndvi.scaled", "gndvi.threshold.scaled"))
 
 ggplot(data = all.coefs, 
        aes(x = all.coefs$predictors, y = all.coefs$value)) +
@@ -192,8 +189,8 @@ ggplot(data = all.rsqrs,
   theme(axis.text.x = element_text(angle = 45)) +
   scale_x_discrete(name = "predictor", 
                    limits=c("ndvi.scaled","ndvi.threshold.scaled", 
-                            "ndvi.threshold.noflowers.scaled", "gndvi.scaled", 
-                            "gndvi.threshold.scaled", "gndvi.threshold.noflowers.scaled"))
+                            "gndvi.scaled", 
+                            "gndvi.threshold.scaled"))
 
 ## cover 
 
@@ -209,7 +206,7 @@ for (j in 1:length(categories)) {
   rsqrs <- c()
   coefs <- c()
   for (i in 1:length(predictors)) {
-    lm.test <- lm(all.prairie[[categories[j]]] ~ all.prairie[[predictors[i]]] + all.prairie$AHOR_cm)
+    lm.test <- lm(all.prairie[[categories[j]]] ~ all.prairie[[predictors[i]]])
     rsqrs[length(rsqrs) + 1] <- summary(lm.test)$adj.r.squared
     coefs[length(coefs) + 1] <- summary(lm.test)$coef[2,1]
     i <- i + 1
@@ -236,3 +233,9 @@ ggplot(data = all.rsqrs,
   theme(axis.text.x = element_text(angle = 45)) +
   scale_x_discrete(name = "predictor", 
                    limits=c("pNDVIvalues", "pGNDVIvalues"))
+
+
+ggplot(data = all.prairie, 
+       aes(x = all.prairie$pGNDVIvalues, y = all.prairie$coverTotal)) +
+  geom_point(aes(col = factor(all.prairie$Plot.category))) +
+  geom_smooth(method = "lm", se = FALSE, aes(col = factor(all.prairie$Plot.category)))
