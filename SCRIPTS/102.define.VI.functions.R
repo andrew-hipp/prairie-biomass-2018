@@ -3,9 +3,6 @@
 library(raster)
 library(splancs)
 
-pNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/ndvi.tif")
-pGNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/gndvi.tif")
-
 # this finds the value at the percentile that indicates bare ground
 findthreshold <- function(area, samples) {
   bare <- c()

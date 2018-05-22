@@ -2,6 +2,9 @@
 
 library(reshape2)
 
+pNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/ndvi.tif")
+pGNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/gndvi.tif")
+
 all.prairie$gr <- all.prairie$pGREvalues / all.prairie$pREDvalues
 all.prairie$ndvicover <- all.prairie$pNDVIvalues * (all.prairie$coverTotal/100)
 all.prairie$gndvicover <- all.prairie$pGNDVIvalues * (all.prairie$coverTotal/100)
