@@ -42,3 +42,5 @@ all.prairie$gndvi.threshold.noflowers <- avgoverthreshold(pGNDVI, plotlist,
                                                           threshold = mean(all.prairie$gndvi.min[which(all.prairie$flowers == 0)], na.rm = TRUE))
 all.prairie$gdvi2.threshold.noflowers <- avgoverthreshold(pGDVI2, plotlist, 
                                                           threshold = mean(all.prairie$gdvi2.min[which(all.prairie$flowers == 0)], na.rm = TRUE))
+
+write.csv(all.prairie, "DATA/all.prairie.with.VI.values.csv", row.names = TRUE)
