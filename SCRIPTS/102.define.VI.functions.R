@@ -30,7 +30,7 @@ avgoverthreshold <- function(area, samples, threshold) {
     smallarea <- crop(area, samples[[i]]) #gets raster surrounding plot
     df <- as.data.frame(smallarea, xy = TRUE) #converts raster to df
     inside <- pip(df, samples[[i]]) #creates df with raster points that are within plot
-    avgover <- mean(inside[,3][which(inside[,3] > threshold[i])])
+    avgover <- mean(inside[,3][which(inside[,3] > threshold)])
     avgthreshold[i] <- avgover
   }
   return(avgthreshold)

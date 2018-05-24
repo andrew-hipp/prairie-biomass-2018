@@ -1,5 +1,7 @@
 # how do VIs predict biomass and cover
 
+all.prairie <- read.csv("DATA/all.prairie.with.VI.values.csv")
+
 ###############################
 ## Simple linear regressions ##
 ###############################

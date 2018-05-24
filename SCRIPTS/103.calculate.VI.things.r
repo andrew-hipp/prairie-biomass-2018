@@ -29,13 +29,15 @@ all.prairie$ndvi.threshold <- avgoverthreshold(pNDVI, plotlist, threshold = mean
 all.prairie$gndvi.threshold <- avgoverthreshold(pGNDVI, plotlist, threshold = mean(all.prairie$gndvi.min, na.rm = TRUE))
 all.prairie$gdvi2.threshold <- avgoverthreshold(pGDVI2, plotlist, threshold = mean(all.prairie$gdvi2.min, na.rm = TRUE))
 
- # find avgerage above individual threshold for each plot
+# find avgerage above individual threshold for each plot
 all.prairie$ndvi.threshold.var <- avgoverthreshold.var(pNDVI, plotlist, threshold = all.prairie$ndvi.min)
 all.prairie$gndvi.threshold.var <- avgoverthreshold.var(pGNDVI, plotlist, threshold = all.prairie$gndvi.min)
 all.prairie$gdvi2.threshold.var <- avgoverthreshold.var(pGDVI2, plotlist, threshold = all.prairie$gdvi2.min)
 
 
 # find average above AVG THRESHOLD for each plot, without flower plots
+flowers <- read.csv("DATA/plot.flowers.csv")
+all.prairie$flowers <- flowers$flowers
 all.prairie$ndvi.threshold.noflowers <- avgoverthreshold(pNDVI, plotlist, 
                                                          threshold = mean(all.prairie$ndvi.min[which(all.prairie$flowers == 0)], na.rm = TRUE))
 all.prairie$gndvi.threshold.noflowers <- avgoverthreshold(pGNDVI, plotlist, 
