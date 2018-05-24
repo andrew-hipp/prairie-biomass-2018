@@ -2,8 +2,31 @@
 # REDONE USING ONLY THE RIGHT PLOTS
 
 all.prairie <- read.csv("DATA/all.prairie.with.VI.values.csv")
+
+all.prairie$ndvi.scaled <- scale(all.prairie$pNDVIvalues)
+all.prairie$gdvi2.scaled <- scale(all.prairie$pGDVI2values)
+all.prairie$gndvi.scaled <- scale(all.prairie$pGNDVIvalues)
+
+all.prairie$ndvi.threshold.scaled <- scale(all.prairie$ndvi.threshold)
+all.prairie$gdvi2.threshold.scaled <- scale(all.prairie$gdvi2.threshold)
+all.prairie$gndvi.threshold.scaled <- scale(all.prairie$gndvi.threshold)
+
+all.prairie$ndvi.threshold.noflowers.scaled <- scale(all.prairie$ndvi.threshold.noflowers)
+all.prairie$gdvi2.threshold.no.flowers.scaled <- scale(all.prairie$gdvi2.threshold.noflowers)
+all.prairie$gndvi.threshold.no.flowers.scaled <- scale(all.prairie$gndvi.threshold.noflowers)
+
+all.prairie$cover.scaled <- scale(all.prairie$coverTotal)
+all.prairie$AHOR_cm.scaled <- scale(all.prairie$AHOR_cm)
+
 use.prairie <- all.prairie[which(all.prairie$Plot.category == "Monoculture" | 
                                    all.prairie$TMT.use == 1),]
+
+use.prairie <- all.prairie[which(all.prairie$Plot.category == "Monoculture"),]
+
+use.prairie <- all.prairie[which(all.prairie$TMT.use == 1),]
+
+
+
 
 # make dataframe
 
@@ -137,141 +160,142 @@ comb[9,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi
 comb[9,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.noflowers)), 2), nsmall = 2)
 
 ## + cover
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal))$coefficients[3,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled))$coefficients[3,4]
 comb[10,2] <- paste("NDVI, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[10,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[10,4] <- NA
-comb[10,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal))$r.squared, 3), nsmall = 3)
-comb[10,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal)), 2), nsmall = 2)
+comb[10,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled))$r.squared, 3), nsmall = 3)
+comb[10,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled)), 2), nsmall = 2)
 
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal))$coefficients[3,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled))$coefficients[3,4]
 comb[11,2] <- paste("GDVI2, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[11,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[11,4] <- NA
-comb[11,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal))$r.squared, 3), nsmall = 3)
-comb[11,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal)), 2), nsmall = 2)
+comb[11,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled))$r.squared, 3), nsmall = 3)
+comb[11,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled)), 2), nsmall = 2)
 
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal))$coefficients[3,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled))$coefficients[3,4]
 comb[12,2] <- paste("GNDVI, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[12,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[12,4] <- NA
-comb[12,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal))$r.squared, 3), nsmall = 3)
-comb[12,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal)), 2), nsmall = 2)
+comb[12,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled))$r.squared, 3), nsmall = 3)
+comb[12,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled)), 2), nsmall = 2)
 
 
 ## t + cover
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal))$coefficients[3,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled))$coefficients[3,4]
 comb[13,2] <- paste("NDVIt, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[13,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[13,4] <- NA
-comb[13,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal))$r.squared, 3), nsmall = 3)
-comb[13,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal)), 2), nsmall = 2)
+comb[13,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled))$r.squared, 3), nsmall = 3)
+comb[13,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled)), 2), nsmall = 2)
 
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal))$coefficients[3,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled))$coefficients[3,4]
 comb[14,2] <- paste("GDVI2t, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[14,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[14,4] <- NA
-comb[14,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal))$r.squared, 3), nsmall = 3)
-comb[14,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal)), 2), nsmall = 2)
+comb[14,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled))$r.squared, 3), nsmall = 3)
+comb[14,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled)), 2), nsmall = 2)
 
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal))$coefficients[3,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled))$coefficients[3,4]
 comb[15,2] <- paste("GNDVIt, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[15,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[15,4] <- NA
-comb[15,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal))$r.squared, 3), nsmall = 3)
-comb[15,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal)), 2), nsmall = 2)
+comb[15,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled))$r.squared, 3), nsmall = 3)
+comb[15,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled)), 2), nsmall = 2)
 
 ## + cover + Ahor
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,4]
-coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,1]
-pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,4]
+coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,1]
+pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,4]
 comb[16,2] <- paste("NDVI, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[16,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[16,4] <- paste("Ahor, ", format(round(coef3, 2), nsmall = 2), ", ", format(round(pval3, 4), nsmall = 4))
-comb[16,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$r.squared, 3), nsmall = 3)
-comb[16,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$pNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm)), 2), nsmall = 2)
+comb[16,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$r.squared, 3), nsmall = 3)
+comb[16,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$ndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled)), 2), nsmall = 2)
 
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,4]
-coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,1]
-pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,4]
+coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,1]
+pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,4]
 comb[17,2] <- paste("GDVI2, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[17,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[17,4] <- paste("Ahor, ", format(round(coef3, 2), nsmall = 2), ", ", format(round(pval3, 4), nsmall = 4))
-comb[17,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal + use.prairie$AHOR_cm))$r.squared, 3), nsmall = 3)
-comb[17,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$pGDVI2values + use.prairie$coverTotal + use.prairie$AHOR_cm)), 2), nsmall = 2)
+comb[17,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$r.squared, 3), nsmall = 3)
+comb[17,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled)), 2), nsmall = 2)
 
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,4]
-coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,1]
-pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,4]
+coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,1]
+pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,4]
 comb[18,2] <- paste("GNDVI, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[18,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[18,4] <- paste("Ahor, ", format(round(coef3, 2), nsmall = 2), ", ", format(round(pval3, 4), nsmall = 4))
-comb[18,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm))$r.squared, 3), nsmall = 3)
-comb[18,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$pGNDVIvalues + use.prairie$coverTotal + use.prairie$AHOR_cm)), 2), nsmall = 2)
+comb[18,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$r.squared, 3), nsmall = 3)
+comb[18,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gndvi.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled)), 2), nsmall = 2)
 
 
 ## t + cover + Ahor
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,4]
-coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,1]
-pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,4]
+coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,1]
+pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,4]
 comb[19,2] <- paste("NDVIt, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[19,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[19,4] <- paste("Ahor, ", format(round(coef3, 2), nsmall = 2), ", ", format(round(pval3, 4), nsmall = 4))
-comb[19,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal))$r.squared, 3), nsmall = 3)
-comb[19,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold + use.prairie$coverTotal)), 2), nsmall = 2)
+comb[19,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$r.squared, 3), nsmall = 3)
+comb[19,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$ndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled)), 2), nsmall = 2)
 
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,4]
-coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,1]
-pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,4]
+coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,1]
+pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,4]
 comb[20,2] <- paste("GDVI2t, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval1, 4), nsmall = 4))
 comb[20,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval2, 4), nsmall = 4))
 comb[20,4] <- paste("Ahor, ", format(round(coef3, 2), nsmall = 2), ", ", format(round(pval3, 4), nsmall = 4))
-comb[20,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$r.squared, 3), nsmall = 3)
-comb[20,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm)), 2), nsmall = 2)
+comb[20,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$r.squared, 3), nsmall = 3)
+comb[20,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gdvi2.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled)), 2), nsmall = 2)
 
-coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,1]
-pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[2,4]
-coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,1]
-pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[3,4]
-coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,1]
-pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$coefficients[4,4]
+coef1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,1]
+pval1 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[2,4]
+coef2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,1]
+pval2 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[3,4]
+coef3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,1]
+pval3 <- summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$coefficients[4,4]
 comb[21,2] <- paste("GNDVIt, ", format(round(coef1, 2), nsmall = 2), ", ", format(round(pval, 4), nsmall = 4))
 comb[21,3] <- paste("cover, ", format(round(coef2, 2), nsmall = 2), ", ", format(round(pval, 4), nsmall = 4))
 comb[21,4] <- paste("Ahor, ", format(round(coef3, 2), nsmall = 2), ", ", format(round(pval, 4), nsmall = 4))
-comb[21,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm))$r.squared, 3), nsmall = 3)
-comb[21,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold + use.prairie$coverTotal + use.prairie$AHOR_cm)), 2), nsmall = 2)
+comb[21,5] <- format(round(summary(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled))$r.squared, 3), nsmall = 3)
+comb[21,6] <- format(round(AIC(lm(use.prairie$biomass.all ~ use.prairie$gndvi.threshold.scaled + use.prairie$cover.scaled + use.prairie$AHOR_cm.scaled)), 2), nsmall = 2)
 
 
+write.csv(comb, "OUT/treatments.regression.summary.csv")
