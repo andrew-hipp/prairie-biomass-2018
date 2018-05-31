@@ -1,4 +1,4 @@
-## assumes you've already compiled data (script 01)
+## Assumes you've already compiled data (script 01)
 
 library(ape)
 library(ggtree)
@@ -155,4 +155,48 @@ tr.prairie.phylosig$node.label <- NULL
 tr.prairie.biomass.K <- list(
   biomass = phylosignal(GDVI2.small[tr.prairie.phylosig$tip.label, 'Biomass'], tr.prairie.phylosig)[1,],
   GDVI2 = phylosignal(GDVI2.small[tr.prairie.phylosig$tip.label, 'GDVI2'], tr.prairie.phylosig)[1,]
+)
+
+##Using spectra
+
+spectra.small = all.prairie.mean[c('pNIRvalues', 'pREGvalues', 'pREDvalues', 'pGREvalues')]
+problem.rows <- which(apply(spectra.small, 1, function(x) any(c(-Inf, NaN) %in% x)))
+if(length(problem.rows) > 0) spectra.small <- spectra.small[-problem.rows, ]
+spectra.small <- apply(spectra.small, 2, function(x) (x - min(x)) / max(x - min(x)))
+if(length(problem.rows) > 0) spectra.small <- spectra.small[-problem.rows, ]
+
+problem.rows <- which(apply(spectra.small, 1, function(x) any(c(-Inf, NaN) %in% x)))
+if(length(problem.rows) > 0) spectra.small <- spectra.small[-problem.rows, ]
+
+spectra.small <- apply(spectra.small, 2, function(x) (x - min(x)) / max(x - min(x)))
+if(length(problem.rows) > 0) spectra.small <- spectra.small[-problem.rows, ]
+
+tr.prairie.biomassPlot <- drop.tip(tr.prairie, names(problem.rows)) %>%     multi2di
+tr.prairie.biomassPlot$node.label[tr.prairie.biomassPlot$node.label %in% c('', 'NA')] <- NA
+tr.prairie.biomassPlot$node.label <-
+     c(rep(NA, length(tr.prairie.biomassPlot$tip.label)), tr.prairie.biomassPlot$node.label)
+tr.prairie.biomassPlot$tip.label[tr.prairie.biomassPlot$tip.label == 'Symphyotrichum_novaeangliae'] <- "Symphyotrichum_novae-angliae"
+p <- ggtree(tr.prairie.biomassPlot
+ )
+
+p <- p + geom_label(aes(x = branch), label = tr.prairie.biomassPlot$node.label, size = 2)
+p <- gheatmap(p, data = spectra.small,
+               low = 'white', high = 'black',
+               colnames_angle = 315,
+               font.size = 2,
+               width = 0.1,
+               hjust = 0,
+ )
+
+#p <- p + theme(legend.position = c(0.05,0.9))
+p <- p + theme(legend.position = 'none')
+print(p)
+
+tr.prairie.phylosig <- tr.prairie.biomassPlot
+tr.prairie.phylosig$node.label <- NULL
+tr.prairie.spectra.K <- list(
+  NIR = phylosignal(spectra.small[tr.prairie.phylosig$tip.label, 'pNIRvalues'], tr.prairie.phylosig)[1,],
+  REG = phylosignal(spectra.small[tr.prairie.phylosig$tip.label, 'pREGvalues'], tr.prairie.phylosig)[1,],
+  RED = phylosignal(spectra.small[tr.prairie.phylosig$tip.label, 'pREDvalues'], tr.prairie.phylosig)[1,],
+  GRE = phylosignal(spectra.small[tr.prairie.phylosig$tip.label, 'pGREvalues'], tr.prairie.phylosig)[1,]
 )
