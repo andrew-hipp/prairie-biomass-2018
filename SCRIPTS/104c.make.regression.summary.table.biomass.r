@@ -90,6 +90,9 @@ comb$AIC.c <- as.character(comb$AIC.c)
 
 colnames(comb) <- c("VI used", "VI", "cover", "A-horizon", "R2", "AIC")
 
+all.prairie <- read.csv("DATA/all.prairie.with.VI.values.csv")
+
+
 # make dataframe with the right columns
 col.prairie <- as.data.frame(all.prairie$plot)
 col.prairie$biomass <- scale(all.prairie$biomass.all)
@@ -111,9 +114,9 @@ col.prairie$cover <- scale(all.prairie$coverTotal)
 use.prairie <- col.prairie[which(col.prairie$category == "Monoculture" | 
                                    col.prairie$use == 1),]
 
-use.prairie <- col.prairie[which(col.prairie$Plot.category == "Monoculture"),]
+use.prairie <- col.prairie[which(col.prairie$category == "Monoculture"),]
 
-use.prairie <- col.prairie[which(col.prairie$TMT.use == 1),]
+use.prairie <- col.prairie[which(col.prairie$use == 1),]
 
 
 i <- 1
@@ -121,7 +124,7 @@ i <- 1
 for (i in 1:length(predictor1)) {
   coef <- summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1[i]]]))$coefficients[2,1]
   pval <- summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1[i]]]))$coefficients[2,4]
-  comb[i,2] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4))
+  comb[i,2] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4), sep = "")
   comb[i,3] <- NA
   comb[i,4] <- NA
   comb[i,5] <- format(round(summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1[i]]]))$r.squared, 3), nsmall = 3)
@@ -135,8 +138,8 @@ for (i in (length(predictor1)+1):(length(predictor1) + length(predictor2.1))) {
   pval <- summary(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]]))$coefficients[2,4]
   coef2 <- summary(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]]))$coefficients[3,1]
   pval2 <- summary(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]]))$coefficients[3,4]
-  comb[i,2] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4))
-  comb[i,3] <- paste(format(round(coef2, 2), nsmall = 2), ", p = ", format(round(pval2, 4), nsmall = 4))
+  comb[i,2] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4), sep = "")
+  comb[i,3] <- paste(format(round(coef2, 2), nsmall = 2), ", p = ", format(round(pval2, 4), nsmall = 4), sep = "")
   comb[i,4] <- NA
   comb[i,5] <- format(round(summary(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]]))$r.squared, 3), nsmall = 3)
   comb[i,6] <- format(round(AIC(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]])), 2), nsmall = 2)
@@ -151,9 +154,9 @@ for (i in (length(predictor1) + length(predictor2.1) + 1):(length(predictor1) + 
   pval2 <- summary(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]] + use.prairie[[predictor3.c[i]]]))$coefficients[3,4]
   coef3 <- summary(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]] + use.prairie[[predictor3.c[i]]]))$coefficients[4,1]
   pval3 <- summary(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]] + use.prairie[[predictor3.c[i]]]))$coefficients[4,4]
-  comb[i,2] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4))
-  comb[i,3] <- paste(format(round(coef2, 2), nsmall = 2), ", p = ", format(round(pval2, 4), nsmall = 4))
-  comb[i,4] <- paste(format(round(coef3, 2), nsmall = 2), ", p = ", format(round(pval3, 4), nsmall = 4))
+  comb[i,2] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4), sep = "")
+  comb[i,3] <- paste(format(round(coef2, 2), nsmall = 2), ", p = ", format(round(pval2, 4), nsmall = 4), sep = "")
+  comb[i,4] <- paste(format(round(coef3, 2), nsmall = 2), ", p = ", format(round(pval3, 4), nsmall = 4), sep = "")
   comb[i,5] <- format(round(summary(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]] + use.prairie[[predictor3.c[i]]]))$r.squared, 3), nsmall = 3)
   comb[i,6] <- format(round(AIC(lm(use.prairie[[response]] ~ use.prairie[[VI.predictor.c[i]]] + use.prairie[[predictor2.c[i]]] + use.prairie[[predictor3.c[i]]])), 2), nsmall = 2)
   i <- i + 1
@@ -164,7 +167,7 @@ for (i in (length(predictor1) + length(predictor2.1) + 1):(length(predictor1) + 
 coef <- summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1.c[i]]]))$coefficients[2,1]
 pval <- summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1.c[i]]]))$coefficients[2,4]
 comb[i,2] <- NA
-comb[i,3] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4))
+comb[i,3] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4), sep = "")
 comb[i,4] <- NA
 comb[i,5] <- format(round(summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1.c[i]]]))$r.squared, 3), nsmall = 3)
 comb[i,6] <- format(round(AIC(lm(use.prairie[[response]] ~ use.prairie[[predictor1.c[i]]])), 2), nsmall = 2)
@@ -175,10 +178,20 @@ coef <- summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1.c[i]]]))$co
 pval <- summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1.c[i]]]))$coefficients[2,4]
 comb[i,2] <- NA
 comb[i,3] <- NA
-comb[i,4] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4))
+comb[i,4] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4), sep = "")
 comb[i,5] <- format(round(summary(lm(use.prairie[[response]] ~ use.prairie[[predictor1.c[i]]]))$r.squared, 3), nsmall = 3)
 comb[i,6] <- format(round(AIC(lm(use.prairie[[response]] ~ use.prairie[[predictor1.c[i]]])), 2), nsmall = 2)
 i <- i + 1
 
 
 comb <- comb[order(comb$AIC),]
+comb$AIC <- as.numeric(comb$AIC)
+comb$deltaAIC <- comb$AIC - comb$AIC[1]
+
+
+comb$VI <- sub("p = 0.0000", "p < 0.0001", comb$VI)
+comb$cover <- sub("p = 0.0000", "p < 0.0001", comb$cover)
+comb$"A-horizon" <- sub("p = 0.0000", "p < 0.0001", comb$"A-horizon")
+
+
+write.csv(comb, "OUT/treatments.regression.summary.csv")
