@@ -55,7 +55,32 @@ ggplot(data = prairie.use,
                       breaks = c("Monoculture", "Treatment"))
 dev.off()
 
+# combined
+NBR <- ggplot(data = prairie.use, 
+       aes(x = prairie.use$pNDVIvalues, y = prairie.use$biomass.all)) +
+  geom_point(aes(color = factor(prairie.use$Plot.category))) +
+  geom_smooth(method = "lm", aes(color = factor(prairie.use$Plot.category))) +
+  labs(x = "NDVI", y = "biomass") +
+  scale_colour_manual(values = c("goldenrod2", "cornflowerblue"),
+                      name = "Plot type",
+                      breaks = c("Monoculture", "Treatment"),
+                      guide = FALSE) +
+  theme_classic()
 
+NCR <- ggplot(data = prairie.use, 
+              aes(x = prairie.use$pNDVIvalues, y = prairie.use$coverTotal)) +
+  geom_point(aes(color = factor(prairie.use$Plot.category))) +
+  geom_smooth(method = "lm", aes(color = factor(prairie.use$Plot.category))) +
+  labs(x = "NDVI", y = "percent cover") +
+  scale_colour_manual(values = c("goldenrod2", "cornflowerblue"),
+                      name = "Plot type",
+                      breaks = c("Monoculture", "Treatment")) +
+  theme_classic()
+
+jpeg("OUT/regressions.jpg", width = 900, height = 480)
+ggarrange(NBR, NCR, labels = c("A", "B"), nrow = 1, ncol = 2, 
+          common.legend = TRUE, legend = "bottom")
+dev.off()
 
 
 ############# boxplots
@@ -92,7 +117,7 @@ PB <- ggplot(data = prairie.use,
 
 BB <- ggplot(data = prairie.use,
        aes(x = prairie.use$block, y = prairie.use$biomass.all)) +
-  geom_boxplot(fill = "cornflowerblue") +
+  geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
   labs(x = "block", y = "biomass")
@@ -113,7 +138,7 @@ PN <- ggplot(data = prairie.use,
 
 BN <- ggplot(data = prairie.use,
              aes(x = prairie.use$block, y = prairie.use$pNDVIvalues)) +
-  geom_boxplot(fill = "cornflowerblue") +
+  geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
   labs(x = "block", y = "NDVI")
