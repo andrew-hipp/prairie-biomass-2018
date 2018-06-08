@@ -147,5 +147,6 @@ BN <- ggplot(data = prairie.use,
 
 jpeg("OUT/boxplots.jpg", width = 1100, height = 480)
 ggarrange(TB, PB, BB, TN, PN, BN, labels = c("A", "B", "C", "D", "E", "F"),
-          ncol = 3, nrow = 2)
+          ncol = 3, nrow = 2,
+          align = "hv")
 dev.off()
