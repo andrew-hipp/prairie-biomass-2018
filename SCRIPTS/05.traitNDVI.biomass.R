@@ -1,5 +1,6 @@
 ## ordination of biomass and NDVI on traits
-## ah, done 2018-07-12
+## ah, 2018-07-12 update:
+##  clean up legend on biomass - ndvi correlation
 
 library(vegan)
 library(FD)
@@ -7,6 +8,7 @@ library(geiger)
 library(ggplot2)
 library(ggrepel)
 library(magrittr)
+library(latex2exp)
 
 dat.fams <- read.csv('../DATA/families.csv', row.names = 1, as.is = T)
 dat.traits <- read.csv('../DATA/ImputedMiceTraits.2016-01-06.csv',
@@ -26,8 +28,11 @@ dat.fams$Family.8 <- dat.fams$family
 dat.fams$Family.8[!dat.fams$family %in% names(tail(sort(table(dat.fams$family)), 7))] <- "Other"
 dat.traits.mds <- monoMDS(gowdis(dat.traits.scaled))
 dat.mds <- as.data.frame(dat.traits.mds$points)
-dat.mds$Family <- dat.fams[row.names(dat.mds), 'family']
-dat.mds$Family.8 <- dat.fams[row.names(dat.mds), 'Family.8']
+# dat.mds$Family <- dat.fams[row.names(dat.mds), 'family']
+dat.mds$Family <- factor(dat.fams[row.names(dat.mds), 'Family.8'],
+                          levels = c("Asclepiadaceae", "Asteraceae", "Cyperaceae",
+                          "Fabaceae", "Lamiaceae", "Poaceae", "Rosaceae",
+                          "Other"))
 dat.mds$Biomass <- ndvi.mat.mean[row.names(dat.mds), 'biomass.all']
 
 dat.traits.mapping <- data.frame(dat.traits.scaled[c('SDMC', 'circularity', 'vegetativeHeight',
@@ -42,15 +47,15 @@ dat.traits.arrows$Mapping_variable <-
   ifelse(dat.traits.arrows$Trait %in% c('Biomass', 'NDVI'), 'Productivity response', 'Plant trait') %>%
   factor(levels = c('Productivity response', 'Plant trait'))
 p.mds <- ggplot(dat.mds, aes(x = MDS1, y = MDS2))
-p.mds <- p.mds + geom_point(aes(size = Biomass, color = Family.8))
+p.mds <- p.mds + geom_point(aes(size = Biomass, color = Family))
 p.mds <- p.mds + scale_color_brewer(type = 'qual', palette = 1)
 #p.mds <- p.mds <- scale_color_brewer("Top 7 families")
 # p.mds <- p.mds + geom_label_repel(label = row.names(dat.mds),point.padding = 1)
 #p.mds <- p.mds + theme(legend.position = c(0.9,0.1))
-p.mds <- p.mds + geom_segment(data= dat.traits.arrows,
+p.mds <- p.mds + geom_segment(data = dat.traits.arrows,
                               aes(x = 0, xend = MDS1, y = 0, yend = MDS2, linetype = Mapping_variable),
-                              arrow = arrow(length = unit(0.5, 'cm')), color = 'black',
-                              inherit_aes = FALSE)
+                              arrow = arrow(length = unit(0.5, 'cm')), color = 'black'
+                              )
 p.mds <- p.mds + geom_label_repel(data = dat.traits.arrows,
                                   aes(x = MDS1, y = MDS2, label = Trait),
                                 point.padding = 0.5, segment.size = 0)
@@ -62,9 +67,11 @@ dev.off()
 
 #plot(dat.traits.env)
 
-dat.traits.lambda <- fitContinuous(tr.prairie.phylosig,
+if(!exists("dat.traits.lambda")) {
+  dat.traits.lambda <- fitContinuous(tr.prairie.phylosig,
   dat.traits[row.names(ndvi.mat.small), 1:13],
   model = 'lambda')
+}
 
 dat.traits.cor <- data.frame(
   NDVI = cor(ndvi.mat.small[, 'NDVI'], dat.traits[row.names(ndvi.mat.small), 1:13])[1, ],
@@ -72,20 +79,21 @@ dat.traits.cor <- data.frame(
   lambda = sapply(dat.traits.lambda, function(x) x$opt$lambda)
   )
 
-plot(dat.traits.cor, pch = 19, cex = dat.traits.cor[, 'lambda'])
-abline(a = 0, b = 1, lty = 'dashed')
-
 p <- ggplot(dat.traits.cor, aes(x = NDVI, y = Biomass))
 #p <- p + geom_abline(intercept = 0, slope= 1, lwd = 0.5, lty = 'dashed')
 p <- p + geom_hline(yintercept = 0, lty = 'dashed')
 p <- p + geom_vline(xintercept = 0, lty = 'dashed')
-p <- p + geom_point(aes(size = lambda), color = 'red')
+p <- p + geom_point(aes(size = lambda), color = 'black')
 #p <- p + geom_text(label = row.names(dat.traits.cor), hjust = 0, vjust = 0)
 p <- p + geom_label_repel(label = row.names(dat.traits.cor),
                           point.padding = 1)
 p <- p + scale_x_continuous("NDVI correlation (r) with individual traits")
 p <- p + scale_y_continuous("Biomass correlation (r) with individual traits")
-p <- p + theme(legend.position = c(0.95,0.1))
+p <- p + theme(
+               #legend.background = element_blank(),
+               legend.position = c(0.93,0.1)
+               )
+p <- p + scale_radius(TeX("Pagel's $\\lambda$"))
 
 pdf('../OUT/biomass.ndvi.correlation.regression.pdf', 8, 8)
 print(p)
