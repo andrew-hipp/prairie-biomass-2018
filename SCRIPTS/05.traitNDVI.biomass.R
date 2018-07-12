@@ -1,4 +1,5 @@
 ## ordination of biomass and NDVI on traits
+## ah, done 2018-07-12
 
 library(vegan)
 library(FD)
