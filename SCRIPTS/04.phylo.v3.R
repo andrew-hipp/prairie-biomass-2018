@@ -5,7 +5,7 @@
   ## -- removing all species excluded from 2017 analysis - DONE
   ## -- cleaning code - DONE
   ## -- add tip labels - DONE
-  ## -- coloring major clades?
+  ## -- coloring major clades? - DONE
 
 library(ape)
 library(ggtree)
@@ -130,7 +130,24 @@ dev.off()
 
 tr.prairie.phylosig <- tr.prairie.biomassPlot
 tr.prairie.phylosig$node.label <- NULL
-tr.prairie.phylosignal.K <- sapply(names(all.prairie.small), function(x) {
+prairie.phylosignal <- lapply(names(all.prairie.small), function(x) {
   phylosignal(all.prairie.small[tr.prairie.phylosig$tip.label, x], tr.prairie.phylosig)[1,]
-  }) %>% t %>%
-  write.csv(file = '../OUT/TABLE.phylosignal.csv')
+  }) %>%
+  do.call('rbind', .)
+# row.names(prairie.phylosignal) <- names(all.prairie.small)
+
+prairie.lambda <- list(estimated = fitContinuous(tr.prairie.phylosig, all.prairie.small, model = 'lambda'),
+                       zero = fitContinuous(rescale(tr.prairie.phylosig, 'lambda', 0), all.prairie.small)
+                       )
+prairie.phylosignal <- cbind(prairie.phylosignal,
+                             lambda = sapply(prairie.lambda$estimated, function(x) x$opt$lambda),
+                             L.ratio = 2 * (sapply(prairie.lambda$estimated, function(x) x$opt$lnL) -
+                                           sapply(prairie.lambda$zero, function(x) x$opt$lnL)),
+                             L.ratio.p = pchisq(2 * (sapply(prairie.lambda$estimated, function(x) x$opt$lnL) -
+                                           sapply(prairie.lambda$zero, function(x) x$opt$lnL)),
+                                           df = 1,
+                                           lower.tail = F)
+                                           )
+
+
+write.csv(prairie.phylosignal, file = '../OUT/TABLE.phylosignal.csv')
