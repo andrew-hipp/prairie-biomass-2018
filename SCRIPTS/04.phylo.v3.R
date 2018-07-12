@@ -150,4 +150,4 @@ prairie.phylosignal <- cbind(prairie.phylosignal,
                                            )
 
 
-write.csv(prairie.phylosignal, file = '../OUT/TABLE.phylosignal.csv')
+write.csv(round(prairie.phylosignal, 5), file = '../OUT/TABLE.phylosignal.csv')
