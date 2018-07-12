@@ -68,25 +68,24 @@ tr.prairie.biomassPlot$node.label <-
   c(rep(NA, length(tr.prairie.biomassPlot$tip.label)), tr.prairie.biomassPlot$node.label)
 
 
-  pdf('../OUT/prairie.biomass.allSpectra.pdf')
-  p <- ggtree(tr.prairie.biomassPlot
-  #            layout = 'fan',
-  #            open.anphylosignal(all.prairie.small[, tr.prairie.biomassPlot)gle = 15
-            )
-  p <- p + geom_label(aes(x = branch), label = tr.prairie.biomassPlot$node.label, size = 2)
-  p <- gheatmap(p, data = all.prairie.small,
-                low = 'white', high = 'black',
-                colnames_angle = 315,
-                font.size = 2,
-                width = 0.1,
-                hjust = 0,
-                )
+pdf('../OUT/prairie.biomass.allSpectra.pdf')
+p <- ggtree(tr.prairie.biomassPlot
+#            layout = 'fan',
+#            open.anphylosignal(all.prairie.small[, tr.prairie.biomassPlot)gle = 15
+          )
+p <- p + geom_label(aes(x = branch), label = tr.prairie.biomassPlot$node.label, size = 2)
+p <- gheatmap(p, data = all.prairie.small,
+              low = 'white', high = 'black',
+              colnames_angle = 315,
+              font.size = 2,
+              width = 0.1,
+              hjust = 0,
+              )
 
-  #p <- p + theme(legend.position = c(0.05,0.9))
-  p <- p + theme(legend.position = 'none')
-  print(p)
-  dev.off()
-
+#p <- p + theme(legend.position = c(0.05,0.9))
+p <- p + theme(legend.position = 'none')
+print(p)
+dev.off()
 
 tr.prairie.phylosig <- tr.prairie.biomassPlot
 tr.prairie.phylosig$node.label <- NULL
