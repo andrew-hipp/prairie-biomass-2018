@@ -4,7 +4,7 @@
 ## v3: ahipp, 2018-07-12. Edits include:
   ## -- removing all species excluded from 2017 analysis - DONE
   ## -- cleaning code - DONE
-  ## -- add tip labels
+  ## -- add tip labels - DONE
   ## -- coloring major clades?
 
 library(ape)
@@ -12,7 +12,10 @@ library(ggtree)
 library(magrittr)
 library(picante)
 
+relabelBranches = TRUE
+
 source('../SCRIPTS/00b.problemSpp.2017.R')
+source('../SCRIPTS/999.gheatmap.mod.R') # to suppress legend selectively
 spp.prob.2017 <- gsub('_', ' ', spp.prob.2017, fixed = T)
 
 tr.prairie.biomassPlot <- tr.prairie
@@ -68,31 +71,60 @@ if(length(problem.rows) > 0) all.prairie.small <- all.prairie.small[-problem.row
 
 tr.prairie.biomassPlot <- drop.tip(tr.prairie.biomassPlot, which(!tr.prairie.biomassPlot$tip.label %in% row.names(all.prairie.small))) %>%
   multi2di
+
+#stop('TREE FIXING STOP')
+
 tr.prairie.biomassPlot$node.label[tr.prairie.biomassPlot$node.label %in% c('', 'NA')] <- NA
 tr.prairie.biomassPlot$node.label <-
   c(rep(NA, length(tr.prairie.biomassPlot$tip.label)), tr.prairie.biomassPlot$node.label)
 
+tr.mrca <- mrca(tr.prairie.biomassPlot)
+tr.prairie.biomassPlot <- groupClade(tr.prairie.biomassPlot,
+                                     c(tr.mrca['Helianthus occidentalis', 'Ratibida pinnata'],
+                                   tr.mrca['Lespedeza capitata', 'Desmanthus illinoensis'],
+                                   tr.mrca['Bromus kalmii', 'Bouteloua curtipendula'],
+                                   tr.mrca['Pycnanthemum virginianum', 'Physostegia virginiana']
+                                   )
+                                 )
+if(relabelBranches) {
+  attr(tr.prairie.biomassPlot, 'group') <- as.factor(c('All other lineages',
+                                      'Asteraceae - Sunflower Family',
+                                      'Fabaceae - Bean Family',
+                                      'Poaceae - Grass Family',
+                                      'Lamiaceae - Mint Family')[attr(tr.prairie.biomassPlot, 'group')]
+                                      )
+                                    }
 
-pdf('../OUT/prairie.biomass.allSpectra.pdf')
-p <- ggtree(tr.prairie.biomassPlot
-#            layout = 'fan',
-#            open.anphylosignal(all.prairie.small[, tr.prairie.biomassPlot)gle = 15
+pdf('../OUT/FIGURE.prairie.biomass.allSpectra.withColors.pdf')
+p <- ggtree(tr.prairie.biomassPlot,
+            aes(color=group)
           )
-p <- p + geom_label(aes(x = branch), label = tr.prairie.biomassPlot$node.label, size = 2)
+p <- p + scale_color_manual("Major plant families",
+                            values = c('black',
+                                        'orange',
+                                        'yellow',
+                                        'lightgreen',
+                                        'blue')
+                                        )
+#p <- p + geom_label(aes(x = branch), label = tr.prairie.biomassPlot$node.label, size = 2)
 p <- gheatmap(p, data = all.prairie.small,
               low = 'white', high = 'black',
               colnames_angle = 315,
-              font.size = 2,
-              width = 0.1,
+              font.size = 1.8,
+              width = 0.2,
               hjust = 0,
               )
 p <- p + geom_tiplab(fontface='italic', size = 1.7,
-                      offset = 20,
+                      offset = 40,
                       color = 'black')
+p <- p + theme(legend.position = c(0.15, 0.88),
+               legend.title = element_text(size = 9.5),
+               legend.text = element_text(size = 8),
+               legend.key.size = unit(0.35, 'cm'),
+               legend.box.background = element_rect(color = NA)
+              )
 
-#p <- p + theme(legend.position = c(0.05,0.9))
-p <- p + theme(legend.position = 'none')
-p <- p + ggplot2::xlim(c(0, 250))
+p <- p + ggplot2::xlim(c(0, 280))
 print(p)
 dev.off()
 
