@@ -2,8 +2,9 @@
 ## v1: ahipp 2018-04-12
 ## v2: atuffin, sometime in May
 ## v3: ahipp, 2018-07-12. Edits include:
-  ## -- removing all species excluded from 2017 analysis
-  ## -- cleaning code
+  ## -- removing all species excluded from 2017 analysis - DONE
+  ## -- cleaning code - DONE
+  ## -- add tip labels
   ## -- coloring major clades?
 
 library(ape)
@@ -12,10 +13,12 @@ library(magrittr)
 library(picante)
 
 source('../SCRIPTS/00b.problemSpp.2017.R')
+spp.prob.2017 <- gsub('_', ' ', spp.prob.2017, fixed = T)
 
 tr.prairie.biomassPlot <- tr.prairie
 tr.prairie.biomassPlot$tip.label[which(tr.prairie.biomassPlot$tip.label == "Symphyotrichum_novaeangliae")] <-
   "Symphyotrichum_novae-angliae"
+tr.prairie.biomassPlot$tip.label <- gsub('_', ' ', tr.prairie.biomassPlot$tip.label, fixed = T)
 
 ##NDVI
 
@@ -43,6 +46,8 @@ names(all.prairie.small) <- c('Biomass',
                               'pREG',
                               'pRED',
                               'pGRE')
+
+row.names(all.prairie.small) <- gsub('_', ' ', row.names(all.prairie.small), fixed = T)
 
 message('CHECKING FOR 2017 PROBLEM SPECIES')
 if(any(!spp.prob.2017 %in% row.names(all.prairie.small))) {
@@ -81,9 +86,13 @@ p <- gheatmap(p, data = all.prairie.small,
               width = 0.1,
               hjust = 0,
               )
+p <- p + geom_tiplab(fontface='italic', size = 1.7,
+                      offset = 20,
+                      color = 'black')
 
 #p <- p + theme(legend.position = c(0.05,0.9))
 p <- p + theme(legend.position = 'none')
+p <- p + ggplot2::xlim(c(0, 250))
 print(p)
 dev.off()
 
