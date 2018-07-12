@@ -10,21 +10,26 @@ spp.spring <- sapply(c('Maianthemum',
               unlist
 
 
-spp.didNotEstablishWell = c('Castilleja_coccinea',
-                       'Asclepias_hirtella',
-                       'Asclepias_syriaca',
-                       'Dalea_purpurea',
-                       "Helianthus_strumosus",
-                       'Juncus_interior',
-                       'Juncus_tenuis',
-                       'Verbena_stricta',
-                       'Asclepias_sullivantii',
-                       'Baptisia_bracteata',
-                       'Ceanothus_americanus',
-                       'Dalea_candida',
-                       'Senna_hebecarpa',
-                       'Hypericum_punctatum',
-                       'Lilium_michiganense',
-                       'Symphyotrichum_sericeum')
+spp.didNotEstablishWell <- c('Castilleja_coccinea',
+                             'Asclepias_hirtella',
+                             'Asclepias_syriaca',
+                             'Dalea_purpurea',
+                             "Helianthus_strumosus",
+                             'Juncus_interior',
+                             'Juncus_tenuis',
+                             'Verbena_stricta',
+                             'Asclepias_sullivantii',
+                             'Baptisia_bracteata',
+                             'Ceanothus_americanus',
+                             'Dalea_candida',
+                             'Senna_hebecarpa',
+                             'Hypericum_punctatum',
+                             'Lilium_michiganense',
+                             'Symphyotrichum_sericeum')
 
-spp.prob.2017 <- unique(c(spp.spring, spp.didNotEstablishWell))
+spp.almostZeroBiomass <- c('Agalinis_tenuifolia', 'Senna_marilandica')
+
+spp.prob.2017 <- unique(c(spp.spring,
+                          spp.didNotEstablishWell,
+                          spp.almostZeroBiomass
+                          ))
