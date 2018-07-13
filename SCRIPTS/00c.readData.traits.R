@@ -4,9 +4,9 @@ dat.traits <- read.csv('../DATA/ImputedMiceTraits.2016-01-06.csv',
 
 dat.traits.use <- c("seedMass", "LDMC", "SLA", "LNC", "LCC", "LPC", "SDMC", "circularity",
                        "vegetativeHeight", "leafLength", "leafThickness", "leafWidth",
-                       "petioleLength", "Lifeform", "photosyntheticPathway", "rhizomes",
-                       "habitClean", "nFixer",
-                       "wis_IL", "genome_Use")
+                       "petioleLength", "photosyntheticPathway", "rhizomes",
+                       "nFixer",
+                       "genome_Use")
 dat.traits.continuous <- c("seedMass", "LDMC", "SLA", "LNC", "LCC", "LPC", "SDMC", "circularity",
                                               "vegetativeHeight", "leafLength", "leafThickness", "leafWidth",
                                               "petioleLength","genome_Use")
