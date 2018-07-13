@@ -25,8 +25,8 @@ prairie.phylosignal <- cbind(lambda = sapply(prairie.lambda$estimated, function(
                                                         df = 1,
                                                         lower.tail = F),
                               prairie.phylosignal)
-prairie.phylosignal <- prairie.phylosignal[order(prairie.phylosignal$lambda, decreasing = T), ]
-prairie.phylosignal <- round(prairie.phylosignal, 5)
-prairie.phylosignal[prairie.phylosignal == 0] <- "< 0.00001"
-prairie.phylosignal[prairie.phylosignal == 1] <- "> 0.99999"
-write.csv(prairie.phylosignal, file = '../OUT/TABLE.phylosignal.csv')
+prairie.phylosignal.pretty <- prairie.phylosignal[order(prairie.phylosignal$lambda, decreasing = T), ]
+prairie.phylosignal.pretty<- round(prairie.phylosignal.pretty, 5)
+prairie.phylosignal.pretty[prairie.phylosignal.pretty == 0] <- "< 0.00001"
+prairie.phylosignal.pretty[prairie.phylosignal.pretty == 1] <- "> 0.99999"
+write.csv(prairie.phylosignal.pretty, file = '../OUT/TABLE.phylosignal.csv')
