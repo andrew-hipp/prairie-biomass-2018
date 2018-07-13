@@ -52,9 +52,6 @@ pdf('../OUT/FIGURE.trait.ordination.withBiomass.pdf',12, 8)
 print(p.mds)
 dev.off()
 
-#plot(dat.traits.env)
-stop('debugging stop')
-
 if(!exists("dat.traits.lambda")) {
   dat.traits.lambda <- fitContinuous(tr.prairie.phylosig,
   dat.traits[row.names(ndvi.mat.small), 1:13],
@@ -62,9 +59,9 @@ if(!exists("dat.traits.lambda")) {
 }
 
 dat.traits.cor <- data.frame(
-  NDVI = cor(ndvi.mat.small[, 'NDVI'], dat.traits[row.names(ndvi.mat.small), 1:13])[1, ],
-  Biomass = cor(ndvi.mat.small[, 'Biomass'], dat.traits[row.names(ndvi.mat.small), 1:13])[1, ],
-  lambda = sapply(dat.traits.lambda, function(x) x$opt$lambda)
+  NDVI = cor(all.prairie.ordi$NDVI, all.prairie.ordi[, labels.traits.continuous])[1, ],
+  Biomass = cor(all.prairie.ordi$Biomass, all.prairie.ordi[, labels.traits.continuous])[1, ],
+  lambda = prairie.phylosignal[labels.traits.continuous, 'lambda']
   )
 
 p <- ggplot(dat.traits.cor, aes(x = NDVI, y = Biomass))
