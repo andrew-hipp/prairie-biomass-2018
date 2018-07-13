@@ -11,6 +11,8 @@ library(ape)
 library(ggtree)
 library(magrittr)
 library(picante)
+library(geiger)
+library(tidyverse)
 
 relabelBranches = TRUE
 
@@ -102,7 +104,7 @@ p <- ggtree(tr.prairie.biomassPlot,
 p <- p + scale_color_manual("Major plant families",
                             values = c('black',
                                         'orange',
-                                        'yellow',
+                                        'maroon1',
                                         'lightgreen',
                                         'blue')
                                         )
@@ -130,12 +132,14 @@ dev.off()
 
 tr.prairie.phylosig <- tr.prairie.biomassPlot
 tr.prairie.phylosig$node.label <- NULL
+message('Doing Blomberg\'s K')
 prairie.phylosignal <- lapply(names(all.prairie.small), function(x) {
   phylosignal(all.prairie.small[tr.prairie.phylosig$tip.label, x], tr.prairie.phylosig)[1,]
   }) %>%
   do.call('rbind', .)
 # row.names(prairie.phylosignal) <- names(all.prairie.small)
 
+message('Doing Pagel\'s Lambda')
 prairie.lambda <- list(estimated = fitContinuous(tr.prairie.phylosig, all.prairie.small, model = 'lambda'),
                        zero = fitContinuous(rescale(tr.prairie.phylosig, 'lambda', 0), all.prairie.small)
                        )
