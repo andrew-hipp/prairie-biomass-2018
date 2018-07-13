@@ -1,0 +1,4 @@
+delete when done.... very ephemeral list -- keep issues in GitHub issues
+
+20170713
+dat.traits.scaled -- subset at ordination time [row.names(ndvi.mat.small)]
