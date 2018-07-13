@@ -1,5 +1,4 @@
 delete when done.... very ephemeral list -- keep issues in GitHub issues
 
-20170713
-dat.traits.scaled -- subset at ordination time [row.names(ndvi.mat.small)]
-trait means -- right now,
+20170713 - AH
+I've gone through most of the things I can do for now; the main thing at this point is for AH and LS to go through the scripts together and fix redundancies, then review remaining analyses together.
