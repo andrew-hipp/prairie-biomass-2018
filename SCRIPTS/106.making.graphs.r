@@ -100,6 +100,8 @@ lighten <- function(color, factor=1.4){
   col
 }
 
+# biomass
+
 MB <- ggplot(data = prairie.use,
              aes(x = prairie.use$Plot.category, y = prairie.use$biomass.all)) +
   geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
@@ -131,6 +133,8 @@ BB <- ggplot(data = prairie.use,
   theme_classic() +
   labs(x = "block", y = "biomass") +
   ylim(c(0, 4000))
+
+# NDVI
 
 TN <- ggplot(data = prairie.use,
        aes(x = prairie.use$trait.div, y = prairie.use$pNDVIvalues)) +
@@ -164,9 +168,46 @@ MN <- ggplot(data = prairie.use,
   labs(x = "plot type", y = "NDVI") +
   ylim(c(0.3, 0.9))
 
+# Cover
+TC <- ggplot(data = prairie.use,
+             aes(x = prairie.use$trait.div, y = prairie.use$coverTotal)) +
+  geom_boxplot(fill = c(lighten("cornflowerblue"), darken("cornflowerblue"))) +
+  scale_x_discrete(limits = c("L", "H"), labels = c("Low", "High")) +
+  theme_classic() +
+  labs(x = "trait diversity", y = "cover") +
+  ylim(c(0, 100))
+
+PC <- ggplot(data = prairie.use,
+             aes(x = prairie.use$phy.div, y = prairie.use$coverTotal)) +
+  geom_boxplot(fill = c(lighten("cornflowerblue"), "cornflowerblue", darken("cornflowerblue"))) +
+  scale_x_discrete(limits = c("L", "M", "H"), labels = c("Low", "Medium", "High")) +
+  theme_classic() +
+  labs(x = "phylogenetic diversity", y = "cover") +
+  ylim(c(0, 100))
+
+BC <- ggplot(data = prairie.use,
+             aes(x = prairie.use$block, y = prairie.use$coverTotal)) +
+  geom_boxplot(fill = "darkolivegreen4") +
+  scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
+  theme_classic() +
+  labs(x = "block", y = "cover") +
+  ylim(c(0, 100))
+
+MC <- ggplot(data = prairie.use,
+             aes(x = prairie.use$Plot.category, y = prairie.use$coverTotal)) +
+  geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
+  scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
+  theme_classic() +
+  labs(x = "plot type", y = "cover") +
+  ylim(c(0, 100))
+
+
 jpeg("OUT/boxplots.jpg", width = 1100, height = 480)
-ggarrange(TB, PB, BB, TN, PN, BN, labels = c("A", "B", "C", "D", "E", "F"),
-          ncol = 3, nrow = 2,
+ggarrange(MB, TB, PB, BB, 
+          MC, TC, PC, BC,
+          MN, TN, PN, BN, 
+          labels = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"),
+          ncol = 4, nrow = 3,
           align = "hv")
 dev.off()
 
