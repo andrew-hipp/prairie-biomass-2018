@@ -2,6 +2,7 @@
 
 library(ggplot2)
 library(colortools)
+library(ggpubr)
 
 all.prairie <- read.csv("DATA/all.prairie.with.VI.values.csv")
 
@@ -85,7 +86,6 @@ dev.off()
 
 ############# boxplots
 
-
 darken <- function(color, factor=1.4){
   col <- col2rgb(color)
   col <- col/factor
@@ -100,53 +100,77 @@ lighten <- function(color, factor=1.4){
   col
 }
 
+MB <- ggplot(data = prairie.use,
+             aes(x = prairie.use$Plot.category, y = prairie.use$biomass.all)) +
+  geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
+  scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
+  theme_classic() +
+  labs(x = "plot type", y = "biomass") +
+  ylim(c(0, 4000))
 
 TB <- ggplot(data = prairie.use,
        aes(x = prairie.use$trait.div, y = prairie.use$biomass.all)) +
   geom_boxplot(fill = c(lighten("cornflowerblue"), darken("cornflowerblue"))) +
   scale_x_discrete(limits = c("L", "H"), labels = c("Low", "High")) +
   theme_classic() +
-  labs(x = "trait diversity", y = "biomass")
+  labs(x = "trait diversity", y = "biomass") +
+  ylim(c(0, 4000))
 
 PB <- ggplot(data = prairie.use,
        aes(x = prairie.use$phy.div, y = prairie.use$biomass.all)) +
   geom_boxplot(fill = c(lighten("cornflowerblue"), "cornflowerblue", darken("cornflowerblue"))) +
   scale_x_discrete(limits = c("L", "M", "H"), labels = c("Low", "Medium", "High")) +
   theme_classic() +
-  labs(x = "phylogenetic diversity", y = "biomass")
+  labs(x = "phylogenetic diversity", y = "biomass") +
+  ylim(c(0, 4000))
 
 BB <- ggplot(data = prairie.use,
        aes(x = prairie.use$block, y = prairie.use$biomass.all)) +
   geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
-  labs(x = "block", y = "biomass")
+  labs(x = "block", y = "biomass") +
+  ylim(c(0, 4000))
 
 TN <- ggplot(data = prairie.use,
        aes(x = prairie.use$trait.div, y = prairie.use$pNDVIvalues)) +
   geom_boxplot(fill = c(lighten("cornflowerblue"), darken("cornflowerblue"))) +
   scale_x_discrete(limits = c("L", "H"), labels = c("Low", "High")) +
   theme_classic() +
-  labs(x = "trait diversity", y = "NDVI")
+  labs(x = "trait diversity", y = "NDVI") +
+  ylim(c(0.3, 0.9))
 
 PN <- ggplot(data = prairie.use,
        aes(x = prairie.use$phy.div, y = prairie.use$pNDVIvalues)) +
   geom_boxplot(fill = c(lighten("cornflowerblue"), "cornflowerblue", darken("cornflowerblue"))) +
   scale_x_discrete(limits = c("L", "M", "H"), labels = c("Low", "Medium", "High")) +
   theme_classic() +
-  labs(x = "phylogenetic diversity", y = "NDVI")
+  labs(x = "phylogenetic diversity", y = "NDVI") +
+  ylim(c(0.3, 0.9))
 
 BN <- ggplot(data = prairie.use,
              aes(x = prairie.use$block, y = prairie.use$pNDVIvalues)) +
   geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
-  labs(x = "block", y = "NDVI")
+  labs(x = "block", y = "NDVI") +
+  ylim(c(0.3, 0.9))
 
-
+MN <- ggplot(data = prairie.use,
+       aes(x = prairie.use$Plot.category, y = prairie.use$pNDVIvalues)) +
+  geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
+  scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
+  theme_classic() +
+  labs(x = "plot type", y = "NDVI") +
+  ylim(c(0.3, 0.9))
 
 jpeg("OUT/boxplots.jpg", width = 1100, height = 480)
 ggarrange(TB, PB, BB, TN, PN, BN, labels = c("A", "B", "C", "D", "E", "F"),
           ncol = 3, nrow = 2,
           align = "hv")
 dev.off()
+
+
+ggarrange(BB, MB, TB, PB, BN, MN, TN, PN, labels = c("A", "B", "C", "D", "E", "F", "G", "H"),
+          ncol = 4, nrow = 2,
+          align = "hv")
