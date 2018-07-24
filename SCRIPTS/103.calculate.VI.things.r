@@ -6,17 +6,25 @@ library(reshape2)
 pNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/ndvi.tif")
 pGNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/gndvi.tif")
 pGDVI2 <- raster("/Users/lanescher/Desktop/tiffs_final/gdvi2.tif")
-# ISSUE read in single band tifs also
+pRED <- raster("/Users/lanescher/Desktop/tiffs_final/red.tif")
+pGRE <- raster("/Users/lanescher/Desktop/tiffs_final/green.tif")
+pNIR <- raster("/Users/lanescher/Desktop/tiffs_final/nir.tif")
+pREG <- raster("/Users/lanescher/Desktop/tiffs_final/rededge.tif")
 
 # read in flower presence
 flowers <- read.csv("DATA/plot.flowers.csv") 
 VI$flowers <- flowers$flowers
 
-# ISSUE add script that calculates avg VIs and band for each plot
+# calculate avg VIs and band for each plot
+VI$pNDVIvalues <- avgvalues(pNDVI, plotlist)
+VI$pGNDVIvalues <- avgvalues(pGNDVI, plotlist)
+VI$pGDVI2values <- avgvalues(pGDVI2, plotlist)
+VI$pREDvalues <- avgvalues(pRED, plotlist)
+VI$pGREvalues <- avgvalues(pGRE, plotlist)
+VI$pNIRvalues <- avgvalues(pNIR, plotlist)
+VI$pREGvalues <- avgvalues(pREG, plotlist)
 
-
-
-# find threshold for each plot
+# find threshold for each plot in each VI
 VI$ndvi.threshold <- findthreshold(pNDVI, plotlist)
 VI$gndvi.threshold <- findthreshold(pGNDVI, plotlist)
 VI$gdvi2.threshold <- findthreshold(pGDVI2, plotlist)
