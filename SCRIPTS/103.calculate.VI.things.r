@@ -6,6 +6,7 @@ library(reshape2)
 pNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/ndvi.tif")
 pGNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/gndvi.tif")
 pGDVI2 <- raster("/Users/lanescher/Desktop/tiffs_final/gdvi2.tif")
+# ISSUE read in single band tifs also
 
 # read in flower presence
 flowers <- read.csv("DATA/plot.flowers.csv") 
