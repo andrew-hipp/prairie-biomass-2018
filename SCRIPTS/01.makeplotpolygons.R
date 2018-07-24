@@ -1,7 +1,7 @@
 # this script turns a txt file into a list of polygons
 
 # read in plot coords from txt file
-plotcoords <- read.csv("/Users/lanescher/Dropbox/prairie/data/prairiecoords.txt", sep = "\t", header = TRUE)
+plotcoords <- read.csv("../DATA/prairiecoords.txt", sep = "\t", header = TRUE)
 
 # cut out extra columns
 plotswithoutNA <- plotcoords[c(5,6)]
