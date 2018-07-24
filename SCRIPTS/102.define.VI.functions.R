@@ -3,6 +3,24 @@
 library(raster)
 library(splancs)
 
+# make a function to calculate average pixel value from raster
+# area: raster
+# samples: list of polygons
+avgvalues <- function(area, samples) {
+  avglist <- c(1:length(samples))
+  i <- 1
+  for (i in 1:length(samples)) {
+    smallarea <- crop(area, samples[[i]]) #gets raster surrounding plot
+    df <- as.data.frame(smallarea, xy = TRUE) #converts raster to df
+    inside <- pip(df, samples[[i]]) #creates df with raster points that are within plot
+    avg <- mean(inside[,3]) #finds mean of values
+    avglist[i] <- avg
+    i <- i + 1
+  }
+  return(avglist)
+}
+
+
 # this finds the value at the percentile that indicates bare ground
 findthreshold <- function(area, samples) {
   bare <- c()
