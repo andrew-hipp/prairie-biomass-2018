@@ -1,48 +1,37 @@
-# calculate VI things
+# calculate VIs for each plot
 
 library(reshape2)
 
+# ISSUE once the rasters are somewhere we can access them, these file names will need to change
 pNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/ndvi.tif")
 pGNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/gndvi.tif")
 pGDVI2 <- raster("/Users/lanescher/Desktop/tiffs_final/gdvi2.tif")
 
-all.prairie$gr <- all.prairie$pGREvalues / all.prairie$pREDvalues
-all.prairie$ndvicover <- all.prairie$pNDVIvalues * (all.prairie$coverTotal/100)
-all.prairie$gndvicover <- all.prairie$pGNDVIvalues * (all.prairie$coverTotal/100)
-all.prairie$gdvi2cover <- all.prairie$pGDVI2values * (all.prairie$coverTotal/100)
+# read in flower presence
+flowers <- read.csv("DATA/plot.flowers.csv") 
+VI$flowers <- flowers$flowers
 
-all.prairie$coverTotal.mono <- NA
-all.prairie$coverTotal.mono[which(all.prairie$Plot.category == "Monoculture")] <- 
-  all.prairie$coverTotal[which(all.prairie$Plot.category == "Monoculture")]
-all.prairie$coverTotal.tmts <- NA
-all.prairie$coverTotal.tmts[which(all.prairie$Plot.category == "Treatment")] <- 
-  all.prairie$coverTotal[which(all.prairie$Plot.category == "Treatment")]
+# ISSUE add script that calculates avg VIs and band for each plot
+
 
 
 # find threshold for each plot
-all.prairie$ndvi.min <- findthreshold(pNDVI, plotlist)
-all.prairie$gndvi.min <- findthreshold(pGNDVI, plotlist)
-all.prairie$gdvi2.min <- findthreshold(pGDVI2, plotlist)
+VI$ndvi.threshold <- findthreshold(pNDVI, plotlist)
+VI$gndvi.threshold <- findthreshold(pGNDVI, plotlist)
+VI$gdvi2.threshold <- findthreshold(pGDVI2, plotlist)
 
 # find average above AVG THRESHOLD for each plot
-all.prairie$ndvi.threshold <- avgoverthreshold(pNDVI, plotlist, threshold = mean(all.prairie$ndvi.min, na.rm = TRUE))
-all.prairie$gndvi.threshold <- avgoverthreshold(pGNDVI, plotlist, threshold = mean(all.prairie$gndvi.min, na.rm = TRUE))
-all.prairie$gdvi2.threshold <- avgoverthreshold(pGDVI2, plotlist, threshold = mean(all.prairie$gdvi2.min, na.rm = TRUE))
-
-# find avgerage above individual threshold for each plot
-all.prairie$ndvi.threshold.var <- avgoverthreshold.var(pNDVI, plotlist, threshold = all.prairie$ndvi.min)
-all.prairie$gndvi.threshold.var <- avgoverthreshold.var(pGNDVI, plotlist, threshold = all.prairie$gndvi.min)
-all.prairie$gdvi2.threshold.var <- avgoverthreshold.var(pGDVI2, plotlist, threshold = all.prairie$gdvi2.min)
-
+VI$ndvi.avg.threshold <- avgoverthreshold(pNDVI, plotlist, threshold = mean(VI$ndvi.threshold, na.rm = TRUE))
+VI$gndvi.avg.threshold <- avgoverthreshold(pGNDVI, plotlist, threshold = mean(VI$gndvi.threshold, na.rm = TRUE))
+VI$gdvi2.avg.threshold <- avgoverthreshold(pGDVI2, plotlist, threshold = mean(VI$gdvi2.threshold, na.rm = TRUE))
 
 # find average above AVG THRESHOLD for each plot, without flower plots
-flowers <- read.csv("DATA/plot.flowers.csv")
-all.prairie$flowers <- flowers$flowers
-all.prairie$ndvi.threshold.noflowers <- avgoverthreshold(pNDVI, plotlist, 
-                                                         threshold = mean(all.prairie$ndvi.min[which(all.prairie$flowers == 0)], na.rm = TRUE))
-all.prairie$gndvi.threshold.noflowers <- avgoverthreshold(pGNDVI, plotlist, 
-                                                          threshold = mean(all.prairie$gndvi.min[which(all.prairie$flowers == 0)], na.rm = TRUE))
-all.prairie$gdvi2.threshold.noflowers <- avgoverthreshold(pGDVI2, plotlist, 
-                                                          threshold = mean(all.prairie$gdvi2.min[which(all.prairie$flowers == 0)], na.rm = TRUE))
+VI$ndvi.avg.threshold.noflowers <- avgoverthreshold(pNDVI, plotlist, 
+                                                         threshold = mean(VI$ndvi.threshold[which(VI$flowers == 0)], na.rm = TRUE))
+VI$gndvi.avg.threshold.noflowers <- avgoverthreshold(pGNDVI, plotlist, 
+                                                          threshold = mean(VI$gndvi.threshold[which(VI$flowers == 0)], na.rm = TRUE))
+VI$gdvi2.avg.threshold.noflowers <- avgoverthreshold(pGDVI2, plotlist, 
+                                                          threshold = mean(VI$gdvi2.threshold[which(VI$flowers == 0)], na.rm = TRUE))
 
-write.csv(all.prairie, "DATA/all.prairie.with.VI.values.csv", row.names = TRUE)
+# write VI df as VIdata.csv, all of these columns should be compiled into all.prairie
+write.csv(VI, "DATA/VIdata.csv", row.names = TRUE)
