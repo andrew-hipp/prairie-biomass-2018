@@ -3,17 +3,16 @@
 library(reshape2)
 
 # ISSUE once the rasters are somewhere we can access them, these file names will need to change
-pNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/ndvi.tif")
-pGNDVI <- raster("/Users/lanescher/Desktop/tiffs_final/gndvi.tif")
-pGDVI2 <- raster("/Users/lanescher/Desktop/tiffs_final/gdvi2.tif")
-pRED <- raster("/Users/lanescher/Desktop/tiffs_final/red.tif")
-pGRE <- raster("/Users/lanescher/Desktop/tiffs_final/green.tif")
-pNIR <- raster("/Users/lanescher/Desktop/tiffs_final/nir.tif")
-pREG <- raster("/Users/lanescher/Desktop/tiffs_final/rededge.tif")
+pNDVI <- raster("/Users/clane_897q3pb/Documents/tiffs_final/ndvi.tif")
+pGNDVI <- raster("/Users/clane_897q3pb/Documents/tiffs_final/gndvi.tif")
+pGDVI2 <- raster("/Users/clane_897q3pb/Documents/tiffs_final/gdvi2.tif")
+pRED <- raster("/Users/clane_897q3pb/Documents/tiffs_final/red.tif")
+pGRE <- raster("/Users/clane_897q3pb/Documents/tiffs_final/green.tif")
+pNIR <- raster("/Users/clane_897q3pb/Documents/tiffs_final/nir.tif")
+pREG <- raster("/Users/clane_897q3pb/Documents/tiffs_final/rededge.tif")
 
 # read in flower presence
-flowers <- read.csv("DATA/plot.flowers.csv") 
-VI$flowers <- flowers$flowers
+VI <- read.csv("../DATA/plot.flowers.csv") 
 
 # calculate avg VIs and band for each plot
 VI$pNDVIvalues <- avgvalues(pNDVI, plotlist)
