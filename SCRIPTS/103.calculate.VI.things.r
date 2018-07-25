@@ -11,8 +11,6 @@ pGRE <- raster("/Users/clane_897q3pb/Documents/tiffs_final/green.tif")
 pNIR <- raster("/Users/clane_897q3pb/Documents/tiffs_final/nir.tif")
 pREG <- raster("/Users/clane_897q3pb/Documents/tiffs_final/rededge.tif")
 
-# read in flower presence
-VI <- read.csv("../DATA/plot.flowers.csv") 
 
 # calculate avg VIs and band for each plot
 VI$pNDVIvalues <- avgvalues(pNDVI, plotlist)
@@ -35,11 +33,11 @@ VI$gdvi2.avg.threshold <- avgoverthreshold(pGDVI2, plotlist, threshold = mean(VI
 
 # find average above AVG THRESHOLD for each plot, without flower plots
 VI$ndvi.avg.threshold.noflowers <- avgoverthreshold(pNDVI, plotlist, 
-                                                         threshold = mean(VI$ndvi.threshold[which(VI$flowers == 0)], na.rm = TRUE))
+                                                         threshold = mean(VI$ndvi.threshold[which(all.prairie$flowers == 0)], na.rm = TRUE))
 VI$gndvi.avg.threshold.noflowers <- avgoverthreshold(pGNDVI, plotlist, 
-                                                          threshold = mean(VI$gndvi.threshold[which(VI$flowers == 0)], na.rm = TRUE))
+                                                          threshold = mean(VI$gndvi.threshold[which(all.prairie$flowers == 0)], na.rm = TRUE))
 VI$gdvi2.avg.threshold.noflowers <- avgoverthreshold(pGDVI2, plotlist, 
-                                                          threshold = mean(VI$gdvi2.threshold[which(VI$flowers == 0)], na.rm = TRUE))
+                                                          threshold = mean(VI$gdvi2.threshold[which(all.prairie$flowers == 0)], na.rm = TRUE))
 
 # write VI df as VIdata.csv, all of these columns should be compiled into all.prairie
 write.csv(VI, "../DATA/VIdata.csv", row.names = TRUE)
