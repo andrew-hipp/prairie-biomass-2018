@@ -5,7 +5,8 @@ require(dplyr)
 dat.soil.cover = read.csv("../DATA/dat.blocksSoilCover.csv")
 dat.compo = read.csv("../DATA/dat.composition.2017.csv")
 dat.phylo.cover = read.csv("../DATA/dat.cover.diversity.2017.csv")
-VI.values = read.csv("../DATA/VIvalues.csv")
+#VI.values = read.csv("../DATA/VIvalues.csv") # VI data will be read in later
+flower.presence = read.csv("../DATA/plot.flowers.csv")
 source("../DATA/plot.design.r")
 
 plot = c(1:437)
@@ -21,11 +22,14 @@ all.prairie = merge(all.prairie, dat.phylo.cover, all.x = T)
 names(all.prairie)[names(all.prairie)=="sp"] <- "plot.ID"
 all.prairie$X = NULL
 
-all.prairie = merge(all.prairie, ndvi.mat, all.x = T)
+all.prairie = merge(all.prairie, ndvi.mat, all.x = T) # ISSUE ndvi.mat not found
 all.prairie$as.is = NULL
 
 VI.values$X = NULL
-all.prairie = merge(all.prairie, VI.values, all.x = T)
+#all.prairie = merge(all.prairie, VI.values, all.x = T)
+
+all.prairie = merge(all.prairie, flower.presence, all.x = T)
+names(all.prairie)[names(all.prairie)=="flowers"] <- "flower.presence"
 
 tmtsToUse <- c(148, 152, 159, 160, 163, 172, 174, 181, 188,205,
                211, 219, 223, 230, 234, 240, 266, 271, 273, 278,
