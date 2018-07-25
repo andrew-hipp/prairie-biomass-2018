@@ -42,4 +42,4 @@ VI$gdvi2.avg.threshold.noflowers <- avgoverthreshold(pGDVI2, plotlist,
                                                           threshold = mean(VI$gdvi2.threshold[which(VI$flowers == 0)], na.rm = TRUE))
 
 # write VI df as VIdata.csv, all of these columns should be compiled into all.prairie
-write.csv(VI, "DATA/VIdata.csv", row.names = TRUE)
+write.csv(VI, "../DATA/VIdata.csv", row.names = TRUE)
