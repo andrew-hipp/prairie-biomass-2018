@@ -5,6 +5,5 @@
 
 library(ape)
 
-
 tr.prairie <- read.tree('../DATA/tree.pruned.tre')
 tr.prairie$tip.label <- gsub('[.-]', '', tr.prairie$tip.label)
