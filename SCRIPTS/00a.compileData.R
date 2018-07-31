@@ -7,7 +7,7 @@ dat <- list(
     composition = read.csv('../DATA/dat.composition.2017.csv', as.is = T),
     plotMeta = read.csv('../DATA/dat.cover.diversity.2017.csv', as.is = T),
     biomass.raw = read.delim('../DATA/Biomass_Datasheet-2018-12-14v2-AHedit.tsv', as.is = T),
-    dat$flower.presence = read.csv('../DATA/plot.flowers.csv', as.is = T)
+    flower.presence = read.csv('../DATA/plot.flowers.csv', as.is = T)
     )
 
 #dat.soil.cover = read.csv("../DATA/dat.blocksSoilCover.csv")
@@ -45,6 +45,6 @@ tmtsToUse <- c(148, 152, 159, 160, 163, 172, 174, 181, 188,205,
                281, 284, 288, 291, 296, 300, 309, 318, 319, 320,
                321, 323, 333, 346, 356, 379, 381, 392, 396, 397,
                412, 414, 424, 429)
-               
+
 all.prairie$TMT.use = 0
 all.prairie$TMT.use[tmtsToUse] = 1
