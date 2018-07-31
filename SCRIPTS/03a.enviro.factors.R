@@ -18,4 +18,6 @@ library(dplyr)
 gg.pca.envir <- ggbiplot(pca.envir, obs.scale = 1, var.scale = 1, groups = blocks[,1], ellipse = TRUE, circle = TRUE)
 gg.pca.envir = gg.pca.envir + scale_color_discrete(name = 'Block')
 
-pdf('/OUT/pca.environmental.factors.pdf')
+pdf('../OUT/pca.environmental.factors.pdf')
+
+dev.off()
