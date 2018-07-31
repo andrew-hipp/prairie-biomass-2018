@@ -1,16 +1,14 @@
 # master script that sources everything
 
+# read all data
+source('../SCRIPTS/00a.readBiomass.R')
+source('../SCRIPTS/00b.compileData.R')
+source('../SCRIPTS/00c.readTree-v3.R')
+source('../SCRIPTS/00d.problemSpp.2017.R')
+source('../SCRIPTS/00e.readData.traits.R')
+
 # convert .txt file with plot coordinates to list of polygons
 source("../SCRIPTS/01.makeplotpolygons.R")
-
-# compile data - ISSUE this script sources another file
-source("../SCRIPTS/00a.compileData.R")
-
-# compile more data
-source("../SCRIPTS/00b.readData.biomassPlotsTree-v3.R")
-
-# compile more data
-source("../SCRIPTS/00c.problemSpp.2017.R")
 
 # define VI functions that will be used to calculate VI values for each plot
 source("../SCRIPTS/102.define.VI.functions.R")
