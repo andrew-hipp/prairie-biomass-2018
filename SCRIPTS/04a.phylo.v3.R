@@ -76,7 +76,8 @@ p <- gheatmap(p, data = all.prairie.small,
               width = 0.2,
               hjust = 0,
               )
-p <- p + geom_tiplab(fontface='italic', size = 1.7,
+p <- p + geom_tiplab(fontface='italic', silibrary(magrittr)
+library(ggplot2)ze = 1.7,
                       offset = 40,
                       color = 'black')
 p <- p + theme(legend.position = c(0.15, 0.88),

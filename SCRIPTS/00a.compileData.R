@@ -16,7 +16,7 @@ dat <- list(
 #VI.values = read.csv("../DATA/VIvalues.csv") # VI data will be read in later
 #flower.presence = read.csv("../DATA/plot.flowers.csv")
 
-source("../DATA/plot.design.r") # this reads in the original plot design... used at all?
+source("../DATA/plot.design.R") # this reads in the original plot design... used at all?
 
 plot <- c(1:437)
 
