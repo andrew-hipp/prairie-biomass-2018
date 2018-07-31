@@ -27,13 +27,10 @@ source("../SCRIPTS/107.add.VIdata.to.all.prairie.R")
 ### at this point, all the data has been read in and formatted
 ### into one df called all.prairie
 
-source('../SCRIPTS/04.dataForPhyloAndOrdination.R')
-
-# ISSUE this script sources 00b again
-source("../SCRIPTS/04a.phylo.v3.R")
-
-# determines phylogenetic signal - ISSUE add cover?
-source("../SCRIPTS/04b.phyloSignal.R")
+# run phylogeny scripts -- add cover to phylo?
+source('../SCRIPTS/04a.dataForPhyloAndOrdination.R')
+source('../SCRIPTS/04b.phylo.v3.R')
+source('../SCRIPTS/04c.phyloSignal.R')
 
 # trait ordination with biomass and biomass NDVI correlation
 source("../SCRIPTS/05.traitNDVI.biomass.R")
