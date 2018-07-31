@@ -21,6 +21,14 @@ tr.prairie <- read.tree('../DATA/tree.pruned.tre')
 
 tr.prairie$tip.label <- gsub('[.-]', '', tr.prairie$tip.label)
 
+dat <- list(
+    blocks = read.csv('../DATA/dat.blocksSoilCover.csv', row.names = 1, as.is = T),
+    composition = read.csv('../DATA/dat.composition.2017.csv', row.names = 1, as.is = T),
+    plotMeta = read.csv('../DATA/dat.cover.diversity.2017.csv', row.names = 1, as.is = T),
+    biomass.raw = read.delim('../DATA/Biomass_Datasheet-2018-12-14v2-AHedit.tsv', as.is = T)
+    )
+
+
 mono.scalar <- 15/4 # accounts for the fact that 4 of 15 plants were collected from each monoculture
 mono.rows <- match(ndvi$plot, dat$mono$plot)
 tmt.rows <- match(ndvi$plot, dat$plugs$plot)
