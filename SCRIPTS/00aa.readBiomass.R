@@ -8,9 +8,8 @@ NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
 "collector",
 "date")
 
-tr.prairie <- read.tree('../DATA/tree.pruned.tre')
-
-tr.prairie$tip.label <- gsub('[.-]', '', tr.prairie$tip.label)
+## this is a kludge -- remove when solved
+ndvi <- read.table('../DATA/plotNDVI', header = T) 
 
 mono.scalar <- 15/4 # accounts for the fact that 4 of 15 plants were collected from each monoculture
 mono.rows <- match(ndvi$plot, dat$mono$plot)
