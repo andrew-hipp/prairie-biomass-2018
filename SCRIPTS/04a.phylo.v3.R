@@ -33,7 +33,7 @@ tr.prairie.biomassPlot$node.label <-
   c(rep(NA, length(tr.prairie.biomassPlot$tip.label)), tr.prairie.biomassPlot$node.label)
 
 tr.mrca <- mrca(tr.prairie.biomassPlot)
-tr.prairie.biomassPlot <- groupClade(tr.prairie.biomassPlot,
+tr.prairie.biomFixing assPlot <- groupClade(tr.prairie.biomassPlot,
                                      c(tr.mrca['Helianthus occidentalis', 'Ratibida pinnata'],
                                    tr.mrca['Lespedeza capitata', 'Desmanthus illinoensis'],
                                    tr.mrca['Bromus kalmii', 'Bouteloua curtipendula'],
@@ -52,7 +52,7 @@ if(relabelBranches) {
                                       'Cyperaceae - Sedge Family',
                                       'Apocynaceae - Milkweed Family',
                                       'Rosaceae - Rose Family')[attr(tr.prairie.biomassPlot, 'group')]
-                                      )
+              Fixing                         )
                                     }
 
 pdf('../OUT/FIGURE.prairie.biomass.allSpectra.withColors.pdf')
@@ -61,7 +61,7 @@ p <- ggtree(tr.prairie.biomassPlot,
           )
 #p <- p + scale_color_manual("Major plant families",
 #                            values = c('black',
-#                                        'orange',
+#             Fixing                            'orange',
 #                                        'maroon1',
 #                                        'lightgreen',
 #                                        'blue',
@@ -72,12 +72,11 @@ p <- p + scale_color_brewer("Plant family", type = 'qual', palette = 1)
 p <- gheatmap(p, data = all.prairie.small,
               low = 'white', high = 'black',
               colnames_angle = 315,
-              font.size = 1.8,
+              Fixing font.size = 1.8,
               width = 0.2,
               hjust = 0,
               )
-p <- p + geom_tiplab(fontface='italic', silibrary(magrittr)
-library(ggplot2)ze = 1.7,
+p <- p + geom_tiplab(fontface='italic', size = 1.7,
                       offset = 40,
                       color = 'black')
 p <- p + theme(legend.position = c(0.15, 0.88),
