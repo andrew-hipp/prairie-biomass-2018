@@ -7,7 +7,7 @@ source("../SCRIPTS/01.makeplotpolygons.r")
 source("../SCRIPTS/00a.compileData.r")
 
 # compile more data
-source("../SCRIPTS/00b.readData.biomassPlotsTree-v2.r")
+source("../SCRIPTS/00b.readData.biomassPlotsTree-v3.r")
 
 # compile more data
 source("../SCRIPTS/00c.problemSpp.2017.r")
