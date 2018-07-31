@@ -16,7 +16,7 @@ source("../SCRIPTS/00c.problemSpp.2017.R")
 source("../SCRIPTS/102.define.VI.functions.R")
 
 # calculate VI values for each plot - this step takes a while, only run when necessary
-source("../SCRIPTS/103.calculate.VI.things.r")
+source("../SCRIPTS/103.calculate.VI.things.R")
 # if there is no new data, read in this csv instead of running the script:
 #VI <- read.csv("../DATA/VIdata.csv")
 
