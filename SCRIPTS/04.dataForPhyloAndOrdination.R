@@ -1,5 +1,5 @@
 library(magrittr)
-source('../SCRIPTS/00b.problemSpp.2017.R')
+
 spp.prob.2017 <- gsub('_', ' ', spp.prob.2017, fixed = T)
 
 vars.productivity <- c('biomass.monocultures',
@@ -19,11 +19,11 @@ labels.productivity <- c('Biomass',
                               'pRED',
                               'pGRE')
 
-labels.traits.continuous <- c("Seed mass", "Leaf dry matter content", "SLA",
+labels.traits.continuous <- c("Seeall.prairie.smalld mass", "Leaf dry matter content", "SLA",
                               "Leaf N content", "Leaf C content", "Leaf P content",
                               "Stem dry matter content", "Leaf circularity",
                               "Vegetative height", "Leaf length", "Leaf thickness", "Leaf width",
-                              "Petiole length","Genome size")
+                              "Petall.prairie.smalliole length","Genome size")
 
 labels.traits.use <- c(labels.traits.continuous[-length(labels.traits.continuous)],
                        "Photosynthetic pathway", "Rhizomes",
