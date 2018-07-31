@@ -21,7 +21,7 @@ source("../SCRIPTS/102.define.VI.functions.R")
 VI <- read.csv("../DATA/VIdata.csv")
 
 # add VI data to all.prairie df
-source("../SCRIPTS/107.add.VIdata.to.all.prairie")
+source("../SCRIPTS/107.add.VIdata.to.all.prairie.R")
 
 # ISSUE not sure what this script does
 source("../SCRIPTS/03.sensitiveEnvir.R")
