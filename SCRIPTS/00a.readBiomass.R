@@ -5,6 +5,16 @@
 
 library(magrittr)
 
+dat <- list(
+    blocks = read.csv('../DATA/dat.blocksSoilCover.csv', as.is = T),
+    composition = read.csv('../DATA/dat.composition.2017.csv', as.is = T),
+    plotMeta = read.csv('../DATA/dat.cover.diversity.2017.csv', as.is = T),
+    biomass.raw = read.delim('../DATA/Biomass_Datasheet-2018-12-14v2-AHedit.tsv', as.is = T),
+    flower.presence = read.csv('../DATA/plot.flowers.csv', as.is = T)
+    )
+
+dat$biomass.raw = read.delim('../DATA/Biomass_Datasheet-2018-12-14v2-AHedit.tsv', as.is = T),
+
 dat.headers.plugs <- c("plot", "type", "sp", "biomass.total", "b01", "b02", "b03", "b04",
 "b05", "b06", "b07", "b08", "b09", "b10", "b11", "b12",
 "b13", "b14", "b15", "groundLeaves", "collector",

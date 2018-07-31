@@ -1,21 +1,5 @@
 require(dplyr)
 
-# source("../SCRIPTS/00.readData.R")
-
-dat <- list(
-    blocks = read.csv('../DATA/dat.blocksSoilCover.csv', as.is = T),
-    composition = read.csv('../DATA/dat.composition.2017.csv', as.is = T),
-    plotMeta = read.csv('../DATA/dat.cover.diversity.2017.csv', as.is = T),
-    biomass.raw = read.delim('../DATA/Biomass_Datasheet-2018-12-14v2-AHedit.tsv', as.is = T),
-    flower.presence = read.csv('../DATA/plot.flowers.csv', as.is = T)
-    )
-
-#dat.soil.cover = read.csv("../DATA/dat.blocksSoilCover.csv")
-#dat.compo = read.csv("../DATA/dat.composition.2017.csv")
-#dat.phylo.cover = read.csv("../DATA/dat.cover.diversity.2017.csv")
-#VI.values = read.csv("../DATA/VIvalues.csv") # VI data will be read in later
-#flower.presence = read.csv("../DATA/plot.flowers.csv")
-
 source("../DATA/plot.design.R") # this reads in the original plot design... used at all?
 
 plot <- c(1:437)
@@ -31,7 +15,7 @@ all.prairie <- merge(all.prairie, dat$plotMeta, all.x = T)
 names(all.prairie)[names(all.prairie)=="sp"] <- "plot.ID"
 all.prairie$X <- NULL
 
-all.prairie <- merge(all.prairie, biomass.mat, by = "plot", all.x = T) # ISSUE ndvi.mat not found
+all.prairie <- merge(all.prairie, biomass.mat, by = "plot", all.x = T)
 all.prairie$as.is = NULL
 
 #VI.values$X = NULL
