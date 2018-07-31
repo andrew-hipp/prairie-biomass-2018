@@ -24,7 +24,7 @@ VI <- read.csv("../DATA/VIdata.csv")
 source("../SCRIPTS/107.add.VIdata.to.all.prairie.R")
 
 # ISSUE not sure what this script does
-source("../SCRIPTS/03.sensitiveEnvir.R")
+#source("../SCRIPTS/03.sensitiveEnvir.R")
 
 ### at this point, all the data has been read in and formatted
 ### into one df called all.prairie
