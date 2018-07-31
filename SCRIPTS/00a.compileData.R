@@ -2,6 +2,13 @@ require(dplyr)
 
 # source("../SCRIPTS/00.readData.R")
 
+dat <- list(
+    blocks = read.csv('../DATA/dat.blocksSoilCover.csv', row.names = 1, as.is = T),
+    composition = read.csv('../DATA/dat.composition.2017.csv', row.names = 1, as.is = T),
+    plotMeta = read.csv('../DATA/dat.cover.diversity.2017.csv', row.names = 1, as.is = T),
+    biomass.raw = read.delim('../DATA/Biomass_Datasheet-2018-12-14v2-AHedit.tsv', as.is = T)
+    )
+
 dat.soil.cover = read.csv("../DATA/dat.blocksSoilCover.csv")
 dat.compo = read.csv("../DATA/dat.composition.2017.csv")
 dat.phylo.cover = read.csv("../DATA/dat.cover.diversity.2017.csv")
