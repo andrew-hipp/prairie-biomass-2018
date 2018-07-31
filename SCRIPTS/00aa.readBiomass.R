@@ -1,11 +1,9 @@
-## read data for prairie biomass and ndvi study
+## read prairie biomass
 ## ahipp@mortonarb.org
 ## 2018-03-06
-# this is a test
+## 2018-07-31 -- substantial cleanup
 
-library(ape)
 library(magrittr)
-library(ggplot2)
 
 dat.headers.plugs <- c("plot", "type", "sp", "biomass.total", "b01", "b02", "b03", "b04",
 "b05", "b06", "b07", "b08", "b09", "b10", "b11", "b12",
@@ -18,7 +16,6 @@ NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
 "date")
 
 spp.trans <- read.delim('../DATA/sp.trans.tsv.txt', as.is = T)
-# ndvi <- read.table('../DATA/plotNDVI', header = T)
 plotNums <- 1:437
 
 ## a little cleanup on two names
@@ -76,12 +73,12 @@ biomass.mat <- data.frame(plot = plotNums,
               biomass.tmts.noGL = dat$plugs[tmt.rows, 'biomass.total'] -
                                   dat$plugs[tmt.rows, 'groundLeaves'],
               phy.div = dat$plugs[tmt.rows, 'phy'],
-              trait.div = dat$plugs[tmt.rows, 'trt']
+              trait.div = dat$plugs[tmt.rows, 'trt'],
               as.is = T)
 
-biomass.mat$biomass.all <- apply(ndvi.mat[, c('biomass.monocultures', 'biomass.tmts')],
+biomass.mat$biomass.all <- apply(biomass.mat[, c('biomass.monocultures', 'biomass.tmts')],
                               1, sum, na.rm = T)
-biomass.mat$biomass.all[which(apply(head(ndvi.mat[, c('biomass.monocultures', 'biomass.tmts')], 15),1,function(x) sum(is.na(x))) == 2)] <- NA
+biomass.mat$biomass.all[which(apply(head(biomass.mat[, c('biomass.monocultures', 'biomass.tmts')], 15),1,function(x) sum(is.na(x))) == 2)] <- NA
 
 
 biomass.mat$'Plot.category' = NA
@@ -90,4 +87,4 @@ biomass.mat$'Plot.category'[which(!is.na(mono.rows))] = "Monoculture"
 biomass.mat$Plot.category <- factor(biomass.mat$Plot.category, levels = c('Treatment',
                                                                     'Monoculture'))
 
-ndvi.mat <- ndvi.mat[-ndvi.mat$plot[is.na(ndvi.mat$Plot.category)], ]
+biomass.mat <- biomass.mat[-biomass.mat$plot[is.na(biomass.mat$Plot.category)], ]
