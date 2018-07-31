@@ -29,6 +29,8 @@ source("../SCRIPTS/107.add.VIdata.to.all.prairie.R")
 ### at this point, all the data has been read in and formatted
 ### into one df called all.prairie
 
+source('../SCRIPTS/04.dataForPhyloAndOrdination.R')
+
 # ISSUE this script sources 00b again
 source("../SCRIPTS/04a.phylo.v3.R")
 
