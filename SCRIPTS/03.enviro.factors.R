@@ -1,5 +1,7 @@
 ## v1: atuffin 2018-07-31
   ## -- taking important script from 03.sensitiveEnvir.R
+## v2: ahipp 2018-07-31
+  ## -- removed null/control/empty plots
 
 ##PCA of environmental factors
 
@@ -8,16 +10,26 @@ log.envir = log.envir[-c(409), ] ##AHOR_cm missing from plot 409
 blocks = all.prairie["block"]
 blocks = data.frame(blocks[-409, ]) ##AHOR_cm missing from plot 409
 
-pca.envir = prcomp(log.envir, center = TRUE, scale. = TRUE)
+use <- which(blocks[, 1] %in% LETTERS[1:6]) # eliminate plots not in blocks
+
+blocks.use <- blocks[use, 1]
+log.envir.use <- log.envir[use, ]
+
+pca.envir = prcomp(log.envir.use, center = TRUE, scale. = TRUE)
 
 library(devtools)
-install_github("vqv/ggbiplot")
+if(class(try(library(ggbiplot))) == "try-error") {
+  install_github("vqv/ggbiplot")
+  library(ggbiplot)
+}
 library(plyr)
 library(dplyr)
 
-gg.pca.envir <- ggbiplot(pca.envir, obs.scale = 1, var.scale = 1, groups = blocks[,1], ellipse = TRUE, circle = TRUE)
-gg.pca.envir = gg.pca.envir + scale_color_discrete(name = 'Block')
+gg.pca.envir <- ggbiplot(pca.envir, obs.scale = 1, var.scale = 1,
+                         groups = blocks.use,
+                         ellipse = TRUE,
+                         circle = FALSE) + scale_color_discrete(name = 'Block')
 
 pdf('../OUT/pca.environmental.factors.pdf')
-
+print(gg.pca.envir)
 dev.off()
