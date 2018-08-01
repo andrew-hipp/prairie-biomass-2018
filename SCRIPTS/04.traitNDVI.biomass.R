@@ -52,11 +52,13 @@ pdf('../OUT/FIGURE.trait.ordination.withBiomass.pdf',12, 8)
 print(p.mds)
 dev.off()
 
-if(!exists("dat.traits.lambda")) {
-  dat.traits.lambda <- fitContinuous(tr.prairie.phylosig,
-  dat.traits[row.names(all.prairie.small), 1:13],
-  model = 'lambda')
-}
+## no longer used, I believe:
+#if(!exists("dat.traits.lambda")) {
+#  dat.traits.lambda <- fitContinuous(
+#    tr.prairie.phylosig,
+#    dat.traits[row.names(all.prairie.small), 1:13],
+#    model = 'lambda')
+#}
 
 dat.traits.cor <- data.frame(
   NDVI = cor(all.prairie.ordi$NDVI, all.prairie.ordi[, labels.traits.continuous])[1, ],
