@@ -19,11 +19,11 @@ labels.productivity <- c('Biomass',
                               'pRED',
                               'pGRE')
 
-labels.traits.continuous <- c("Seeall.prairie.smalld mass", "Leaf dry matter content", "SLA",
+labels.traits.continuous <- c("Seed mass", "Leaf dry matter content", "SLA",
                               "Leaf N content", "Leaf C content", "Leaf P content",
                               "Stem dry matter content", "Leaf circularity",
                               "Vegetative height", "Leaf length", "Leaf thickness", "Leaf width",
-                              "Petall.prairie.smalliole length","Genome size")
+                              "Petiole length","Genome size")
 
 labels.traits.use <- c(labels.traits.continuous[-length(labels.traits.continuous)],
                        "Photosynthetic pathway", "Rhizomes",
