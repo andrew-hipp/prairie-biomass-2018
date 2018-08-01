@@ -54,7 +54,7 @@ dev.off()
 
 if(!exists("dat.traits.lambda")) {
   dat.traits.lambda <- fitContinuous(tr.prairie.phylosig,
-  dat.traits[row.names(ndvi.mat.small), 1:13],
+  dat.traits[row.names(all.prairie.small), 1:13],
   model = 'lambda')
 }
 
