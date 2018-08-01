@@ -90,7 +90,6 @@ comb$AIC.c <- as.character(comb$AIC.c)
 
 colnames(comb) <- c("VI used", "VI", "cover", "A-horizon", "R2", "AIC")
 
-all.prairie <- read.csv("DATA/all.prairie.with.VI.values.csv")
 
 
 # make dataframe with the right columns
