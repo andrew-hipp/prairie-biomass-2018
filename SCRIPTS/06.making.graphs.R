@@ -172,7 +172,7 @@ ggarrange(MB, TB, PB, BB,
           align = "hv")
 dev.off()
 
-
-ggarrange(BB, MB, TB, PB, BN, MN, TN, PN, labels = c("A", "B", "C", "D", "E", "F", "G", "H"),
-          ncol = 4, nrow = 2,
-          align = "hv")
+## is this needed?
+#ggarrange(BB, MB, TB, PB, BN, MN, TN, PN, labels = c("A", "B", "C", "D", "E", "F", "G", "H"),
+#          ncol = 4, nrow = 2,
+#          align = "hv")
