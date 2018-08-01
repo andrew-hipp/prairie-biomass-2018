@@ -34,7 +34,7 @@ NCR <- ggplot(data = prairie.use.other,
   geom_smooth(method = "lm", aes(color = factor(prairie.use.other$Plot.category))) +
   labs(x = "NDVI", y = "percent cover") +
   scale_colour_manual(values = c("goldenrod2", "cornflowerblue"),
-                      name = "Plot type",all.prairie.with.VI.values.csv
+                      name = "Plot type",
                       breaks = c("Monoculture", "Treatment")) +
   theme_classic()
 
@@ -163,7 +163,7 @@ MC <- ggplot(data = prairie.use.other,
   ylim(c(0, 100))
 
 
-jpeg("OUT/FIGURE.boxplots.jpg", width = 1100, height = 480)
+jpeg("../OUT/FIGURE.boxplots.jpg", width = 1100, height = 480)
 ggarrange(MB, TB, PB, BB,
           MC, TC, PC, BC,
           MN, TN, PN, BN,
