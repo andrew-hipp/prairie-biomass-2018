@@ -16,7 +16,7 @@ prairie.use.other <- all.prairie
 
 # combined
 # NDVI biomass regression
-NBR <- ggplot(data = prairie.use.biomass, 
+NBR <- ggplot(data = prairie.use.biomass,
        aes(x = prairie.use.biomass$pNDVIvalues, y = prairie.use.biomass$biomass.all)) +
   geom_point(aes(color = factor(prairie.use.biomass$Plot.category))) +
   geom_smooth(method = "lm", aes(color = factor(prairie.use.biomass$Plot.category))) +
@@ -28,18 +28,18 @@ NBR <- ggplot(data = prairie.use.biomass,
   theme_classic()
 
 # NDVI cover regression
-NCR <- ggplot(data = prairie.use.other, 
+NCR <- ggplot(data = prairie.use.other,
               aes(x = prairie.use.other$pNDVIvalues, y = prairie.use.other$coverTotal)) +
   geom_point(aes(color = factor(prairie.use.other$Plot.category))) +
   geom_smooth(method = "lm", aes(color = factor(prairie.use.other$Plot.category))) +
   labs(x = "NDVI", y = "percent cover") +
   scale_colour_manual(values = c("goldenrod2", "cornflowerblue"),
-                      name = "Plot type",
+                      name = "Plot type",all.prairie.with.VI.values.csv
                       breaks = c("Monoculture", "Treatment")) +
   theme_classic()
 
-jpeg("OUT/regressions.jpg", width = 900, height = 480)
-ggarrange(NBR, NCR, labels = c("A", "B"), nrow = 1, ncol = 2, 
+jpeg("../OUT/regressions.jpg", width = 900, height = 480)
+ggarrange(NBR, NCR, labels = c("A", "B"), nrow = 1, ncol = 2,
           common.legend = TRUE, legend = "bottom")
 dev.off()
 
@@ -164,9 +164,9 @@ MC <- ggplot(data = prairie.use.other,
 
 
 jpeg("OUT/FIGURE.boxplots.jpg", width = 1100, height = 480)
-ggarrange(MB, TB, PB, BB, 
+ggarrange(MB, TB, PB, BB,
           MC, TC, PC, BC,
-          MN, TN, PN, BN, 
+          MN, TN, PN, BN,
           labels = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"),
           ncol = 4, nrow = 3,
           align = "hv")
