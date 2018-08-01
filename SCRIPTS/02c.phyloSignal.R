@@ -14,7 +14,7 @@ message('Doing Pagel\'s Lambda')
 prairie.lambda <- list(estimated = fitContinuous(tr.prairie.phylosig,
                                                  all.prairie.ordi[, labels.signal],
                                                  model = 'lambda'),
-                       zero = fitContinuous(rescale.phylo(tr.prairie.phylosig, 'lambda', 0),
+                       zero = fitContinuous(geiger::rescale(tr.prairie.phylosig, 'lambda', 0),
                                             all.prairie.ordi[, labels.signal])
                                           )
 prairie.phylosignal <- cbind(lambda = sapply(prairie.lambda$estimated, function(x) x$opt$lambda),
