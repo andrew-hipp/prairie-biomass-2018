@@ -38,8 +38,20 @@ NCR <- ggplot(data = prairie.use.other,
                       breaks = c("Monoculture", "Treatment")) +
   theme_classic()
 
+# NDVI drone cover regression
+NDCR <- ggplot(data = prairie.use.other,
+              aes(x = prairie.use.other$pNDVIvalues, y = prairie.use.other$dcover)) +
+  geom_point(aes(color = factor(prairie.use.other$Plot.category))) +
+  geom_smooth(method = "lm", aes(color = factor(prairie.use.other$Plot.category))) +
+  labs(x = "NDVI", y = "percent cover") +
+  scale_colour_manual(values = c("goldenrod2", "cornflowerblue"),
+                      name = "Plot type",
+                      breaks = c("Monoculture", "Treatment")) +
+  theme_classic()
+
+
 jpeg("../OUT/regressions.jpg", width = 900, height = 480)
-ggarrange(NBR, NCR, labels = c("A", "B"), nrow = 1, ncol = 2,
+ggarrange(NBR, NCR, NDCR, labels = c("A", "B", "C"), nrow = 1, ncol = 3,
           common.legend = TRUE, legend = "bottom")
 dev.off()
 
