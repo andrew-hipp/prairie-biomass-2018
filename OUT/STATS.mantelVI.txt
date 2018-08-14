@@ -1,0 +1,48 @@
+[1] "-----------------------MANTEL TEST, PCA OF SCHER VI VS Schweiger VI-----------------------"
+
+Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel(xdis = dist(vi.pca.scher$x[, 1:2]), ydis = dist(vi.pca.schweiger$x[,      1:2]), method = "pearson") 
+
+Mantel statistic r: 0.008942 
+      Significance: 0.43 
+
+Upper quantiles of permutations (null model):
+  90%   95% 97.5%   99% 
+0.256 0.367 0.416 0.482 
+Permutation: free
+Number of permutations: 999
+
+[1] "-----------------------MANTEL TEST, dist(SCHER NDVI) vs cophenetic.phylo-----------------------"
+
+Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel(xdis = as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$broad,      spp.schw$broad]), ydis = dist(all.prairie.mean[gsub(" ",      "_", spp.schw$broad), "pNDVIvalues"]), method = "pearson") 
+
+Mantel statistic r: 0.03397 
+      Significance: 0.32 
+
+Upper quantiles of permutations (null model):
+  90%   95% 97.5%   99% 
+0.157 0.240 0.314 0.373 
+Permutation: free
+Number of permutations: 999
+
+[1] "-----------------------MANTEL TEST, dist(biomass) vs cophenetic.phylo-----------------------"
+
+Mantel statistic based on Pearson's product-moment correlation 
+
+Call:
+mantel(xdis = as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$broad,      spp.schw$broad]), ydis = dist(all.prairie.mean[gsub(" ",      "_", spp.schw$broad), "biomass.all"]), method = "pearson") 
+
+Mantel statistic r: 0.4476 
+      Significance: 0.001 
+
+Upper quantiles of permutations (null model):
+  90%   95% 97.5%   99% 
+0.194 0.268 0.300 0.322 
+Permutation: free
+Number of permutations: 999
+
