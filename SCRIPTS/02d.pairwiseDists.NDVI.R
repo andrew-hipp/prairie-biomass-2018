@@ -71,6 +71,10 @@ vi.pca.mantel <- mantel(dist(vi.pca.scher$x[, 1:2]),
                         dist(vi.pca.schweiger$x[, 1:2]),
                         method = 'pearson')
 
+vi.phylo.schweiger <- mantel(as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$broad, spp.schw$broad]),
+                            dist(vi.pca.schweiger$x[, 1:2]),
+                            method = 'pearson')
+
 vi.phylo.mantel <- mantel(as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$broad, spp.schw$broad]),
                           dist(all.prairie.mean[gsub(' ', '_', spp.schw$broad), 'pNDVIvalues']),
                          method = 'pearson')
@@ -82,8 +86,10 @@ vi.biomass.mantel <- mantel(as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$
 sink('../OUT/STATS.mantelVI.txt')
 print('-----------------------MANTEL TEST, PCA OF SCHER VI VS Schweiger VI-----------------------')
 print(vi.pca.mantel)
-print('-----------------------MANTEL TEST, dist(SCHER NDVI) vs cophenetic.phylo-----------------------')
+print('-----------------------MANTEL TEST, PCA of Schweiger VI vs phylo-----------------------')
+print(vi.phylo.schweiger)
+print('-----------------------MANTEL TEST, dist(SCHER NDVI) vs phylo-----------------------')
 print(vi.phylo.mantel)
-print('-----------------------MANTEL TEST, dist(biomass) vs cophenetic.phylo-----------------------')
+print('-----------------------MANTEL TEST, dist(biomass) vs phylo-----------------------')
 print(vi.biomass.mantel)
 #unlink('../OUT/STATS.mantelVI.txt')
