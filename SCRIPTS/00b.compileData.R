@@ -32,3 +32,10 @@ tmtsToUse <- c(148, 152, 159, 160, 163, 172, 174, 181, 188,205,
 
 all.prairie$TMT.use = 0
 all.prairie$TMT.use[tmtsToUse] = 1
+
+# add drone cover estimates
+dcover <- read.csv("../DATA/drone-cover.csv", 
+                   col.names = c("plot", "dcover.obs1", "dcover.obs2"))
+all.prairie <- merge(all.prairie, dcover, by = "plot", all.x = T)
+all.prairie$dcover <- (all.prairie$dcover.obs1 + all.prairie$dcover.obs2)/2
+
