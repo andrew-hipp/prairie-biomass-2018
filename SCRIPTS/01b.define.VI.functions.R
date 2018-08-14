@@ -29,7 +29,7 @@ findthreshold <- function(area, samples) {
     smallarea <- crop(area, samples[[i]]) #gets raster surrounding plot
     df <- as.data.frame(smallarea, xy = TRUE) #converts raster to df
     inside <- pip(df, samples[[i]]) #creates df with raster points that are within plot
-    bottom <- quantile(inside[,3], probs = (1-all.prairie$coverTotal[i]/100))
+    bottom <- quantile(inside[,3], probs = (1-all.prairie$dcover[i]/100))
     bare[length(bare) + 1] <- bottom
     i <- i + 1
   }
