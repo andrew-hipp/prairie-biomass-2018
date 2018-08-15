@@ -13,10 +13,10 @@ source("../SCRIPTS/01a.makeplotpolygons.R")
 # define VI functions that will be used to calculate VI values for each plot
 source("../SCRIPTS/01b.define.VI.functions.R")
 
-# calculate VI values for each plot - this step takes a while, only run when necessary
-#source("../SCRIPTS/01c.calculate.VI.values.R")
-# if there is no new data, read in this csv instead of running the script:
+# read in VI data
 VI <- read.csv("../DATA/VIdata.csv")
+# if there is new raster data or new functions, run this script:
+#source("../SCRIPTS/01c.calculate.VI.values.R")
 
 # add VI data to all.prairie df
 source("../SCRIPTS/01d.add.VIdata.to.all.prairie.R")
