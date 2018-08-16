@@ -37,7 +37,7 @@ source("../SCRIPTS/03.enviro.factors.R")
 source("../SCRIPTS/04.traitNDVI.biomass.R")
 
 # make regression summary tables for predicting biomass and cover
-source("../SCRIPTS/05a.make.regression.summary.table.biomass.R")
+source("../SCRIPTS/05a.regression.summary.biomass.R")
 source("../SCRIPTS/05b.make.regression.summary.table.cover.R")
 
 # make figures: NDVI/biomass and NDVI/cover regressions, summary boxplots
