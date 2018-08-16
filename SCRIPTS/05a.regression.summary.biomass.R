@@ -401,3 +401,9 @@ partial$`cover used` <- sub("dcover", "drone", partial$`cover used`)
 partial$VI <- sub("p = 0.0000", "p < 0.0001", partial$VI)
 partial$cover <- sub("p = 0.0000", "p < 0.0001", partial$cover)
 partial$"A-horizon" <- sub("p = 0.0000", "p < 0.0001", partial$"A-horizon")
+
+
+
+# save as csv
+write.csv(full, "../OUT/TABLE.biomass.regression.full.csv")
+write.csv(partial, "../OUT/TABLE.biomass.regression.partial.csv")
