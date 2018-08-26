@@ -18,7 +18,8 @@ scaled$coverTotal <- scale(all.prairie$coverTotal)
 scaled$dcover <- scale(all.prairie$dcover)
 scaled$AHOR_cm <- scale(all.prairie$AHOR_cm)
 
-use.prairie <- scaled
+use.prairie <- scaled[which(scaled$Plot.category == "Monoculture" | 
+                              scaled$Plot.category == "Treatment"),]
 
 response <- "dcover"
 
