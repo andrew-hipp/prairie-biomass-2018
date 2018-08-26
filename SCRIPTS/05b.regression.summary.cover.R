@@ -71,7 +71,7 @@ t2$V5 <- as.numeric(t2$V5)
 t2$deltaAIC <- t2$V5 - t2$V5[1]
 
 colnames(t2) <- c("VI used", "VI", "A-horizon", "R2", "AIC", "deltaAIC")
-t2$`VI used` <- NA
+t2$`VI used` <- "-"
 
 # 2 predictors
 
@@ -176,7 +176,7 @@ t2$V5 <- as.numeric(t2$V5)
 t2$deltaAIC <- t2$V5 - t2$V5[1]
 
 colnames(t2) <- c("VI used", "VI", "A-horizon", "R2", "AIC", "deltaAIC")
-t2$`VI used` <- NA
+t2$`VI used` <- "-"
 
 # 2 predictors
 

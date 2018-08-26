@@ -31,7 +31,7 @@ pred1 <- c("pNDVIvalues", "pGNDVIvalues", "pGDVI2values",
 
 
 t1 <- as.data.frame(pred1)
-t1$cover.used <- NA
+t1$cover.used <- "-"
 
 
 i <- 1
@@ -79,13 +79,13 @@ t2$V7 <- as.numeric(t2$V7)
 t2$deltaAIC <- t2$V7 - t2$V7[1]
 
 colnames(t2) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
-t2$`VI used` <- NA
+t2$`VI used` <- "-"
 
 # 1 predictor, ahor
 pred3 <- c("AHOR_cm")
 
 t3 <- as.data.frame(pred3)
-t3$cover.used <- NA
+t3$cover.used <- "-"
 
 i <- 1
 # make loop to fill in 1 predictor
@@ -105,7 +105,7 @@ t3$V7 <- as.numeric(t3$V7)
 t3$deltaAIC <- t3$V7 - t3$V7[1]
 
 colnames(t3) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
-t3$`VI used` <- NA
+t3$`VI used` <- "-"
 
 # 2 predictors
 
@@ -225,7 +225,7 @@ pred1 <- c("pNDVIvalues", "pGNDVIvalues", "pGDVI2values",
            "ndvi.avg.threshold", "gndvi.avg.threshold", "gdvi2.avg.threshold")
 
 t1 <- as.data.frame(pred1)
-t1$cover.used <- NA
+t1$cover.used <- "-"
 
 
 i <- 1
@@ -273,13 +273,13 @@ t2$V7 <- as.numeric(t2$V7)
 t2$deltaAIC <- t2$V7 - t2$V7[1]
 
 colnames(t2) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
-t2$`VI used` <- NA
+t2$`VI used` <- "-"
 
 # 1 predictor, ahor
 pred3 <- c("AHOR_cm")
 
 t3 <- as.data.frame(pred3)
-t3$cover.used <- NA
+t3$cover.used <- "-"
 
 i <- 1
 # make loop to fill in 1 predictor
@@ -299,7 +299,7 @@ t3$V7 <- as.numeric(t3$V7)
 t3$deltaAIC <- t3$V7 - t3$V7[1]
 
 colnames(t3) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
-t3$`VI used` <- NA
+t3$`VI used` <- "-"
 
 # 2 predictors
 
