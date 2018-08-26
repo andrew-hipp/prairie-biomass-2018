@@ -8,7 +8,8 @@ library(ggpubr)
 prairie.use.biomass <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
                                    all.prairie$TMT.use == 1),]
 
-prairie.use.other <- all.prairie
+prairie.use.other <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
+                                         all.prairie$Plot.category == "Treatment"),]
 
 
 ################ regression
@@ -62,9 +63,10 @@ BGCR <- ggplot(data = prairie.use.biomass,
 
 
 
-jpeg("../OUT/regressions.jpg", width = 900, height = 900)
+jpeg("../OUT/FIGURE.regressions.jpg", width = 900, height = 900)
 ggarrange(NBR, BGCR, NGCR, NDCR, labels = c("A", "B", "C", "D"), nrow = 2, ncol = 2,
-          common.legend = TRUE, legend = "bottom")
+          common.legend = TRUE, legend = "bottom",
+          label.x = 1, label.y = 1)
 dev.off()
 
 
@@ -193,10 +195,8 @@ ggarrange(MB, TB, PB, BB,
           MN, TN, PN, BN,
           labels = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"),
           ncol = 4, nrow = 3,
-          align = "hv")
+          align = "hv",
+          label.x = 0, label.y = 1)
 dev.off()
 
-## is this needed?
-#ggarrange(BB, MB, TB, PB, BN, MN, TN, PN, labels = c("A", "B", "C", "D", "E", "F", "G", "H"),
-#          ncol = 4, nrow = 2,
-#          align = "hv")
+
