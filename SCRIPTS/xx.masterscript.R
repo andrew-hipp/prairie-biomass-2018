@@ -50,6 +50,3 @@ source("../SCRIPTS/06.making.graphs.R")
 
 # ISSUE not sure what this does
 source("../SCRIPTS/999.gheatmap.mod.R")
-
-# ISSUE not sure what this does
-source("../SCRIPTS/07.biomass&VI.model.ahor&block.R")
