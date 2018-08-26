@@ -28,7 +28,7 @@ NBR <- ggplot(data = prairie.use.biomass,
                       guide = FALSE) +
   theme_classic()
 
-# NDVI cover regression
+# NDVI ground cover regression
 NGCR <- ggplot(data = prairie.use.other,
               aes(x = prairie.use.other$pNDVIvalues, y = prairie.use.other$coverTotal)) +
   geom_point(aes(color = factor(prairie.use.other$Plot.category))) +
@@ -37,7 +37,8 @@ NGCR <- ggplot(data = prairie.use.other,
   scale_colour_manual(values = c("goldenrod2", "cornflowerblue"),
                       name = "Plot type",
                       breaks = c("Monoculture", "Treatment")) +
-  theme_classic()
+  theme_classic() +
+  ylim(c(0, 100))
 
 # NDVI drone cover regression
 NDCR <- ggplot(data = prairie.use.other,
@@ -48,7 +49,8 @@ NDCR <- ggplot(data = prairie.use.other,
   scale_colour_manual(values = c("goldenrod2", "cornflowerblue"),
                       name = "Plot type",
                       breaks = c("Monoculture", "Treatment")) +
-  theme_classic()
+  theme_classic() +
+  ylim(c(0, 100))
 
 # biomass ground cover regression
 BGCR <- ggplot(data = prairie.use.biomass,
