@@ -68,7 +68,7 @@ BGCR <- ggplot(data = prairie.use.biomass,
 jpeg("../OUT/FIGURE.regressions.jpg", width = 900, height = 900)
 ggarrange(NBR, BGCR, NGCR, NDCR, labels = c("A", "B", "C", "D"), nrow = 2, ncol = 2,
           common.legend = TRUE, legend = "bottom",
-          label.x = 1, label.y = 1)
+          label.x = 1, label.y = 1, align = "hv")
 dev.off()
 
 
