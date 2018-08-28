@@ -89,3 +89,23 @@ range.plot <- function(area, samples) {
   }
   return(ranges)
 }
+
+
+# function that calculates volume of each plot
+# area: raster
+# samples: list of polygons
+vol.plot <- function(area, samples) {
+  vols <- c(1:length(samples))
+  for (i in 1:length(samples)){
+    smallarea <- crop(area, samples[[i]]) #gets raster surrounding plot
+    df <- as.data.frame(smallarea, xy = TRUE) #converts raster to df
+    inside <- pip(df, samples[[i]]) #creates df with raster points that are within plot
+    inside$height <- inside[,3] - min(inside[,3])
+    vol <- sum(inside[,4])
+    vols[i] <- vol
+    i <- i + 1
+  }
+  return(vols)
+}
+
+
