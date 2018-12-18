@@ -6,17 +6,9 @@ source('../SCRIPTS/00b.compileData.R')
 source('../SCRIPTS/00c.readTree-v3.R')
 source('../SCRIPTS/00d.problemSpp.2017.R')
 source('../SCRIPTS/00e.readData.traits.R')
+allRS <- read.csv("../DATA/allRS.csv")
+# source('../SCRIPTS/tif.analysis.r') only if there is new data
 
-# convert .txt file with plot coordinates to list of polygons
-source("../SCRIPTS/01a.makeplotpolygons.R")
-
-# define VI functions that will be used to calculate VI values for each plot
-source("../SCRIPTS/01b.define.VI.functions.R")
-
-# read in VI data
-VI <- read.csv("../DATA/VIdata.csv")
-# if there is new raster data or new functions, run this script:
-#source("../SCRIPTS/01c.calculate.VI.values.R")
 
 # add VI data to all.prairie df
 source("../SCRIPTS/01d.add.VIdata.to.all.prairie.R")
