@@ -7,15 +7,14 @@ source('../SCRIPTS/00c.readTree-v3.R')
 source('../SCRIPTS/00d.problemSpp.2017.R')
 source('../SCRIPTS/00e.readData.traits.R')
 allRS <- read.csv("../DATA/allRS.csv")
-# source('../SCRIPTS/tif.analysis.r') only if there is new data
+# source('../SCRIPTS/00f.tif.analysis.R') only if there is new data
 
+# combine data and clean
+source("../SCRIPTS/01.combine.data.R")
 
-# add VI data to all.prairie df
-source("../SCRIPTS/01d.add.VIdata.to.all.prairie.R")
-
-### at this point, all the data has been read in and formatted
-### into one df called all.prairie
-
+### at this point, all the data have been read in and formatted
+### into one df called prairie and prairie.bio 
+### use prairie.bio for analyses involving biomass
 
 # run phylogeny scripts -- add cover to phylo?
 source('../SCRIPTS/02a.dataForPhyloAndOrdination.R')
