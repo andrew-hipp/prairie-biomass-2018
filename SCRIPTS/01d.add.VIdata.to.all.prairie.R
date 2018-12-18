@@ -1,6 +1,13 @@
-# adds VIdata to all.prairie
+# adds VI data to all.prairie
+all.prairie <- cbind(all.prairie, allRS)
 
-VI <- read.csv("../DATA/VIdata.csv")
-VI$X <- NULL
 
-all.prairie <- merge(all.prairie, VI, all.x = T)
+# make df to use for biomass analyses
+prairie.bio <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
+                                           all.prairie$TMT.use == 1),]
+
+
+# make df to use for analyses that do not include biomass
+prairie <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
+                                         all.prairie$Plot.category == "Treatment"),]
+
