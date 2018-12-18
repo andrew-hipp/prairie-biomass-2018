@@ -81,7 +81,7 @@ for (i in 1:length(finalPlots)) {
 }
 
 VEG <- t(VEG)
-colnames(VEG) <- c("NDVIveg", "GNDVIveg", "GDVI2veg", "REDveg", "NIRveg", "GREveg", "REGveg")
+colnames(VEG) <- c("NDVIND", "GNDVIND", "GDVI2ND", "REDND", "NIRND", "GREND", "REGND")
 rownames(VEG) <- 1:length(VEG[,1])
 
 
@@ -179,16 +179,16 @@ vhm <- dsm - dtm
 
 # find average height (m) across plot, then multiply by l and w (m)
 heightPlots <- c()
-for (i in 1:length(testP)){
-  small <- crop(vhm, testP[i,])
-  avg <- extract(small, testP[i,], fun = mean, na.rm = TRUE)
+for (i in 1:length(finalPlots)){
+  small <- crop(vhm, finalPlots[i,])
+  avg <- extract(small, finalPlots[i,], fun = mean, na.rm = TRUE)
   heightPlots[i] <- as.numeric(avg)
 }
 
 volPlots <- c()
 for (i in 1:length(heightPlots)) {
-  p <- crop(vhm, testP[i,])
-  numPixels <- rasterize(testP[i,], p, 1)
+  p <- crop(vhm, finalPlots[i,])
+  numPixels <- rasterize(finalPlots[i,], p, 1)
   numPixels <- cellStats(numPixels, "sum")
   dim <- sqrt(numPixels) * 1.15 / 100
   vol <- dim * dim * heightPlots[i]
@@ -198,7 +198,38 @@ for (i in 1:length(heightPlots)) {
 }
 
 
+# combine products ----
+
+ALL <- as.data.frame(ALL)
+ND <- as.data.frame(VEG)
+
+# avg of values excluding weeds
+NW <- as.data.frame(1:7)
+for (i in 1:length(noWeeds)){
+  avg <- colMeans(noWeeds[[i]])
+  avg <- as.vector(avg)
+  NW[i] <- avg
+}
+NW <- t(NW)
+colnames(NW) <- c("NDVINW", "GNDVINW", "GDVI2NW", "REDNW", "NIRNW", "GRENW", "REGNW")
+rownames(NW) <- 1:length(NW[,1])
+NW <- as.data.frame(NW)
 
 
+# avg of values excluding weeds
+NWND <- as.data.frame(1:7)
+for (i in 1:length(noWeedsNoDirt)){
+  avg <- colMeans(noWeedsNoDirt[[i]])
+  avg <- as.vector(avg)
+  NWND[i] <- avg
+}
+NWND <- t(NWND)
+colnames(NWND) <- c("NDVINWND", "GNDVINWND", "GDVI2NWND", "REDNWND", "NIRNWND", "GRENWND", "REGNWND")
+rownames(NWND) <- 1:length(NWND[,1])
+NWND <- as.data.frame(NWND)
 
+VOL <- volPlots
 
+allRS <- cbind(ALL, ND, NW, NWND, VOL)
+
+write.csv(allRS, "../DATA/allRS.csv")
