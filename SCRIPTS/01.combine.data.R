@@ -9,9 +9,10 @@ all.prairie <- all.prairie[which(all.prairie$monoTreeName %ni% spp.prob.2017),]
 # make df to use for biomass analyses
 prairie.bio <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
                                            all.prairie$TMT.use == 1),]
-
+# 62 < 0, 177 > 0
 
 # make df to use for analyses that do not include biomass
 prairie <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
                                          all.prairie$Plot.category == "Treatment"),]
 
+# 68 < 0, 198 > 0

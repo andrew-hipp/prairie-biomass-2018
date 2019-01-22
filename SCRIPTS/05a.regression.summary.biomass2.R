@@ -14,13 +14,22 @@ scaled$GDVI2NW <- scale(prairie.bio$GDVI2NW)
 scaled$NDVINWND <- scale(prairie.bio$NDVINWND)
 scaled$GNDVINWND <- scale(prairie.bio$GNDVINWND)
 scaled$GDVI2NWND <- scale(prairie.bio$GDVI2NWND)
+scaled$NDVIND <- scale(prairie.bio$NDVIND)
+scaled$GNDVIND <- scale(prairie.bio$GNDVIND)
+scaled$GDVI2ND <- scale(prairie.bio$GDVI2ND)
 scaled$coverTotal <- scale(prairie.bio$coverTotal)
 scaled$dcover <- scale(prairie.bio$dcover)
 scaled$AHOR_cm <- scale(prairie.bio$AHOR_cm)
 scaled$VOL <- scale(prairie.bio$VOL)
+scaled$trait.div <- prairie.bio$trait.div
+scaled$phylo.div <- prairie.bio$phy.div
+scaled$DensVol <- prairie.bio$NDVI * prairie.bio$VOL
 
-use.prairie <- scaled[which(scaled$Plot.category == "Monoculture" | 
-                              scaled$TMT.use == 1),]
+scaled$traits <- "high trait diversity"
+scaled$traits[which(is.na(scaled$trait.div) == T)] <- "monoculture"
+scaled$traits[which(scaled$trait.div == "L")] <- "low trait diversity"
+
+use.prairie <- scaled[which(scaled$traits == "low trait diversity"),]
 
 response <- "biomass.all"
 
@@ -29,7 +38,7 @@ use.prairie <- scaled[which(scaled$Plot.category == "Monoculture"),]
 # 1 predictor, VI
 pred1 <- c("NDVI", "GNDVI", "GDVI2", 
            "NDVINW", "GNDVINW", "GDVI2NW",
-           "NDVINWND", "GNDVINWND", "GDVI2NWND")
+           "NDVINWND", "GNDVINWND", "GDVI2NWND", "DensVol")
 
 
 t1 <- as.data.frame(pred1)
@@ -53,7 +62,7 @@ t1 <- t1[order(t1$V7),]
 t1$V7 <- as.numeric(t1$V7)
 t1$deltaAIC <- t1$V7 - t1$V7[1]
 
-colnames(t1) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
+colnames(t1) <- c("VI used", "cover used", "VI", "cover", "volume", "R2", "AIC", "deltaAIC")
 
 
 # 1 predictor, cover
@@ -80,10 +89,10 @@ t2 <- t2[order(t2$V7),]
 t2$V7 <- as.numeric(t2$V7)
 t2$deltaAIC <- t2$V7 - t2$V7[1]
 
-colnames(t2) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
+colnames(t2) <- c("VI used", "cover used", "VI", "cover", "volume", "R2", "AIC", "deltaAIC")
 t2$`VI used` <- "-"
 
-# 1 predictor, ahor
+# 1 predictor, volume
 pred3 <- c("VOL")
 
 t3 <- as.data.frame(pred3)
@@ -106,14 +115,12 @@ t3 <- t3[order(t3$V7),]
 t3$V7 <- as.numeric(t3$V7)
 t3$deltaAIC <- t3$V7 - t3$V7[1]
 
-colnames(t3) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
+colnames(t3) <- c("VI used", "cover used", "VI", "cover", "volume", "R2", "AIC", "deltaAIC")
 t3$`VI used` <- "-"
 
-# 2 predictors
+# 2 predictors, VI and cover
 
 pred2.1 <- c("NDVI", "GNDVI", "GDVI2", 
-             "NDVINW", "GNDVINW", "GDVI2NW",
-             "NDVI", "GNDVI", "GDVI2", 
              "NDVINW", "GNDVINW", "GDVI2NW",
              "NDVI", "GNDVI", "GDVI2", 
              "NDVINW", "GNDVINW", "GDVI2NW")
@@ -121,9 +128,7 @@ pred2.1 <- c("NDVI", "GNDVI", "GDVI2",
 pred2.2 <- c("coverTotal", "coverTotal", "coverTotal",
              "coverTotal", "coverTotal", "coverTotal",
              "dcover", "dcover", "dcover",
-             "dcover", "dcover", "dcover",
-             "VOL", "VOL", "VOL",
-             "VOL", "VOL", "VOL")
+             "dcover", "dcover", "dcover")
 
 t4 <- as.data.frame(pred2.1)
 t4$cover.used <- pred2.2
@@ -146,8 +151,38 @@ t4 <- t4[order(t4$V7),]
 t4$V7 <- as.numeric(t4$V7)
 t4$deltaAIC <- t4$V7 - t4$V7[1]
 
-colnames(t4) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
+colnames(t4) <- c("VI used", "cover used", "VI", "cover", "volume", "R2", "AIC", "deltaAIC")
 
+# 2 predictors, VI and volume
+
+pred2.1 <- c("NDVI", "GNDVI", "GDVI2", 
+             "NDVINW", "GNDVINW", "GDVI2NW")
+
+pred2.2 <- c("VOL", "VOL", "VOL",
+             "VOL", "VOL", "VOL")
+
+t41 <- as.data.frame(pred2.1)
+t41$cover.used <- "-"
+
+i <- 1
+for (i in 1:length(pred2.1)) {
+  coef <- summary(lm(use.prairie[[response]] ~ use.prairie[[pred2.1[i]]] + use.prairie[[pred2.2[i]]]))$coefficients[2,1]
+  pval <- summary(lm(use.prairie[[response]] ~ use.prairie[[pred2.1[i]]] + use.prairie[[pred2.2[i]]]))$coefficients[2,4]
+  coef2 <- summary(lm(use.prairie[[response]] ~ use.prairie[[pred2.1[i]]] + use.prairie[[pred2.2[i]]]))$coefficients[3,1]
+  pval2 <- summary(lm(use.prairie[[response]] ~ use.prairie[[pred2.1[i]]] + use.prairie[[pred2.2[i]]]))$coefficients[3,4]
+  t41[i,3] <- paste(format(round(coef, 2), nsmall = 2), ", p = ", format(round(pval, 4), nsmall = 4), sep = "")
+  t41[i,4] <- "-"
+  t41[i,5] <- paste(format(round(coef2, 2), nsmall = 2), ", p = ", format(round(pval2, 4), nsmall = 4), sep = "")
+  t41[i,6] <- format(round(summary(lm(use.prairie[[response]] ~ use.prairie[[pred2.1[i]]] + use.prairie[[pred2.2[i]]]))$r.squared, 3), nsmall = 3)
+  t41[i,7] <- format(round(AIC(lm(use.prairie[[response]] ~ use.prairie[[pred2.1[i]]] + use.prairie[[pred2.2[i]]])), 2), nsmall = 2)
+  i <- i + 1
+}
+
+t41 <- t41[order(t41$V7),]
+t41$V7 <- as.numeric(t41$V7)
+t41$deltaAIC <- t41$V7 - t41$V7[1]
+
+colnames(t41) <- c("VI used", "cover used", "VI", "cover", "volume", "R2", "AIC", "deltaAIC")
 
 
 # 3 predictors
@@ -167,10 +202,10 @@ pred3.3 <- c("VOL", "VOL", "VOL",
              "VOL", "VOL", "VOL",
              "VOL", "VOL", "VOL")
 
-pred3.3 <- c("AHOR_cm", "AHOR_cm", "AHOR_cm",
-             "AHOR_cm", "AHOR_cm", "AHOR_cm",
-             "AHOR_cm", "AHOR_cm", "AHOR_cm",
-             "AHOR_cm", "AHOR_cm", "AHOR_cm")
+#pred3.3 <- c("AHOR_cm", "AHOR_cm", "AHOR_cm",
+#             "AHOR_cm", "AHOR_cm", "AHOR_cm",
+#             "AHOR_cm", "AHOR_cm", "AHOR_cm",
+#             "AHOR_cm", "AHOR_cm", "AHOR_cm")
 
 t5 <- as.data.frame(pred3.1)
 t5$cover.used <- pred3.2
@@ -195,15 +230,11 @@ t5 <- t5[order(t5$V7),]
 t5$V7 <- as.numeric(t5$V7)
 t5$deltaAIC <- t5$V7 - t5$V7[1]
 
-colnames(t5) <- c("VI used", "cover used", "VI", "cover", "A-horizon", "R2", "AIC", "deltaAIC")
+colnames(t5) <- c("VI used", "cover used", "VI", "cover", "volume", "R2", "AIC", "deltaAIC")
 
 
 # merge all tables
-full <- rbind(t1, t2)
-full <- rbind(full, t3)
-full <- rbind(full, t4)
-full <- rbind(full, t5)
-
+full <- rbind(t1, t2, t3, t4, t41, t5)
 
 # re-sort
 full <- full[order(full$AIC),]
@@ -227,7 +258,7 @@ full$`cover used` <- sub("dcover", "drone", full$`cover used`)
 
 full$VI <- sub("p = 0.0000", "p < 0.0001", full$VI)
 full$cover <- sub("p = 0.0000", "p < 0.0001", full$cover)
-full$"A-horizon" <- sub("p = 0.0000", "p < 0.0001", full$"A-horizon")
+full$volume <- sub("p = 0.0000", "p < 0.0001", full$volume)
 
 # make partial table for pub
 
