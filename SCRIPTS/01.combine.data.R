@@ -6,6 +6,18 @@ all.prairie <- cbind(all.prairie, allRS)
 '%ni%' <- Negate('%in%')
 all.prairie <- all.prairie[which(all.prairie$monoTreeName %ni% spp.prob.2017),]
 
+# remove treatments with problem species
+tmtcomp <- read.csv("../DATA/matrix.of.planted.species.csv", row.names = 1)
+tmtCompProb <- tmtcomp[,colnames(tmtcomp) %in% spp.prob.2017]
+plotTotal <- rowSums(tmtCompProb)
+probSpCount <- as.data.frame(plotTotal)
+probSpCount$plot <- rownames(probSpCount)
+all.prairie <- merge(all.prairie, probSpCount, by = "plot", all = T)
+
+all.prairie <- all.prairie[which(all.prairie$plotTotal < 1 |
+                                   all.prairie$Plot.category == "Monoculture"),]
+
+
 # make df to use for biomass analyses
 prairie.bio <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
                                            all.prairie$TMT.use == 1),]
