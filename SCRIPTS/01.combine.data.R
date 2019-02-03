@@ -2,10 +2,25 @@
 all.prairie <- cbind(all.prairie, allRS)
 
 
+# make df to use for biomass analyses
+prairie.bio <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
+                                   all.prairie$TMT.use == 1),]
+
+# make df to use for analyses that do not include biomass
+prairie <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
+                               all.prairie$Plot.category == "Treatment"),]
+
+
 # remove monocultures of problem species
 '%ni%' <- Negate('%in%')
 all.prairie <- all.prairie[which(all.prairie$monoTreeName %ni% spp.prob.2017),]
 
+# make df for phylogenetic analysis
+prairie.mono <- all.prairie[which(all.prairie$Plot.category == "Monoculture"),]
+
+
+
+# old code
 # remove treatments with problem species
 tmtcomp <- read.csv("../DATA/matrix.of.planted.species.csv", row.names = 1)
 tmtCompProb <- tmtcomp[,colnames(tmtcomp) %in% spp.prob.2017]
@@ -18,13 +33,3 @@ all.prairie <- all.prairie[which(all.prairie$plotTotal < 1 |
                                    all.prairie$Plot.category == "Monoculture"),]
 
 
-# make df to use for biomass analyses
-prairie.bio <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
-                                           all.prairie$TMT.use == 1),]
-# 62 < 0, 177 > 0
-
-# make df to use for analyses that do not include biomass
-prairie <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
-                                         all.prairie$Plot.category == "Treatment"),]
-
-# 68 < 0, 198 > 0
