@@ -47,7 +47,7 @@ ALL <- as.data.frame(1:7)
 for (i in 1:length(finalPlots)) {
   small <- crop(all, finalPlots[i,]) # makes a smaller raster
   df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
-  avgNDVI <- mean(df[,2], na.rm = T)
+  avgNDVI <- mean(df[,2], na.rm = T) # saves mean of NDVI column
   avgGNDVI <- mean(df[,3], na.rm = T)
   avgGDVI2 <- mean(df[,4], na.rm = T)
   avgRED <- mean(df[,5], na.rm = T)
@@ -66,10 +66,10 @@ rownames(ALL) <- 1:length(ALL[,1])
 # get average of non-dirt pixels (NDVI > 0.1) ----
 
 VEG <- as.data.frame(1:7)
-for (i in 1:length(finalPlots)) {
+for (i in 1:length(test)) {
   small <- crop(all, finalPlots[i,]) # makes a smaller raster
   df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
-  avgNDVI <- mean(df[,2][which(df[,2] > 0.1)], na.rm = T)
+  avgNDVI <- mean(df[,2][which(df[,2] > 0.1)], na.rm = T) # saves mean of NDVI column EXCEPT dirt pixels
   avgGNDVI <- mean(df[,3][which(df[,2] > 0.1)], na.rm = T)
   avgGDVI2 <- mean(df[,4][which(df[,2] > 0.1)], na.rm = T)
   avgRED <- mean(df[,5][which(df[,2] > 0.1)], na.rm = T)
@@ -81,45 +81,34 @@ for (i in 1:length(finalPlots)) {
 }
 
 VEG <- t(VEG)
-colnames(VEG) <- c("NDVIND", "GNDVIND", "GDVI2ND", "REDND", "NIRND", "GREND", "REGND")
+colnames(VEG) <- c("NDVI.ND", "GNDVI.ND", "GDVI2.ND", "RED.ND", "NIR.ND", "GRE.ND", "REG.ND")
 rownames(VEG) <- 1:length(VEG[,1])
 
 
-# get average of pixels without weeds ----
+# get average of pixels correcting for average "weed" value ----
 weeds <- all.prairie$dcover - all.prairie$coverTotal
-weeds[is.na(weeds) == T] <- 0
+correct <- mean(weeds, na.rm = T)
 
-
-i <- 1
-noWeeds <- list()
-for (i in 1:length(finalPlots)) {
-  if (weeds[i] < 0){
-      no <- as.data.frame(1:7)
-      no[,1] <- NA 
-      no <- t(no)
-      colnames(no) <- c("NDVINW", "GNDVINW", "GDVI2NW", "REDNW", "NIRNW", "GRENW", "REGNW")
-      rownames(no) <- 1:length(no[,1])
-      no <- as.data.frame(no)
-      noWeeds[[i]] <- no
-    } else {
+noWeeds.CA <- list()
+for (i in 1:length(test)) {
       small <- crop(all, finalPlots[i,]) # makes a smaller raster
       df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
       veg <- df[which(df[,2] > 0.1),] # separate out veg pixels
       dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
-      dirtAVG <- as.vector(colMeans(dirt))
-      
+
       vegW <- as.data.frame(1:7)
       
-      for (j in 1:100) {
-        weed <- runif((weeds[i]/100 * length(df$ID)), 0, length(veg$ID)) # select random pixels as weeds NEED TO DEAL WITH NEGATIVE WEEDS
+      for (j in 1:500) {
+        selRan <- sample(1:length(dirt$ID), 1) # select index of random row to use as dirt values
+        weed <- runif((correct/100 * length(df$ID)), 0, length(veg$ID)) # select random pixels as weeds 
         newVeg <- veg
-        newVeg[weed, 2] <- dirtAVG[2] # replace pixels with dirt avg
-        newVeg[weed, 3] <- dirtAVG[3] # replace pixels with dirt avg
-        newVeg[weed, 4] <- dirtAVG[4] # replace pixels with dirt avg
-        newVeg[weed, 5] <- dirtAVG[5] # replace pixels with dirt avg
-        newVeg[weed, 6] <- dirtAVG[6] # replace pixels with dirt avg
-        newVeg[weed, 7] <- dirtAVG[7] # replace pixels with dirt avg
-        newVeg[weed, 8] <- dirtAVG[8] # replace pixels with dirt avg
+        newVeg[weed, 2] <- dirt[selRan,2] # replace pixels with random dirt 
+        newVeg[weed, 3] <- dirt[selRan,3] # replace pixels with random dirt
+        newVeg[weed, 4] <- dirt[selRan,4] # replace pixels with random dirt
+        newVeg[weed, 5] <- dirt[selRan,5] # replace pixels with random dirt
+        newVeg[weed, 6] <- dirt[selRan,6] # replace pixels with random dirt
+        newVeg[weed, 7] <- dirt[selRan,7] # replace pixels with random dirt
+        newVeg[weed, 8] <- dirt[selRan,8] # replace pixels with random dirt
         df <- rbind(newVeg, dirt)
         avgNDVI <- mean(df[,2], na.rm = T)
         avgGNDVI <- mean(df[,3], na.rm = T)
@@ -133,45 +122,120 @@ for (i in 1:length(finalPlots)) {
       }
       
       vegW <- t(vegW)
-      colnames(vegW) <- c("NDVINW", "GNDVINW", "GDVI2NW", "REDNW", "NIRNW", "GRENW", "REGNW")
+      colnames(vegW) <- c("NDVI.CA", "GNDVI.CA", "GDVI2.CA", "RED.CA", "NIR.CA", "GRE.CA", "REG.CA")
       rownames(vegW) <- 1:length(vegW[,1])
       vegW <- as.data.frame(vegW)
-      noWeeds[[i]] <- vegW
-    }
+      noWeeds.CA[[i]] <- vegW
+    
 
 }
-# ~18 min
 
 
-# get average of pixels without dirt or weeds
-noWeedsNoDirt <- list()
-for (i in 1:length(finalPlots)) {
-  if (weeds[i] < 0) {
-    no <- as.data.frame(1:7)
-    no[,1] <- NA 
-    no <- t(no)
-    colnames(no) <- c("NDVINW", "GNDVINW", "GDVI2NW", "REDNW", "NIRNW", "GRENW", "REGNW")
-    rownames(no) <- 1:length(no[,1])
-    no <- as.data.frame(no)
-    noWeedsNoDirt[[i]] <- no
-  } else {
+# get average of pixels correcting for individual "weed" values ----
+weeds <- all.prairie$dcover - all.prairie$coverTotal
+weeds[is.na(weeds) == T] <- 0
+
+i <- 29
+noWeeds.CI <- list()
+for (i in 29) {
+  if (weeds[i] < 0){ # "growth" correction
     small <- crop(all, finalPlots[i,]) # makes a smaller raster
     df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
     veg <- df[which(df[,2] > 0.1),] # separate out veg pixels
     dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
-    dirtAVG <- as.vector(colMeans(dirt))
-    
+
     vegW <- as.data.frame(1:7)
-    for (j in 1:100) {
-      weed <- runif((abs(weeds[i])/100 * length(df$ID)), 0, length(veg$ID)) # select random pixels as weeds NEED TO DEAL WITH NEGATIVE WEEDS
+    
+    for (j in 1:500) {
+      selRan <- sample(1:length(veg$ID), 1) # select index of random row to use as veg values
+      growth <- runif((-weeds[i]/100 * length(df$ID)), 0, length(dirt$ID)) # select random pixels as growth
+      newDirt <- dirt
+      newDirt[growth, 2] <- veg[selRan,2] # replace pixels with random veg
+      newDirt[growth, 3] <- veg[selRan,3] # replace pixels with random veg
+      newDirt[growth, 4] <- veg[selRan,4] # replace pixels with random veg
+      newDirt[growth, 5] <- veg[selRan,5] # replace pixels with random veg
+      newDirt[growth, 6] <- veg[selRan,6] # replace pixels with random veg
+      newDirt[growth, 7] <- veg[selRan,7] # replace pixels with random veg
+      newDirt[growth, 8] <- veg[selRan,8] # replace pixels with random veg
+      df <- rbind(veg, newDirt)
+      avgNDVI <- mean(df[,2], na.rm = T)
+      avgGNDVI <- mean(df[,3], na.rm = T)
+      avgGDVI2 <- mean(df[,4], na.rm = T)
+      avgRED <- mean(df[,5], na.rm = T)
+      avgNIR <- mean(df[,6], na.rm = T)
+      avgGRE <- mean(df[,7], na.rm = T)
+      avgREG <- mean(df[,8], na.rm = T)
+      tog <- c(avgNDVI, avgGNDVI, avgGDVI2, avgRED, avgNIR, avgGRE, avgREG)
+      vegW[j] <- tog
+    }
+    
+    vegW <- t(vegW)
+    colnames(vegW) <- c("NDVI.CI", "GNDVI.CI", "GDVI2.CI", "RED.CI", "NIR.CI", "GRE.CI", "REG.CI")
+    rownames(vegW) <- 1:length(vegW[,1])
+    vegW <- as.data.frame(vegW)
+    noWeeds.CI[[i]] <- vegW
+  } 
+  else { # "weed" correction
+    small <- crop(all, finalPlots[i,]) # makes a smaller raster
+    df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
+    veg <- df[which(df[,2] > 0.1),] # separate out veg pixels
+    dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+
+    vegW <- as.data.frame(1:7)
+    
+    for (j in 1:500) {
+      selRan <- sample(1:length(dirt$ID), 1) # select index of random row to use as dirt values
+      weed <- runif((weeds[i]/100 * length(df$ID)), 0, length(veg$ID)) # select random pixels as weeds 
       newVeg <- veg
-      newVeg[weed, 2] <- dirtAVG[2] # replace pixels with dirt avg
-      newVeg[weed, 3] <- dirtAVG[3] # replace pixels with dirt avg
-      newVeg[weed, 4] <- dirtAVG[4] # replace pixels with dirt avg
-      newVeg[weed, 5] <- dirtAVG[5] # replace pixels with dirt avg
-      newVeg[weed, 6] <- dirtAVG[6] # replace pixels with dirt avg
-      newVeg[weed, 7] <- dirtAVG[7] # replace pixels with dirt avg
-      newVeg[weed, 8] <- dirtAVG[8] # replace pixels with dirt avg
+      newVeg[weed, 2] <- dirt[selRan,2] # replace pixels with random dirt
+      newVeg[weed, 3] <- dirt[selRan,3] # replace pixels with random dirt
+      newVeg[weed, 4] <- dirt[selRan,4] # replace pixels with random dirt
+      newVeg[weed, 5] <- dirt[selRan,5] # replace pixels with random dirt
+      newVeg[weed, 6] <- dirt[selRan,6] # replace pixels with random dirt
+      newVeg[weed, 7] <- dirt[selRan,7] # replace pixels with random dirt
+      newVeg[weed, 8] <- dirt[selRan,8] # replace pixels with random dirt
+      df <- rbind(newVeg, dirt)
+      avgNDVI <- mean(df[,2], na.rm = T)
+      avgGNDVI <- mean(df[,3], na.rm = T)
+      avgGDVI2 <- mean(df[,4], na.rm = T)
+      avgRED <- mean(df[,5], na.rm = T)
+      avgNIR <- mean(df[,6], na.rm = T)
+      avgGRE <- mean(df[,7], na.rm = T)
+      avgREG <- mean(df[,8], na.rm = T)
+      tog <- c(avgNDVI, avgGNDVI, avgGDVI2, avgRED, avgNIR, avgGRE, avgREG)
+      vegW[j] <- tog
+    }
+    
+    vegW <- t(vegW)
+    colnames(vegW) <- c("NDVI.CI", "GNDVI.CI", "GDVI2.CI", "RED.CI", "NIR.CI", "GRE.CI", "REG.CI")
+    rownames(vegW) <- 1:length(vegW[,1])
+    vegW <- as.data.frame(vegW)
+    noWeeds.CI[[i]] <- vegW
+  }
+  
+}
+
+
+# get average of pixels without dirt, with average weed correction ----
+noDirt.CA <- list()
+for (i in 1:length(finalPlots)) {
+    small <- crop(all, finalPlots[i,]) # makes a smaller raster
+    df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
+    veg <- df[which(df[,2] > 0.1),] # separate out veg pixels
+    dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+
+    vegW <- as.data.frame(1:7)
+    for (j in 1:500) {
+      selRan <- sample(1:length(dirt$ID), 1) # select index of random row to use as dirt values
+      weed <- runif((correct/100 * length(df$ID)), 0, length(veg$ID)) # select random pixels as weeds 
+      newVeg <- veg
+      newVeg[weed, 2] <- dirt[selRan,2] # replace pixels with random dirt
+      newVeg[weed, 3] <- dirt[selRan,3] # replace pixels with random dirt
+      newVeg[weed, 4] <- dirt[selRan,4] # replace pixels with random dirt
+      newVeg[weed, 5] <- dirt[selRan,5] # replace pixels with random dirt
+      newVeg[weed, 6] <- dirt[selRan,6] # replace pixels with random dirt
+      newVeg[weed, 7] <- dirt[selRan,7] # replace pixels with random dirt
+      newVeg[weed, 8] <- dirt[selRan,8] # replace pixels with random dirt
       df <- newVeg[which(newVeg[,2] > 0.1),]
       avgNDVI <- mean(df[,2], na.rm = T)
       avgGNDVI <- mean(df[,3], na.rm = T)
@@ -185,15 +249,91 @@ for (i in 1:length(finalPlots)) {
     }
     
     vegW <- t(vegW)
-    colnames(vegW) <- c("NDVINWND", "GNDVINWND", "GDVI2NWND", "REDNWND", "NIRNWND", "GRENWND", "REGNWND")
+    colnames(vegW) <- c("NDVI.ND.CA", "GNDVI.ND.CA", "GDVI2.ND.CA", "RED.ND.CA", "NIR.ND.CA", "GRE.ND.CA", "REG.ND.CA")
     rownames(vegW) <- 1:length(vegW[,1])
     vegW <- as.data.frame(vegW)
-    noWeedsNoDirt[[i]] <- vegW
+    noDirt.CA[[i]] <- vegW
+
+}
+
+# get average of pixels without dirt, with individual weed correction ----
+noDirt.CI <- list()
+for (i in 1:length(finalPlots)) {
+  if (weeds[i] < 0) {
+    small <- crop(all, finalPlots[i,]) # makes a smaller raster
+    df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
+    veg <- df[which(df[,2] > 0.1),] # separate out veg pixels
+    dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+    
+    vegW <- as.data.frame(1:7)
+    for (j in 1:500) {
+      selRan <- sample(1:length(veg$ID), 1) # select index of random row to use as veg values
+      growth <- runif((-weeds[i]/100 * length(df$ID)), 0, length(dirt$ID)) # select random pixels as growth
+      newDirt <- dirt
+      newDirt[growth, 2] <- veg[selRan,2] # replace pixels with random veg
+      newDirt[growth, 3] <- veg[selRan,3] # replace pixels with random veg
+      newDirt[growth, 4] <- veg[selRan,4] # replace pixels with random veg
+      newDirt[growth, 5] <- veg[selRan,5] # replace pixels with random veg
+      newDirt[growth, 6] <- veg[selRan,6] # replace pixels with random veg
+      newDirt[growth, 7] <- veg[selRan,7] # replace pixels with random veg
+      newDirt[growth, 8] <- veg[selRan,8] # replace pixels with random veg
+      df <- rbind(veg, newDirt)
+      df <- df[which(df[,2] > 0.1),]
+      avgNDVI <- mean(df[,2], na.rm = T)
+      avgGNDVI <- mean(df[,3], na.rm = T)
+      avgGDVI2 <- mean(df[,4], na.rm = T)
+      avgRED <- mean(df[,5], na.rm = T)
+      avgNIR <- mean(df[,6], na.rm = T)
+      avgGRE <- mean(df[,7], na.rm = T)
+      avgREG <- mean(df[,8], na.rm = T)
+      tog <- c(avgNDVI, avgGNDVI, avgGDVI2, avgRED, avgNIR, avgGRE, avgREG)
+      vegW[j] <- tog
+    }
+    vegW <- t(vegW)
+    colnames(vegW) <- c("NDVI.ND.CI", "GNDVI.ND.CI", "GDVI2.ND.CI", "RED.ND.CI", "NIR.ND.CI", "GRE.ND.CI", "REG.ND.CI")
+    rownames(vegW) <- 1:length(vegW[,1])
+    vegW <- as.data.frame(vegW)
+    noDirt.CI[[i]] <- vegW
+  } else {
+    small <- crop(all, finalPlots[i,]) # makes a smaller raster
+    df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
+    veg <- df[which(df[,2] > 0.1),] # separate out veg pixels
+    dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+
+    vegW <- as.data.frame(1:7)
+    for (j in 1:500) {
+      selRan <- sample(1:length(dirt$ID), 1) # select index of random row to use as dirt values
+      weed <- runif((correct/100 * length(df$ID)), 0, length(veg$ID)) # select random pixels as weeds 
+      newVeg <- veg
+      newVeg[weed, 2] <- dirt[selRan,2] # replace pixels with random dirt
+      newVeg[weed, 3] <- dirt[selRan,3] # replace pixels with random dirt
+      newVeg[weed, 4] <- dirt[selRan,4] # replace pixels with random dirt
+      newVeg[weed, 5] <- dirt[selRan,5] # replace pixels with random dirt
+      newVeg[weed, 6] <- dirt[selRan,6] # replace pixels with random dirt
+      newVeg[weed, 7] <- dirt[selRan,7] # replace pixels with random dirt
+      newVeg[weed, 8] <- dirt[selRan,8] # replace pixels with random dirt
+      df <- newVeg[which(newVeg[,2] > 0.1),]
+      avgNDVI <- mean(df[,2], na.rm = T)
+      avgGNDVI <- mean(df[,3], na.rm = T)
+      avgGDVI2 <- mean(df[,4], na.rm = T)
+      avgRED <- mean(df[,5], na.rm = T)
+      avgNIR <- mean(df[,6], na.rm = T)
+      avgGRE <- mean(df[,7], na.rm = T)
+      avgREG <- mean(df[,8], na.rm = T)
+      tog <- c(avgNDVI, avgGNDVI, avgGDVI2, avgRED, avgNIR, avgGRE, avgREG)
+      vegW[j] <- tog
+    }
+    
+    
+    vegW <- t(vegW)
+    colnames(vegW) <- c("NDVI.ND.CI", "GNDVI.ND.CI", "GDVI2.ND.CI", "RED.ND.CI", "NIR.ND.CI", "GRE.ND.CI", "REG.ND.CI")
+    rownames(vegW) <- 1:length(vegW[,1])
+    vegW <- as.data.frame(vegW)
+    noDirt.CI[[i]] <- vegW
   }
   
   
 }
-
 
 
 # plot volume ----
@@ -213,7 +353,7 @@ for (i in 1:length(finalPlots)){
 }
 
 volPlots <- c()
-for (i in 1:length(heightPlots)) {
+for (i in 1:length(finalPlots)) {
   p <- crop(vhm, finalPlots[i,])
   numPixels <- rasterize(finalPlots[i,], p, 1)
   numPixels <- cellStats(numPixels, "sum")
@@ -229,33 +369,61 @@ for (i in 1:length(heightPlots)) {
 ALL <- as.data.frame(ALL)
 ND <- as.data.frame(VEG)
 
-# avg of values excluding weeds
-NW <- as.data.frame(1:7)
-for (i in 1:length(noWeeds)){
-  avg <- colMeans(noWeeds[[i]])
+# average correction
+CA <- as.data.frame(1:7)
+for (i in 1:length(noWeeds.CA)){
+  avg <- colMeans(noWeeds.CA[[i]])
   avg <- as.vector(avg)
-  NW[i] <- avg
+  CA[i] <- avg
 }
-NW <- t(NW)
-colnames(NW) <- c("NDVINW", "GNDVINW", "GDVI2NW", "REDNW", "NIRNW", "GRENW", "REGNW")
-rownames(NW) <- 1:length(NW[,1])
-NW <- as.data.frame(NW)
+CA <- t(CA)
+colnames(CA) <- c("NDVI.CA", "GNDVI.CA", "GDVI2.CA", "RED.CA", "NIR.CA", "GRE.CA", "REG.CA")
+rownames(CA) <- 1:length(CA[,1])
+CA <- as.data.frame(CA)
+
+# individual correction
+CI <- as.data.frame(1:7)
+for (i in 1:length(noWeeds.CI)){
+  avg <- colMeans(noWeeds.CI[[i]])
+  avg <- as.vector(avg)
+  CI[i] <- avg
+}
+CI <- t(CI)
+colnames(CI) <- c("NDVI.CI", "GNDVI.CI", "GDVI2.CI", "RED.CI", "NIR.CI", "GRE.CI", "REG.CI")
+rownames(CI) <- 1:length(CI[,1])
+CI <- as.data.frame(CI)
 
 
-# avg of values excluding weeds
-NWND <- as.data.frame(1:7)
-for (i in 1:length(noWeedsNoDirt)){
-  avg <- colMeans(noWeedsNoDirt[[i]])
+# avg of values excluding dirt, average correction
+ND.CA <- as.data.frame(1:7)
+for (i in 1:length(noDirt.CA)){
+  avg <- colMeans(noDirt.CA[[i]])
   avg <- as.vector(avg)
-  NWND[i] <- avg
+  ND.CA[i] <- avg
 }
-NWND <- t(NWND)
-colnames(NWND) <- c("NDVINWND", "GNDVINWND", "GDVI2NWND", "REDNWND", "NIRNWND", "GRENWND", "REGNWND")
-rownames(NWND) <- 1:length(NWND[,1])
-NWND <- as.data.frame(NWND)
+ND.CA <- t(ND.CA)
+colnames(ND.CA) <- c("NDVI.ND.CA", "GNDVI.ND.CA", "GDVI2.ND.CA", "RED.ND.CA", "NIR.ND.CA", "GRE.ND.CA", "REG.ND.CA")
+rownames(ND.CA) <- 1:length(ND.CA[,1])
+ND.CA <- as.data.frame(ND.CA)
+
+# avg of values excluding dirt, individual correction
+ND.CI <- as.data.frame(1:7)
+for (i in 1:length(noDirt.CI)){
+  avg <- colMeans(noDirt.CI[[i]])
+  avg <- as.vector(avg)
+  ND.CI[i] <- avg
+}
+ND.CI <- t(ND.CI)
+colnames(ND.CI) <- c("NDVI.ND.CI", "GNDVI.ND.CI", "GDVI2.ND.CI", "RED.ND.CI", "NIR.ND.CI", "GRE.ND.CI", "REG.ND.CI")
+rownames(ND.CI) <- 1:length(ND.CI[,1])
+ND.CI <- as.data.frame(ND.CI)
 
 VOL <- volPlots
 
-allRS <- cbind(ALL, ND, NW, NWND, VOL)
+allRS <- cbind(ALL, ND, CA, CI, ND.CA, ND.CI, VOL)
 
 write.csv(allRS, "../DATA/allRS.csv")
+
+save(noWeeds.CA, noWeeds.CI, noDirt.CA, noDirt.CI, file = "C:/Users/clane_897q3pb/Documents/tiffs_final/RSdata.rdata")
+
+
