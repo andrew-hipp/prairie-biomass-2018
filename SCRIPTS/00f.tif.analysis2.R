@@ -49,7 +49,7 @@ finalPlots <- spTransform(intPlots, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84
 
 # get average of all pixels in plot ----
 ALL <- as.data.frame(1:7)
-for (i in 1:length(test)) {
+for (i in 1:length(finalPlots)) {
   small <- crop(all, finalPlots[i,]) # makes a smaller raster
   df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
   tog <- colMeans(df, na.rm = T)
@@ -63,7 +63,7 @@ rownames(ALL) <- 1:length(ALL[,1])
 
 # get average of non-dirt pixels (NDVI > 0.1) ----
 VEG <- as.data.frame(1:7)
-for (i in 1:length(test)) {
+for (i in 1:length(finalPlots)) {
   small <- crop(all, finalPlots[i,]) # makes a smaller raster
   df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
   tog <- colMeans(df[which(df$NDVI > 0.1),], na.rm = T)
@@ -185,10 +185,10 @@ tifAn <- function (rast, plots, correction, threshold = -100, reps = 100) {
   return(resu)
 }
 
-noWeeds.CA <- tifAn(rast = all, plots = test, correction = "mean", reps = 20, threshold = -10)
-noWeeds.CI <- tifAn(rast = all, plots = test, correction = "individual", reps = 20, threshold = -10)
-noDirt.CA <- tifAn(rast = all, plots = test, correction = "mean", reps = 20, threshold = 0.1)
-noDirt.CI <- tifAn(rast = all, plots = test, correction = "individual", reps = 20, threshold = 0.1)
+noWeeds.CA <- tifAn(rast = all, plots = finalPlots, correction = "mean", reps = 200, threshold = -10)
+noWeeds.CI <- tifAn(rast = all, plots = finalPlots, correction = "individual", reps = 200, threshold = -10)
+noDirt.CA <- tifAn(rast = all, plots = finalPlots, correction = "mean", reps = 200, threshold = 0.1)
+noDirt.CI <- tifAn(rast = all, plots = finalPlots, correction = "individual", reps = 200, threshold = 0.1)
 
 # plot volume ----
 
@@ -197,14 +197,14 @@ vhm <- dsm - dtm
 
 # find average height (m) across plot, then multiply by l and w (m)
 heightPlots <- c()
-for (i in 1:length(test)){
+for (i in 1:length(finalPlots)){
   small <- crop(vhm, finalPlots[i,])
   avg <- extract(small, finalPlots[i,], fun = mean, na.rm = TRUE)
   heightPlots[i] <- as.numeric(avg)
 }
 
 volPlots <- c()
-for (i in 1:length(test)) {
+for (i in 1:length(finalPlots)) {
   p <- crop(vhm, finalPlots[i,])
   numPixels <- rasterize(finalPlots[i,], p, 1)
   numPixels <- cellStats(numPixels, "sum")
