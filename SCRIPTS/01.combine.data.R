@@ -13,23 +13,10 @@ prairie <- all.prairie[which(all.prairie$Plot.category == "Monoculture" |
 
 # remove monocultures of problem species
 '%ni%' <- Negate('%in%')
-all.prairie <- all.prairie[which(all.prairie$monoTreeName %ni% spp.prob.2017),]
+prairie.noProb <- all.prairie[which(all.prairie$monoTreeName %ni% spp.prob.2017),]
 
 # make df for phylogenetic analysis
-prairie.mono <- all.prairie[which(all.prairie$Plot.category == "Monoculture"),]
+prairie.mono <- prairie.noProb[which(prairie.noProb$Plot.category == "Monoculture"),]
 
-
-
-# old code
-# remove treatments with problem species
-tmtcomp <- read.csv("../DATA/matrix.of.planted.species.csv", row.names = 1)
-tmtCompProb <- tmtcomp[,colnames(tmtcomp) %in% spp.prob.2017]
-plotTotal <- rowSums(tmtCompProb)
-probSpCount <- as.data.frame(plotTotal)
-probSpCount$plot <- rownames(probSpCount)
-all.prairie <- merge(all.prairie, probSpCount, by = "plot", all = T)
-
-all.prairie <- all.prairie[which(all.prairie$plotTotal < 1 |
-                                   all.prairie$Plot.category == "Monoculture"),]
 
 

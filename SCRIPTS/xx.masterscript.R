@@ -7,7 +7,7 @@ source('../SCRIPTS/00c.readTree-v3.R')
 source('../SCRIPTS/00d.problemSpp.2017.R')
 source('../SCRIPTS/00e.readData.traits.R')
 allRS <- read.csv("../DATA/allRS.csv")
-# source('../SCRIPTS/00f.tif.analysis.R') only if there is new data
+# source('../SCRIPTS/00f.tif.analysis.R') only if there is new tif data
 
 # combine data and clean
 source("../SCRIPTS/01.combine.data.R")
@@ -16,7 +16,7 @@ source("../SCRIPTS/01.combine.data.R")
 ### into one df called prairie and prairie.bio 
 ### use prairie.bio for analyses involving biomass
 
-# run phylogeny scripts -- add cover to phylo?
+# run phylogeny scripts -- add cover and volume to phylo?
 source('../SCRIPTS/02a.dataForPhyloAndOrdination.R')
 source('../SCRIPTS/02b.phylo.v3.R')
 source('../SCRIPTS/02c.phyloSignal.R')
