@@ -13,8 +13,9 @@ allRS <- read.csv("../DATA/allRS.csv")
 source("../SCRIPTS/01.combine.data.R")
 
 ### at this point, all the data have been read in and formatted
-### into one df called prairie and prairie.bio 
+### into one df called prairie, prairie.bio, and prairie.mono
 ### use prairie.bio for analyses involving biomass
+### use prairie.mono for phylogenetic analysis
 
 # run phylogeny scripts -- add cover and volume to phylo?
 source('../SCRIPTS/02a.dataForPhyloAndOrdination.R')
