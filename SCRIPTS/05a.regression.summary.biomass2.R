@@ -238,7 +238,7 @@ for (j in 1:3){
   
   assign(x = paste0("full-", namesL[j]), value = full)
   
-  write.csv(full, paste0("../OUT/TABLE.biomass.regression.full.", names[i], ".csv"))
+  write.csv(full, paste0("../OUT/TABLE.biomass.regression.full.", namesL[j], ".csv"))
   
   
 }
