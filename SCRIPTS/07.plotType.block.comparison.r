@@ -5,7 +5,7 @@ library(colortools)
 library(ggpubr)
 
 # use for biomass analyses
-prairie.use.biomass <- prairie
+prairie.use.biomass <- prairie.bio
 
 # uses for NDVI and cover analyses
 prairie.use.other <- prairie
