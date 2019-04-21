@@ -83,7 +83,7 @@ NDVImax <- max(prairie.use.other$NDVI)
 NDVImeanM <- mean(prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Monoculture")])
 NDVImeanT <- mean(prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Treatment")])
 
-tNDVI <- t.test(prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Monoculture",)],
+tNDVI <- t.test(prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Monoculture")],
                 prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Treatment")])
 tNDVIp <- tNDVI$p.value
 
@@ -98,13 +98,47 @@ GNDVImax <- max(prairie.use.other$GNDVI)
 GNDVImeanM <- mean(prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Monoculture")])
 GNDVImeanT <- mean(prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Treatment")])
 
-tGNDVI <- t.test(prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Monoculture",)],
+tGNDVI <- t.test(prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Monoculture")],
                 prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Treatment")])
 tGNDVIp <- tGNDVI$p.value
 
 anovaGNDVI <- aov(prairie.use.other$GNDVI ~ prairie.use.other$block)
 anovaGNDVIp <- summary(anovaGNDVI)[[1]][["Pr(>F)"]][1]
 
+
+
+GDVI2mean <- mean(prairie.use.other$GDVI2)
+GDVI2min <- min(prairie.use.other$GDVI2)
+GDVI2max <- max(prairie.use.other$GDVI2)
+
+GDVI2meanM <- mean(prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Monoculture")])
+GDVI2meanT <- mean(prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Treatment")])
+
+tGDVI2 <- t.test(prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Monoculture")],
+                 prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Treatment")])
+tGDVI2p <- tGDVI2$p.value
+
+anovaGDVI2 <- aov(prairie.use.other$GDVI2 ~ prairie.use.other$block)
+anovaGDVI2p <- summary(anovaGDVI2)[[1]][["Pr(>F)"]][1]
+
+
+# put into a table
+compStats <- matrix(nrow = 6, ncol = 7)
+colnames(compStats) <- c("mean", "min", "max", "meanMonoculture", "meanTreatment", "plotTypeP", "blockP")
+rownames(compStats) <- c("biomass", "coverGround", "coverDrone", "NDVI", "GNDVI", "GDVI2")
+
+compStats <- as.data.frame(compStats)
+
+compStats[1,] <- c(biomean, biomin, biomax, biomeanm, biomeant, tbiop, anovabiop)
+compStats[2,] <- c(coverGmean, coverGmin, coverGmax, coverGmeanM, coverGmeanT, tcoverGp, anovaCoverGp)
+compStats[3,] <- c(coverDmean, coverDmin, coverDmax, coverDmeanM, coverDmeanT, tcoverDp, anovaCoverDp)
+compStats[4,] <- c(NDVImean, NDVImin, NDVImax, NDVImeanM, NDVImeanT, tNDVIp, anovaNDVIp)
+compStats[5,] <- c(GNDVImean, GNDVImin, GNDVImax, GNDVImeanM, GNDVImeanT, tGNDVIp, anovaGNDVIp)
+compStats[6,] <- c(GDVI2mean, GDVI2min, GDVI2max, GDVI2meanM, GDVI2meanT, tGDVI2p, anovaGDVI2p)
+
+compStats$range <- compStats$max - compStats$min
+
+write.csv(compStats, file = "../OUT/plotType.and.block.comparison.stats.csv")
 
 # make boxplots
 
