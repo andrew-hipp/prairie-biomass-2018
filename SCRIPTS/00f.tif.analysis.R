@@ -2,9 +2,10 @@ library(raster)
 library(rgdal)
 library(rgeos)
 library(splancs)
+library(Rfast)
 
 # read in tifs and plots ----
-setwd("C:/Users/clane_897q3pb/Documents/tiffs_final")
+setwd("C:/Users/clane_897q3pb/Documents/projects/prairie/tiffs_final")
 ndvi <- raster("NDVI.tif")
 gndvi <- raster("GNDVI.tif")
 gdvi2 <- raster("GDVI2.tif")
@@ -43,44 +44,13 @@ intPlots <- gBuffer(plotsTest, width = -0.25, byid = T)
 finalPlots <- spTransform(intPlots, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
 
-
-
-
-
-# get average of all pixels in plot ----
-ALL <- as.data.frame(1:7)
-for (i in 1:length(finalPlots)) {
-  small <- crop(all, finalPlots[i,]) # makes a smaller raster
-  df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
-  tog <- colMeans(df, na.rm = T)
-  ALL[i] <- tog[2:8]
-}
-
-ALL <- t(ALL)
-colnames(ALL) <- c("NDVI", "GNDVI", "GDVI2", "RED", "NIR", "GRE", "REG")
-rownames(ALL) <- 1:length(ALL[,1])
-
-
-# get average of non-dirt pixels (NDVI > 0.1) ----
-VEG <- as.data.frame(1:7)
-for (i in 1:length(finalPlots)) {
-  small <- crop(all, finalPlots[i,]) # makes a smaller raster
-  df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
-  tog <- colMeans(df[which(df$NDVI > 0.1),], na.rm = T)
-  VEG[i] <- tog[2:8]
-}
-
-VEG <- t(VEG)
-colnames(VEG) <- c("NDVI.ND", "GNDVI.ND", "GDVI2.ND", "RED.ND", "NIR.ND", "GRE.ND", "REG.ND")
-rownames(VEG) <- 1:length(VEG[,1])
-
 test <- finalPlots[1:3,]
 
-# get average of pixels correcting for individual "weed" values ----
+# define function to get average of pixels correcting for individual "weed" values ----
 weeds <- all.prairie$dcover - all.prairie$coverTotal
 
 
-tifAn <- function (rast, plots, correction, threshold = -100, reps = 100) {
+tifAnAvg <- function (rast, plots, correction, threshold = -100, reps = 100) {
   resu <- list()
   for (i in 1:length(plots)) {
     if (correction == "mean") {
@@ -185,10 +155,201 @@ tifAn <- function (rast, plots, correction, threshold = -100, reps = 100) {
   return(resu)
 }
 
-noWeeds.CA <- tifAn(rast = all, plots = finalPlots, correction = "mean", reps = 200, threshold = -10)
-noWeeds.CI <- tifAn(rast = all, plots = finalPlots, correction = "individual", reps = 200, threshold = -10)
-noDirt.CA <- tifAn(rast = all, plots = finalPlots, correction = "mean", reps = 200, threshold = 0.1)
-noDirt.CI <- tifAn(rast = all, plots = finalPlots, correction = "individual", reps = 200, threshold = 0.1)
+# define function to get variance of pixels correcting for individual "weed" values ----
+weeds <- all.prairie$dcover - all.prairie$coverTotal
+
+
+tifAnVar <- function (rast, plots, correction, threshold = -100, reps = 100) {
+  resu <- list()
+  for (i in 1:length(plots)) {
+    if (correction == "mean") {
+      weedCor <- mean(weeds, na.rm = T)
+    } else {
+      weeds[is.na(weeds) == T] <- 0
+      weedCor <- weeds[i]
+    }
+    
+    if (weedCor < 0){ # "growth" correction, change dirt to veg
+      small <- crop(rast, plots[i,]) # makes a smaller raster
+      df <- extract(small, plots[i,], df = T) # makes df of points in raster
+      veg <- df[which(df[,2] > 0.1),] # separate out veg pixels
+      dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+      
+      # Sometimes the number of pixels that needs to be replaces is greater than 
+      # the number of pixels available. If that is the case, replace all available pixels:
+      if (abs(weedCor)/100 * length(df$ID) > length(dirt$ID)) {
+        numRep <- length(dirt$ID)
+      } else {
+        numRep <- abs(weedCor)/100 * length(df$ID)
+      }
+      
+      # if there are no veg pixels to replace dirt with, use veg pixels from previous plot:
+      if (length(veg$ID) < 1){
+        small <- crop(rast, plots[i-1,]) # makes a smaller raster
+        df <- extract(small, plots[i-1,], df = T) # makes df of points in raster
+        veg <- df[which(df[,2] > 0.1),] # separate out dirt pixels
+      }
+      
+      # if there are still no veg pixels to replace dirt with, use veg pixels from random plot:
+      while (length(veg$ID) < 1){
+        randPlot <- sample(1:length(plots), 1)
+        small <- crop(rast, plots[randPlot,]) # makes a smaller raster
+        df <- extract(small, plots[randPlot,], df = T) # makes df of points in raster
+        veg <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+      }
+      
+      # now random pixels x number of times, save in vegW
+      vegW <- as.data.frame(1:7)
+      for (j in 1:reps) {
+        correct <- sample(1:length(dirt$ID), numRep) # choose dirt rows to replace
+        selRan <- sample(1:length(veg$ID), numRep, replace = T) # select veg rows that will replace dirt
+        newDirt <- dirt 
+        newDirt[correct,] <- veg[selRan,] # replace dirt pixels with random veg
+        df <- rbind(veg, newDirt) # put all pixels back together
+        vNDVI <- var(df$NDVI[which(df[,2] > threshold)], na.rm = T)
+        vGNDVI <- var(df$GNDVI[which(df[,2] > threshold)], na.rm = T)
+        vGDVI2 <- var(df$GDVI2[which(df[,2] > threshold)], na.rm = T)
+        vRED <- var(df$RED[which(df[,2] > threshold)], na.rm = T)
+        vNIR <- var(df$NIR[which(df[,2] > threshold)], na.rm = T)
+        vREG <- var(df$REG[which(df[,2] > threshold)], na.rm = T)
+        vGRE <- var(df$GRE[which(df[,2] > threshold)], na.rm = T)
+        
+        #tog <- colVars(as.matrix(df))
+        vegW[j] <- c(vNDVI, vGNDVI, vGDVI2, vRED, vNIR, vGRE, vREG)
+        
+        
+        
+        #tog <- colMeans(df[which(df[,2] > threshold),], na.rm = T) # get mean of each column
+        #vegW[j] <- tog[2:8]
+      }
+      
+    } 
+    else { # "weed" correction, change veg to dirt
+      small <- crop(rast, plots[i,]) # makes a smaller raster
+      df <- extract(small, plots[i,], df = T) # makes df of points in raster
+      veg <- df[which(df[,2] > 0.1),] # separate out veg pixels
+      dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+      
+      # Sometimes the number of pixels that needs to be replaces is greater than 
+      # the number of pixels available. If that is the case, replace all available pixels:
+      if (abs(weedCor)/100 * length(df$ID) > length(veg$ID)) {
+        numRep <- length(veg$ID)
+      } else {
+        numRep <- abs(weedCor)/100 * length(df$ID)
+      }
+      
+      # if there are no dirt pixels to replace veg with, use dirt pixels from previous plot:
+      if (length(dirt$ID) < 1){
+        small <- crop(rast, plots[i-1,]) # makes a smaller raster
+        df <- extract(small, plots[i-1,], df = T) # makes df of points in raster
+        dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+      }
+      
+      # if there are still no dirt pixels to replace veg with, use dirt pixels from random plot:
+      while (length(dirt$ID) < 1){
+        randPlot <- sample(1:length(plots), 1)
+        small <- crop(rast, plots[randPlot,]) # makes a smaller raster
+        df <- extract(small, plots[randPlot,], df = T) # makes df of points in raster
+        dirt <- df[which(df[,2] <= 0.1),] # separate out dirt pixels
+      }
+      
+      # now random pixels x number of times, save in vegW
+      vegW <- as.data.frame(1:7)
+      for (j in 1:reps) {
+        correct <- sample(1:length(veg$ID), numRep) # select veg rows to replace
+        selRan <- sample(1:length(dirt$ID), numRep, replace = T) # select dirt rows that will replace veg
+        newVeg <- veg 
+        newVeg[correct,] <- dirt[selRan,] # replace veg pixels with random dirt
+        df <- rbind(newVeg, dirt) # put all pixels back together
+        vNDVI <- var(df$NDVI[which(df[,2] > threshold)], na.rm = T)
+        vGNDVI <- var(df$GNDVI[which(df[,2] > threshold)], na.rm = T)
+        vGDVI2 <- var(df$GDVI2[which(df[,2] > threshold)], na.rm = T)
+        vRED <- var(df$RED[which(df[,2] > threshold)], na.rm = T)
+        vNIR <- var(df$NIR[which(df[,2] > threshold)], na.rm = T)
+        vREG <- var(df$REG[which(df[,2] > threshold)], na.rm = T)
+        vGRE <- var(df$GRE[which(df[,2] > threshold)], na.rm = T)
+        
+        #tog <- colVars(as.matrix(df))
+        vegW[j] <- c(vNDVI, vGNDVI, vGDVI2, vRED, vNIR, vGRE, vREG)
+        
+        
+        
+        #tog <- colMeans(df[which(df[,2] > threshold),], na.rm = T) # get mean of each column
+        #vegW[j] <- tog[2:8]
+        
+      }
+      
+    }
+    
+    vegW <- t(vegW)
+    colnames(vegW) <- c("NDVI.CI", "GNDVI.CI", "GDVI2.CI", "RED.CI", "NIR.CI", "GRE.CI", "REG.CI")
+    rownames(vegW) <- 1:length(vegW[,1])
+    vegW <- as.data.frame(vegW)
+    resu[[i]] <- vegW
+  }
+  return(resu)
+}
+
+
+# get average of all pixels in plot ----
+ALL <- as.data.frame(1:7)
+for (i in 1:length(finalPlots)) {
+  small <- crop(all, finalPlots[i,]) # makes a smaller raster
+  df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
+  tog <- colMeans(df, na.rm = T)
+  ALL[i] <- tog[2:8]
+}
+
+ALL <- t(ALL)
+colnames(ALL) <- c("NDVI", "GNDVI", "GDVI2", "RED", "NIR", "GRE", "REG")
+rownames(ALL) <- 1:length(ALL[,1])
+
+
+# get average of non-dirt pixels (NDVI > 0.1) ----
+VEG <- as.data.frame(1:7)
+for (i in 1:length(finalPlots)) {
+  small <- crop(all, finalPlots[i,]) # makes a smaller raster
+  df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
+  tog <- colMeans(df[which(df$NDVI > 0.1),], na.rm = T)
+  VEG[i] <- tog[2:8]
+}
+
+VEG <- t(VEG)
+colnames(VEG) <- c("NDVI.ND", "GNDVI.ND", "GDVI2.ND", "RED.ND", "NIR.ND", "GRE.ND", "REG.ND")
+rownames(VEG) <- 1:length(VEG[,1])
+
+
+# get avgs with correction
+noWeeds.CA <- tifAnAvg(rast = all, plots = finalPlots, correction = "mean", reps = 200, threshold = -10)
+noWeeds.CI <- tifAnAvg(rast = all, plots = finalPlots, correction = "individual", reps = 200, threshold = -10)
+noDirt.CA <- tifAnAvg(rast = all, plots = finalPlots, correction = "mean", reps = 200, threshold = 0.1)
+noDirt.CI <- tifAnAvg(rast = all, plots = finalPlots, correction = "individual", reps = 200, threshold = 0.1)
+
+# get variances within each plot ----
+vALL <- as.data.frame(1:7)
+for (i in 1:length(finalPlots)) {
+  small <- crop(all, finalPlots[i,]) # makes a smaller raster
+  df <- extract(small, finalPlots[i,], df = T) # makes df of points in raster
+  vNDVI <- var(df$NDVI, na.rm = T)
+  vGNDVI <- var(df$GNDVI, na.rm = T)
+  vGDVI2 <- var(df$GDVI2, na.rm = T)
+  vRED <- var(df$RED, na.rm = T)
+  vNIR <- var(df$NIR, na.rm = T)
+  vREG <- var(df$REG, na.rm = T)
+  vGRE <- var(df$GRE, na.rm = T)
+  
+  #tog <- colVars(as.matrix(df))
+  vALL[i] <- c(vNDVI, vGNDVI, vGDVI2, vRED, vNIR, vGRE, vREG)
+}
+
+vALL <- t(vALL)
+colnames(vALL) <- c("vNDVI", "vGNDVI", "vGDVI2", "vRED", "vNIR", "vGRE", "vREG")
+rownames(vALL) <- 1:length(vALL[,1])
+
+# get variance with correction ----
+vNoWeeds.CI <- tifAn(rast = all, plots = finalPlots, correction = "individual", reps = 200, threshold = -10)
+
+
 
 # plot volume ----
 
@@ -219,6 +380,7 @@ for (i in 1:length(finalPlots)) {
 
 ALL <- as.data.frame(ALL)
 ND <- as.data.frame(VEG)
+vALL <- as.data.frame(vALL)
 
 # average correction
 CA <- as.data.frame(1:7)
@@ -243,6 +405,18 @@ CI <- t(CI)
 colnames(CI) <- c("NDVI.CI", "GNDVI.CI", "GDVI2.CI", "RED.CI", "NIR.CI", "GRE.CI", "REG.CI")
 rownames(CI) <- 1:length(CI[,1])
 CI <- as.data.frame(CI)
+
+##### individual correction VARIANCE
+vCI <- as.data.frame(1:7)
+for (i in 1:length(vNoWeeds.CI)){
+  avg <- colMeans(vNoWeeds.CI[[i]])
+  avg <- as.vector(avg)
+  vCI[i] <- avg
+}
+vCI <- t(vCI)
+colnames(vCI) <- c("vNDVI.CI", "vGNDVI.CI", "vGDVI2.CI", "vRED.CI", "vNIR.CI", "vGRE.CI", "vREG.CI")
+rownames(vCI) <- 1:length(vCI[,1])
+vCI <- as.data.frame(vCI)
 
 
 # avg of values excluding dirt, average correction
@@ -271,11 +445,19 @@ ND.CI <- as.data.frame(ND.CI)
 
 VOL <- volPlots
 
-allRS <- cbind(ALL, ND, CA, CI, ND.CA, ND.CI, VOL)
+allRS <- cbind(ALL, ND, CA, CI, ND.CA, ND.CI, VOL, vALL, vCI)
 
-write.csv(allRS, "../DATA/allRS.csv")
+write.csv(allRS, "../DATA/allRS.csv", row.names = F)
 
 save(noWeeds.CA, noWeeds.CI, noDirt.CA, noDirt.CI, file = "C:/Users/clane_897q3pb/Documents/tiffs_final/RSdata.rdata")
+save(vNoWeeds.CI, file = "C:/Users/clane_897q3pb/Documents/projects/prairie/tiffs_final/RSdataSupp.rdata")
+
+
+
+
+
+
+
 
 
 
