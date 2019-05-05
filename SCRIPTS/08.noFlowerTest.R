@@ -519,3 +519,17 @@ ggarrange(coverMono, coverTmt, RcoverMono, RcoverTmt,
           nrow = 2, ncol = 2,
           labels = c("A", "B", "C", "D"),
           align = "hv")
+
+
+# figure showing which plots have flowers
+jpeg("../OUT/FIGURE.regressionsFlowersRemoved.jpg", width = 900, height = 900)
+ggplot(prairie, aes(x = prairie$NDVI, 
+                    y = prairie$biomass.all)) +
+  geom_point(aes(color = factor(prairie$Plot.category),
+                 shape = factor(prairie$flower.presence))) +
+  scale_shape_manual(values=c(19, 1)) +
+  labs(x = "NDVI",
+       y = "biomass") +
+  theme_classic()
+dev.off()
+
