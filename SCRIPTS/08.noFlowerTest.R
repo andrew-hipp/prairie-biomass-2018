@@ -522,7 +522,7 @@ ggarrange(coverMono, coverTmt, RcoverMono, RcoverTmt,
 
 
 # figure showing which plots have flowers
-jpeg("../OUT/FIGURE.regressionsFlowersRemoved.jpg", width = 900, height = 900)
+jpeg("../OUT/FIGURE.regressionsFlowersRemoved.jpg", width = 500, height = 300)
 ggplot(prairie, aes(x = prairie$NDVI, 
                     y = prairie$biomass.all)) +
   geom_point(aes(color = factor(prairie$Plot.category),
@@ -533,3 +533,8 @@ ggplot(prairie, aes(x = prairie$NDVI,
   theme_classic()
 dev.off()
 
+prairie.mono$genus <- gsub("_.*", "", prairie.mono$monoTreeName)
+
+ggplot(prairie.mono, aes(x = prairie.mono$NDVI,
+                         y = prairie.mono$biomass.all))+
+  geom_point(aes(color = factor(prairie.mono$genus)))

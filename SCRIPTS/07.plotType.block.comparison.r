@@ -3,6 +3,7 @@
 library(ggplot2)
 library(colortools)
 library(ggpubr)
+library(reshape2)
 
 # use for biomass analyses
 prairie.use.biomass <- prairie.bio
@@ -24,8 +25,8 @@ biomeanm <- mean(prairie.use.biomass$biomass.all[which(prairie.use.biomass$Plot.
 biominm <- min(prairie.use.biomass$biomass.all[which(prairie.use.biomass$Plot.category == "Monoculture")])
 biomaxm <- max(prairie.use.biomass$biomass.all[which(prairie.use.biomass$Plot.category == "Monoculture")])
 
-tbio <- t.test(prairie.use.biomass$biomass.all[prairie.use.biomass$Plot.category == "Monoculture"],
-               prairie.use.biomass$biomass.all[prairie.use.biomass$Plot.category == "Treatment"])
+tbio <- t.test(log(prairie.use.biomass$biomass.all[prairie.use.biomass$Plot.category == "Monoculture"]),
+               log(prairie.use.biomass$biomass.all[prairie.use.biomass$Plot.category == "Treatment"]))
 tbiop <- tbio$p.value
 
 anovabio <- aov(prairie.use.biomass$biomass.all ~ prairie.use.biomass$block)
@@ -148,7 +149,7 @@ MB <- ggplot(data = prairie.use.biomass,
   geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
   scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
   theme_classic() +
-  labs(x = "plot type", y = "biomass") +
+  labs(x = "plot type", y = "biomass (g)") +
   ylim(c(0, 4000))
 
 
@@ -157,7 +158,7 @@ BB <- ggplot(data = prairie.use.biomass,
   geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
-  labs(x = "block", y = "biomass") +
+  labs(x = "block", y = "biomass (g)") +
   ylim(c(0, 4000))
 
 # NDVI
@@ -186,7 +187,7 @@ BC <- ggplot(data = prairie.use.other,
   geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
-  labs(x = "block", y = "cover") +
+  labs(x = "block", y = "cover (%)") +
   ylim(c(0, 100))
 
 #Removed 5 rows containing non-finite values (stat_boxplot).
@@ -195,7 +196,7 @@ MC <- ggplot(data = prairie.use.other,
   geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
   scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
   theme_classic() +
-  labs(x = "plot type", y = "cover") +
+  labs(x = "plot type", y = "cover (%)") +
   ylim(c(0, 100))
 
 
@@ -209,4 +210,15 @@ ggarrange(MB, BB,
           align = "hv",
           label.x = 0, label.y = 1)
 dev.off()
+
+# compare VIs
+
+VI <- prairie.use.other[,c("NDVI", "GNDVI", "GDVI2")]
+VI <- melt(VI)
+
+VIaov <- aov(VI$value ~ VI$variable)
+summary(VIaov)
+
+out <- TukeyHSD(VIaov)
+tmp <- as.data.frame(out$`VI$variable`)
 
