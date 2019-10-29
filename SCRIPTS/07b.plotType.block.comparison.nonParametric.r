@@ -4,6 +4,7 @@ library(ggplot2)
 library(colortools)
 library(ggpubr)
 library(reshape2)
+library(FSA)
 
 # use for biomass analyses
 prairie.use.biomass <- prairie.bio
@@ -27,6 +28,8 @@ biomaxm <- max(prairie.use.biomass$biomass.all[which(prairie.use.biomass$Plot.ca
 
 wbio <- wilcox.test(prairie.use.biomass$biomass.all ~ prairie.use.biomass$Plot.category)
 wbiop <- wbio$p.value
+
+shapiro.test(prairie.use.biomass$biomass.all)
 
 #tbio <- t.test(prairie.use.biomass$biomass.all[prairie.use.biomass$Plot.category == "Monoculture"],
 #               prairie.use.biomass$biomass.all[prairie.use.biomass$Plot.category == "Treatment"])
@@ -55,12 +58,20 @@ coverGmeanM <- mean(prairie.use.other$coverTotal[which(prairie.use.biomass$Plot.
 coverGminM <- min(prairie.use.other$coverTotal[which(prairie.use.biomass$Plot.category == "Monoculture")], na.rm = T)
 coverGmaxM <- max(prairie.use.other$coverTotal[which(prairie.use.biomass$Plot.category == "Monoculture")], na.rm = T)
 
-tcoverG <- t.test(prairie.use.other$coverTotal[prairie.use.other$Plot.category == "Monoculture"],
-                  prairie.use.other$coverTotal[prairie.use.other$Plot.category == "Treatment"])
-tcoverGp <- tcoverG$p.value
 
-anovaCoverG <- aov(prairie.use.other$coverTotal ~ prairie.use.other$block)
-anovaCoverGp <- summary(anovaCoverG)[[1]][["Pr(>F)"]][1]
+wcoverG <- wilcox.test(prairie.use.other$coverTotal ~ prairie.use.other$Plot.category)
+wcoverGp <- wcoverG$p.value
+
+#tcoverG <- t.test(prairie.use.other$coverTotal[prairie.use.other$Plot.category == "Monoculture"],
+#                  prairie.use.other$coverTotal[prairie.use.other$Plot.category == "Treatment"])
+#tcoverGp <- tcoverG$p.value
+
+prairie.use.other$block <- as.factor(prairie.use.other$block)
+kcoverG <- kruskal.test(prairie.use.other$coverTotal ~ prairie.use.other$block)
+kcoverGp <- kcoverG$p.value
+
+#anovaCoverG <- aov(prairie.use.other$coverTotal ~ prairie.use.other$block)
+#anovaCoverGp <- summary(anovaCoverG)[[1]][["Pr(>F)"]][1]
 
 # compare drone cover monoculture and treatment
 coverDmean <- mean(prairie.use.other$dcover, na.rm = T)
@@ -75,13 +86,20 @@ coverDmeanM <- mean(prairie.use.other$dcover[which(prairie.use.biomass$Plot.cate
 coverDminM <- min(prairie.use.other$dcover[which(prairie.use.biomass$Plot.category == "Monoculture")], na.rm = T)
 coverDmaxM <- max(prairie.use.other$dcover[which(prairie.use.biomass$Plot.category == "Monoculture")], na.rm = T)
 
-tcoverD <- t.test(prairie.use.other$dcover[prairie.use.other$Plot.category == "Monoculture"],
-                  prairie.use.other$dcover[prairie.use.other$Plot.category == "Treatment"])
-tcoverDp <- tcoverD$p.value
+wcoverD <- wilcox.test(prairie.use.other$dcover ~ prairie.use.other$Plot.category)
+wcoverDp <- wcoverD$p.value
 
-anovaCoverD <- aov(prairie.use.other$dcover ~ prairie.use.other$block)
-anovaCoverDp <- summary(anovaCoverD)[[1]][["Pr(>F)"]][1]
+#tcoverD <- t.test(prairie.use.other$dcover[prairie.use.other$Plot.category == "Monoculture"],
+#                  prairie.use.other$dcover[prairie.use.other$Plot.category == "Treatment"])
+#tcoverDp <- tcoverD$p.value
 
+kcoverD <- kruskal.test(prairie.use.other$dcover ~ prairie.use.other$block)
+kcoverDp <- kcoverD$p.value
+
+#anovaCoverD <- aov(prairie.use.other$dcover ~ prairie.use.other$block)
+#anovaCoverDp <- summary(anovaCoverD)[[1]][["Pr(>F)"]][1]
+
+dunnTest(prairie.use.other$dcover ~ prairie.use.other$block)
 
 # compare VIs mono vs. tmt
 NDVImean <- mean(prairie.use.other$NDVI)
@@ -91,12 +109,21 @@ NDVImax <- max(prairie.use.other$NDVI)
 NDVImeanM <- mean(prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Monoculture")])
 NDVImeanT <- mean(prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Treatment")])
 
-tNDVI <- t.test(prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Monoculture")],
-                prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Treatment")])
-tNDVIp <- tNDVI$p.value
+wNDVI <- wilcox.test(prairie.use.other$NDVI ~ prairie.use.other$Plot.category)
+wNDVIp <- wNDVI$p.value
 
-anovaNDVI <- aov(prairie.use.other$NDVI ~ prairie.use.other$block)
-anovaNDVIp <- summary(anovaNDVI)[[1]][["Pr(>F)"]][1]
+kNDVI <- kruskal.test(prairie.use.other$NDVI ~ prairie.use.other$block)
+kNDVIp <- kNDVI$p.value
+
+dunnTest(prairie.use.other$NDVI ~ prairie.use.other$block)
+
+
+#tNDVI <- t.test(prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Monoculture")],
+#                prairie.use.other$NDVI[which(prairie.use.other$Plot.category == "Treatment")])
+#tNDVIp <- tNDVI$p.value
+
+#anovaNDVI <- aov(prairie.use.other$NDVI ~ prairie.use.other$block)
+#anovaNDVIp <- summary(anovaNDVI)[[1]][["Pr(>F)"]][1]
 
 
 GNDVImean <- mean(prairie.use.other$GNDVI)
@@ -106,12 +133,21 @@ GNDVImax <- max(prairie.use.other$GNDVI)
 GNDVImeanM <- mean(prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Monoculture")])
 GNDVImeanT <- mean(prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Treatment")])
 
-tGNDVI <- t.test(prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Monoculture")],
-                prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Treatment")])
-tGNDVIp <- tGNDVI$p.value
+wGNDVI <- wilcox.test(prairie.use.other$GNDVI ~ prairie.use.other$Plot.category)
+wGNDVIp <- wGNDVI$p.value
 
-anovaGNDVI <- aov(prairie.use.other$GNDVI ~ prairie.use.other$block)
-anovaGNDVIp <- summary(anovaGNDVI)[[1]][["Pr(>F)"]][1]
+kGNDVI <- kruskal.test(prairie.use.other$GNDVI ~ prairie.use.other$block)
+kGNDVIp <- kGNDVI$p.value
+
+dunnTest(prairie.use.other$GNDVI ~ prairie.use.other$block)
+
+
+#tGNDVI <- t.test(prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Monoculture")],
+#                prairie.use.other$GNDVI[which(prairie.use.other$Plot.category == "Treatment")])
+#tGNDVIp <- tGNDVI$p.value
+
+#anovaGNDVI <- aov(prairie.use.other$GNDVI ~ prairie.use.other$block)
+#anovaGNDVIp <- summary(anovaGNDVI)[[1]][["Pr(>F)"]][1]
 
 
 
@@ -122,12 +158,21 @@ GDVI2max <- max(prairie.use.other$GDVI2)
 GDVI2meanM <- mean(prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Monoculture")])
 GDVI2meanT <- mean(prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Treatment")])
 
-tGDVI2 <- t.test(prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Monoculture")],
-                 prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Treatment")])
-tGDVI2p <- tGDVI2$p.value
+wGDVI2 <- wilcox.test(prairie.use.other$GDVI2 ~ prairie.use.other$Plot.category)
+wGDVI2p <- wGDVI2$p.value
 
-anovaGDVI2 <- aov(prairie.use.other$GDVI2 ~ prairie.use.other$block)
-anovaGDVI2p <- summary(anovaGDVI2)[[1]][["Pr(>F)"]][1]
+kGDVI2 <- kruskal.test(prairie.use.other$GDVI2 ~ prairie.use.other$block)
+kGDVI2p <- kGDVI2$p.value
+
+dunnTest(prairie.use.other$GDVI2 ~ prairie.use.other$block)
+
+
+#tGDVI2 <- t.test(prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Monoculture")],
+#                 prairie.use.other$GDVI2[which(prairie.use.other$Plot.category == "Treatment")])
+#tGDVI2p <- tGDVI2$p.value
+
+#anovaGDVI2 <- aov(prairie.use.other$GDVI2 ~ prairie.use.other$block)
+#anovaGDVI2p <- summary(anovaGDVI2)[[1]][["Pr(>F)"]][1]
 
 
 # put into a table
@@ -137,16 +182,16 @@ rownames(compStats) <- c("biomass", "coverGround", "coverDrone", "NDVI", "GNDVI"
 
 compStats <- as.data.frame(compStats)
 
-compStats[1,] <- c(biomean, biomin, biomax, biomeanm, biomeant, tbiop, anovabiop)
-compStats[2,] <- c(coverGmean, coverGmin, coverGmax, coverGmeanM, coverGmeanT, tcoverGp, anovaCoverGp)
-compStats[3,] <- c(coverDmean, coverDmin, coverDmax, coverDmeanM, coverDmeanT, tcoverDp, anovaCoverDp)
-compStats[4,] <- c(NDVImean, NDVImin, NDVImax, NDVImeanM, NDVImeanT, tNDVIp, anovaNDVIp)
-compStats[5,] <- c(GNDVImean, GNDVImin, GNDVImax, GNDVImeanM, GNDVImeanT, tGNDVIp, anovaGNDVIp)
-compStats[6,] <- c(GDVI2mean, GDVI2min, GDVI2max, GDVI2meanM, GDVI2meanT, tGDVI2p, anovaGDVI2p)
+compStats[1,] <- c(biomean, biomin, biomax, biomeanm, biomeant, wbiop, kbiop)
+compStats[2,] <- c(coverGmean, coverGmin, coverGmax, coverGmeanM, coverGmeanT, wcoverGp, kcoverGp)
+compStats[3,] <- c(coverDmean, coverDmin, coverDmax, coverDmeanM, coverDmeanT, wcoverDp, kcoverDp)
+compStats[4,] <- c(NDVImean, NDVImin, NDVImax, NDVImeanM, NDVImeanT, wNDVIp, kNDVIp)
+compStats[5,] <- c(GNDVImean, GNDVImin, GNDVImax, GNDVImeanM, GNDVImeanT, wGNDVIp, kGNDVIp)
+compStats[6,] <- c(GDVI2mean, GDVI2min, GDVI2max, GDVI2meanM, GDVI2meanT, wGDVI2p, kGDVI2p)
 
 compStats$range <- compStats$max - compStats$min
 
-write.csv(compStats, file = "../OUT/plotType.and.block.comparison.stats.csv")
+write.csv(compStats, file = "../OUT/plotType.and.block.comparison.stats.nonParametric.csv")
 
 # make boxplots
 
@@ -223,8 +268,8 @@ dev.off()
 VI <- prairie.use.other[,c("NDVI", "GNDVI", "GDVI2")]
 VI <- melt(VI)
 
-VIaov <- aov(VI$value ~ VI$variable)
-summary(VIaov)
+VIaov <- kruskal.test(VI$value ~ VI$variable)
+VIaov$p.value
 
 out <- TukeyHSD(VIaov)
 tmp <- as.data.frame(out$`VI$variable`)
