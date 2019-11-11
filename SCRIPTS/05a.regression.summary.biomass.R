@@ -236,6 +236,9 @@ for (j in 1:3){
   full$cover <- sub("p = 0.0000", "p < 0.0001", full$cover)
   full$volume <- sub("p = 0.0000", "p < 0.0001", full$volume)
   
+  full$`cover used`[which(full$`cover used` == "drone")] <- "total"
+  full$`cover used`[which(full$`cover used` == "ground")] <- "planted"
+  
   assign(x = paste0("full-", namesL[j]), value = full)
   
   write.csv(full, paste0("../OUT/TABLE.biomass.regression.full.", namesL[j], ".csv"))
