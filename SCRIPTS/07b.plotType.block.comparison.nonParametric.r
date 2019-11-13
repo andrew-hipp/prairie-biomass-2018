@@ -12,16 +12,16 @@ prairie.use.biomass <- prairie.bio
 # uses for NDVI and cover analyses
 prairie.use.other <- prairie
 
-outTab <- matrix(nrow = 6, ncol = 8)
+outTab <- matrix(nrow = 7, ncol = 8)
 outTab <- as.data.frame(outTab)
 colnames(outTab) <- c("mean ALL", "min, max", "mean MONO", "min, max",
                       "mean TMT", "min, max", "plot type p", "block p")
 rownames(outTab) <- c("biomass", "planted cover", "total cover",
-                      "NDVI", "GNDVI", "GDVI2")
+                      "NDVI", "GNDVI", "GDVI2", "VOL")
 
 
 vari <- c("biomass.all", "coverTotal", "dcover",
-          "NDVI", "GNDVI", "GDVI2")
+          "NDVI", "GNDVI", "GDVI2", "VOL")
 
 for (i in 1:length(vari)) {
   use <- vari[i]
@@ -46,11 +46,11 @@ for (i in 1:length(vari)) {
   outTab[i,6] <- paste0(mini, ", ", maxi)
   
   w <- wilcox.test(df[,use] ~ df$Plot.category)
-  outTab[i,7] <- format(round(w$p.value, 3), nsmall = 3)
+  outTab[i,7] <- format(round(w$p.value, 4), nsmall = 4)
   
   prairie.use.other$block <- as.factor(prairie.use.other$block)
   k <- kruskal.test(df[,use] ~ df$block)
-  outTab[i,8] <- format(round(k$p.value, 3), nsmall = 3)
+  outTab[i,8] <- format(round(k$p.value, 4), nsmall = 4)
   
 }
 
@@ -65,7 +65,7 @@ MB <- ggplot(data = prairie.use.biomass,
   geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
   scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
   theme_classic() +
-  labs(x = "plot type", y = "biomass (g)") +
+  labs(x = "", y = "biomass (g)") +
   ylim(c(0, 4000))
 
 
@@ -74,7 +74,7 @@ BB <- ggplot(data = prairie.use.biomass,
   geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
-  labs(x = "block", y = "biomass (g)") +
+  labs(x = "", y = "biomass (g)") +
   ylim(c(0, 4000))
 
 # NDVI
@@ -84,8 +84,8 @@ BN <- ggplot(data = prairie.use.other,
   geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
-  labs(x = "block", y = "NDVI") +
-  ylim(c(0.3, 0.9))
+  labs(x = "", y = "NDVI") +
+  ylim(c(0, 1))
 
 #Removed 45 rows containing non-finite values (stat_boxplot).
 MN <- ggplot(data = prairie.use.other,
@@ -93,8 +93,8 @@ MN <- ggplot(data = prairie.use.other,
   geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
   scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
   theme_classic() +
-  labs(x = "plot type", y = "NDVI") +
-  ylim(c(0.3, 0.9))
+  labs(x = "", y = "NDVI") +
+  ylim(c(0, 1))
 
 # Cover
 # Removed 5 rows containing non-finite values (stat_boxplot).
@@ -103,26 +103,45 @@ BC <- ggplot(data = prairie.use.other,
   geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
-  labs(x = "block", y = "cover (%)") +
+  labs(x = "", y = "cover (%)") +
   ylim(c(0, 100))
 
 #Removed 5 rows containing non-finite values (stat_boxplot).
 MC <- ggplot(data = prairie.use.other,
              aes(x = prairie.use.other$Plot.category, y = prairie.use.other$coverTotal)) +
   geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
-  scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
+  scale_x_discrete(limits = c("Monoculture", "Treatment")) +
   theme_classic() +
-  labs(x = "plot type", y = "cover (%)") +
+  labs(x = "", y = "cover (%)") +
   ylim(c(0, 100))
 
+# Volume
+# Removed 5 rows containing non-finite values (stat_boxplot).
+BV <- ggplot(data = prairie.use.other,
+             aes(x = prairie.use.other$block, y = prairie.use.other$VOL)) +
+  geom_boxplot(fill = "darkolivegreen4") +
+  scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
+  theme_classic() +
+  labs(x = "block", y = expression(paste("volume (", m^2, ")"))) +
+  ylim(c(0, 4))
+
+#Removed 5 rows containing non-finite values (stat_boxplot).
+MV <- ggplot(data = prairie.use.other,
+             aes(x = prairie.use.other$Plot.category, y = prairie.use.other$VOL)) +
+  geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
+  scale_x_discrete(limits = c("Monoculture", "Treatment"), labels = c("Monoculture", "Treatment")) +
+  theme_classic() +
+  labs(x = "plot type", y = expression(paste("volume (", m^2, ")"))) +
+  ylim(c(0, 4))
 
 # format and save figure
-jpeg("../OUT/FIGURE.boxplots.jpg", width = 510, height = 480)
+jpeg("../OUT/FIGURE.boxplots.jpg", width = 550, height = 700)
 ggarrange(MB, BB,
           MC, BC,
           MN, BN,
-          labels = c("A", "B", "C", "D", "E", "F"),
-          ncol = 2, nrow = 3,
+          MV, BV,
+          labels = c("A", "B", "C", "D", "E", "F", "G", "H"),
+          ncol = 2, nrow = 4,
           align = "hv",
           label.x = 0, label.y = 1)
 dev.off()
