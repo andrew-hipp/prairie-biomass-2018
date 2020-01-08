@@ -5,6 +5,7 @@ library(colortools)
 library(ggpubr)
 library(reshape2)
 library(FSA)
+library(plotrix)
 
 # use for biomass analyses
 prairie.use.biomass <- prairie.bio
@@ -12,10 +13,11 @@ prairie.use.biomass <- prairie.bio
 # uses for NDVI and cover analyses
 prairie.use.other <- prairie
 
-outTab <- matrix(nrow = 7, ncol = 8)
+outTab <- matrix(nrow = 7, ncol = 13)
 outTab <- as.data.frame(outTab)
 colnames(outTab) <- c("mean ALL", "min, max", "mean MONO", "min, max",
-                      "mean TMT", "min, max", "plot type p", "block p")
+                      "mean TMT", "min, max", "plot type p", "block p", 
+                      "SEM", "monoSEM", "tmtSEM", "W", "K")
 rownames(outTab) <- c("biomass", "planted cover", "total cover",
                       "NDVI", "GNDVI", "GDVI2", "VOL")
 
@@ -34,23 +36,28 @@ for (i in 1:length(vari)) {
   
   outTab[i,1] <- format(round(mean(df[,use], na.rm = T), 2), nsmall = 2)
   outTab[i,2] <- paste0(format(round(min(df[,use], na.rm = T), 2), nsmall = 2), ", ", format(round(max(df[,use], na.rm = T), 2), nsmall = 2))
+  outTab[i,9] <- std.error(df[,use], na.rm = T)
   
   outTab[i,3] <- format(round(mean(df[,use][which(prairie.use.biomass$Plot.category == "Monoculture")], na.rm = T), 2), nsmall = 2)
   mini <- format(round(min(df[,use][which(df$Plot.category == "Monoculture")], na.rm = T), 2), nsmall = 2)
   maxi <- format(round(max(df[,use][which(df$Plot.category == "Monoculture")], na.rm = T), 2), nsmall = 2)
   outTab[i,4] <- paste0(mini, ", ", maxi)
+  outTab[i,10] <- std.error(df[,use][which(df$Plot.category == "Monoculture")], na.rm = T)
   
   outTab[i,5] <- format(round(mean(df[,use][which(df$Plot.category == "Treatment")], na.rm = T), 2), nsmall = 2)
   mini <- format(round(min(df[,use][which(df$Plot.category == "Treatment")], na.rm = T), 2), nsmall = 2)
   maxi <- format(round(max(df[,use][which(df$Plot.category == "Treatment")], na.rm = T), 2), nsmall = 2)
   outTab[i,6] <- paste0(mini, ", ", maxi)
+  outTab[i,11] <- std.error(df[,use][which(df$Plot.category == "Treatment")], na.rm = T)
   
   w <- wilcox.test(df[,use] ~ df$Plot.category)
   outTab[i,7] <- format(round(w$p.value, 4), nsmall = 4)
+  outTab[i,12] <- w$statistic
   
-  prairie.use.other$block <- as.factor(prairie.use.other$block)
+  df$block <- as.factor(df$block)
   k <- kruskal.test(df[,use] ~ df$block)
   outTab[i,8] <- format(round(k$p.value, 4), nsmall = 4)
+  outTab[i,13] <- k$statistic
   
 }
 
@@ -103,7 +110,7 @@ BC <- ggplot(data = prairie.use.other,
   geom_boxplot(fill = "darkolivegreen4") +
   scale_x_discrete(limits = c("A", "B", "C", "D", "E", "F")) +
   theme_classic() +
-  labs(x = "", y = "cover (%)") +
+  labs(x = "", y = "planted cover (%)") +
   ylim(c(0, 100))
 
 #Removed 5 rows containing non-finite values (stat_boxplot).
@@ -112,7 +119,7 @@ MC <- ggplot(data = prairie.use.other,
   geom_boxplot(fill = c("goldenrod2", "cornflowerblue")) +
   scale_x_discrete(limits = c("Monoculture", "Treatment")) +
   theme_classic() +
-  labs(x = "", y = "cover (%)") +
+  labs(x = "", y = "planted cover (%)") +
   ylim(c(0, 100))
 
 # Volume
@@ -154,6 +161,22 @@ VI <- melt(VI)
 VIaov <- kruskal.test(VI$value ~ VI$variable)
 VIaov$p.value
 
-out <- TukeyHSD(VIaov)
+VIaov2 <- aov(VI$value ~ VI$variable)
+out <- TukeyHSD(x = VIaov2)
 tmp <- as.data.frame(out$`VI$variable`)
 
+# compare soil blocks
+
+soil <- prairie.use.other[,c("block", "AHOR_cm")]
+soil <- melt(soil)
+
+soil$block <- as.factor(soil$block)
+soilAOV <- kruskal.test(soil$value ~ soil$block)
+soilAOV$p.value
+
+# effect of blocking on biomass -- different from loop above 
+# because we only want monocultures
+prairie.use.biomass$block <- as.factor(prairie.use.biomass$block)
+bioAOV <- kruskal.test(prairie.use.biomass$biomass.all[which(prairie.use.biomass$Plot.category == "Monoculture")] ~
+                         prairie.use.biomass$block[which(prairie.use.biomass$Plot.category == "Monoculture")])
+bioAOV$p.value

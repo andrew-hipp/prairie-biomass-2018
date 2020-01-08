@@ -232,3 +232,32 @@ for (k in 1:length(coverType)) {
   }
   
 }
+
+
+for (j in 1:length(namesL)) {
+  ### read in .csv files to find avg increase in AIC from adding block
+  
+  noBlock <- read.csv(paste0("../OUT/TABLE.cover.regression.", namesL[j], ".dcover.csv"))
+  block <- read.csv(paste0("../OUT/TABLE.cover.mixedRegression.", namesL[j], ".dcover.csv"))
+  
+  noBlock$model <- NA
+  noBlock$model[which(noBlock$volume == "-")] <- paste0(noBlock$VI.used[which(noBlock$volume == "-")],
+                                                        ".-")
+  noBlock$model[which(noBlock$volume != "-")] <- paste0(noBlock$VI.used[which(noBlock$volume != "-")],
+                                                        ".VOL")
+  
+  block$model <- NA
+  block$model[which(block$volume == "-")] <- paste0(block$VI.used[which(block$volume == "-")],
+                                                    ".-")
+  block$model[which(block$volume != "-")] <- paste0(block$VI.used[which(block$volume != "-")],
+                                                    ".VOL")
+  
+  ### merge AIC with and without block ###
+  
+  all <- merge(block[,c(6, 8)], noBlock[,c(6, 8)], by = "model")
+  colnames(all) <- c("model", "block", "noBlock")
+  all$AICdiff <- all$noBlock - all$block
+  
+  keep[j, 2] <- mean(all$AICdiff)
+  
+}

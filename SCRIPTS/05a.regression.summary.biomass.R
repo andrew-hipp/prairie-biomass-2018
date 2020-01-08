@@ -1,3 +1,7 @@
+library(lme4)
+library(lmerTest)
+library(MuMIn)
+
 # make regression table
 
 # NDVI, NDVI.CA, NDVI.CI, NDVI.ND, NDVI.ND.CA, NDVI.ND.CI
@@ -501,7 +505,38 @@ for (j in 1:length(namesL)){
 }
 
 
+### make table to store mean AIC differences ###
+keep <- data.frame(group = namesL, meanAICdiff = NA)
 
 
-
-
+for (j in 1:length(namesL)) {
+  ### read in .csv files to find avg increase in AIC from adding block
+  
+  noBlock <- read.csv(paste0("../OUT/TABLE.biomass.regression.", namesL[j], ".csv"))
+  block <- read.csv(paste0("../OUT/TABLE.biomass.mixedRegression.", namesL[j], ".csv"))
+  
+  noBlock$model <- NA
+  noBlock$model[which(noBlock$volume == "-")] <- paste0(noBlock$VI.used[which(noBlock$volume == "-")],
+                                                        ".", noBlock$cover.used[which(noBlock$volume == "-")],
+                                                        ".-")
+  noBlock$model[which(noBlock$volume != "-")] <- paste0(noBlock$VI.used[which(noBlock$volume != "-")],
+                                                        ".", noBlock$cover.used[which(noBlock$volume != "-")],
+                                                        ".VOL")
+  
+  block$model <- NA
+  block$model[which(block$volume == "-")] <- paste0(block$VI.used[which(block$volume == "-")],
+                                                    ".", block$cover.used[which(block$volume == "-")],
+                                                    ".-")
+  block$model[which(block$volume != "-")] <- paste0(block$VI.used[which(block$volume != "-")],
+                                                    ".", block$cover.used[which(block$volume != "-")],
+                                                    ".VOL")
+  
+  ### merge AIC with and without block ###
+  
+  all <- merge(block[,c(8,10)], noBlock[,c(8, 10)], by = "model")
+  colnames(all) <- c("model", "block", "noBlock")
+  all$AICdiff <- all$noBlock - all$block
+  
+  keep[j, 2] <- mean(all$AICdiff)
+  
+}
