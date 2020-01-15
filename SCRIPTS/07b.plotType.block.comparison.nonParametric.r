@@ -4,7 +4,6 @@ library(ggplot2)
 library(colortools)
 library(ggpubr)
 library(reshape2)
-library(FSA)
 library(plotrix)
 
 # use for biomass analyses
@@ -180,3 +179,8 @@ prairie.use.biomass$block <- as.factor(prairie.use.biomass$block)
 bioAOV <- kruskal.test(prairie.use.biomass$biomass.all[which(prairie.use.biomass$Plot.category == "Monoculture")] ~
                          prairie.use.biomass$block[which(prairie.use.biomass$Plot.category == "Monoculture")])
 bioAOV$p.value
+
+
+# mean of block a vs mean of blocks b-f
+mean(prairie.use.other$AHOR_cm[which(prairie.use.other$block == "A")])
+mean(prairie.use.other$AHOR_cm[which(prairie.use.other$block != "A")])
