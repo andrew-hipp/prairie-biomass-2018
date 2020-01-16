@@ -5,12 +5,12 @@ Mantel statistic based on Pearson's product-moment correlation
 Call:
 mantel(xdis = dist(vi.pca.scher$x[, 1:2]), ydis = dist(vi.pca.schweiger$x[,      1:2]), method = "pearson") 
 
-Mantel statistic r: 0.008942 
-      Significance: 0.468 
+Mantel statistic r: 0.005696 
+      Significance: 0.446 
 
 Upper quantiles of permutations (null model):
   90%   95% 97.5%   99% 
-0.267 0.355 0.409 0.462 
+0.262 0.355 0.411 0.480 
 Permutation: free
 Number of permutations: 999
 
@@ -26,7 +26,7 @@ Mantel statistic r: 0.6599
 
 Upper quantiles of permutations (null model):
   90%   95% 97.5%   99% 
-0.162 0.223 0.304 0.361 
+0.156 0.215 0.286 0.348 
 Permutation: free
 Number of permutations: 999
 
@@ -35,14 +35,14 @@ Number of permutations: 999
 Mantel statistic based on Pearson's product-moment correlation 
 
 Call:
-mantel(xdis = as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$broad,      spp.schw$broad]), ydis = dist(all.prairie.mean[gsub(" ",      "_", spp.schw$broad), "pNDVIvalues"]), method = "pearson") 
+mantel(xdis = as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$broad,      spp.schw$broad]), ydis = dist(all.prairie.mean[gsub(" ",      "_", spp.schw$broad), "NDVI"]), method = "pearson") 
 
-Mantel statistic r: 0.03397 
-      Significance: 0.317 
+Mantel statistic r: 0.1055 
+      Significance: 0.223 
 
 Upper quantiles of permutations (null model):
   90%   95% 97.5%   99% 
-0.173 0.269 0.334 0.430 
+0.212 0.260 0.304 0.377 
 Permutation: free
 Number of permutations: 999
 
@@ -58,7 +58,7 @@ Mantel statistic r: 0.4476
 
 Upper quantiles of permutations (null model):
   90%   95% 97.5%   99% 
-0.208 0.281 0.312 0.351 
+0.232 0.284 0.319 0.365 
 Permutation: free
 Number of permutations: 999
 

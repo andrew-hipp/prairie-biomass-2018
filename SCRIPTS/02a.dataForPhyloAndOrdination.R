@@ -3,21 +3,21 @@ library(magrittr)
 spp.prob.2017 <- gsub('_', ' ', spp.prob.2017, fixed = T)
 
 vars.productivity <- c('biomass.monocultures',
-                                        'pNDVIvalues',
-                                        'pGNDVIvalues',
-                                        'pGDVI2values',
-                                        'pNIRvalues',
-                                        'pREGvalues',
-                                        'pREDvalues',
-                                        'pGREvalues')
+                                        'NDVI.CI',
+                                        'GNDVI.CI',
+                                        'GDVI2.CI',
+                                        'NIR.CI',
+                                        'REG.CI',
+                                        'RED.CI',
+                                        'GRE.CI')
 labels.productivity <- c('Biomass',
                               'NDVI',
                               'GNDVI',
                               'GDVI2',
-                              'pNIR',
-                              'pREG',
-                              'pRED',
-                              'pGRE')
+                              'NIR',
+                              'REG',
+                              'RED',
+                              'GRE')
 
 labels.traits.continuous <- c("Seed mass", "Leaf dry matter content", "SLA",
                               "Leaf N content", "Leaf C content", "Leaf P content",

@@ -63,7 +63,7 @@ spp.schw <- list(
 
 ## compare our data with schweiger; source = https://ecosis.org/#result/6b3feb89-bf62-4003-8f03-73341a4c4033
 vi.pca.scher <- prcomp(all.prairie.mean[gsub(" ", "_", spp.schw$broad),
-                                       c('pNIRvalues','pREGvalues','pREDvalues','pGREvalues')],
+                                       c('NIR.CI','REG.CI','RED.CI','GRE.CI')],
                         scale = TRUE)
 vi.pca.schweiger <- prcomp(dat.schweiger[spp.schw$codes.broad, ], scale = TRUE)
 
@@ -76,7 +76,7 @@ vi.phylo.schweiger <- mantel(as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw
                             method = 'pearson')
 
 vi.phylo.mantel <- mantel(as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$broad, spp.schw$broad]),
-                          dist(all.prairie.mean[gsub(' ', '_', spp.schw$broad), 'pNDVIvalues']),
+                          dist(all.prairie.mean[gsub(' ', '_', spp.schw$broad), 'NDVI']),
                          method = 'pearson')
 
 vi.biomass.mantel <- mantel(as.dist(cophenetic(tr.prairie.biomassPlot)[spp.schw$broad, spp.schw$broad]),

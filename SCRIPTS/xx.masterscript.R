@@ -21,6 +21,7 @@ source("../SCRIPTS/01.combine.data.R")
 source('../SCRIPTS/02a.dataForPhyloAndOrdination.R')
 source('../SCRIPTS/02b.phylo.v3.R')
 source('../SCRIPTS/02c.phyloSignal.R')
+source('../SCRIPTS/02d.pairwiseDists.NDVI.R')
 
 # make PCA with environmental factors
 source("../SCRIPTS/03.enviro.factors.R")
